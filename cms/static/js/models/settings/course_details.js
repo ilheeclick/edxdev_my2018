@@ -36,9 +36,63 @@ define(['backbone', 'underscore', 'gettext', 'js/models/validation_helpers', 'js
             },
 
             validate: function(newattrs) {
-        // Returns either nothing (no return call) so that validate works or an object of {field: errorstring} pairs
-        // A bit funny in that the video key validation is asynchronous; so, it won't stop the validation.
+                // Returns either nothing (no return call) so that validate works or an object of {field: errorstring} pairs
+                // A bit funny in that the video key validation is asynchronous; so, it won't stop the validation.
                 var errors = {};
+
+                if ((newattrs.end_date != null && newattrs.enrollment_end != null && newattrs.end_date != null && newattrs.enrollment_end != null && newattrs.Calculated != null) && (newattrs.effort == null || newattrs.effort == "")) {
+                    $("#course-effort").focus();
+                    errors.effort = gettext("Effort time must have value");
+                }
+
+                if (
+                    (
+                    newattrs.end_date != null &&
+                    newattrs.enrollment_end != null &&
+                    newattrs.end_date != null &&
+                    newattrs.enrollment_end != null &&
+                    newattrs.Calculated != null) &&
+                    (isNaN($("#course-effort-hh").val()) || isNaN($("#course-effort-mm").val()) || isNaN($("#Calculated").val()) || isNaN($("#Calculated_mm").val()) || isNaN($("#course-effort-week").val()))
+                ) {
+                    if (isNaN($("#course-effort-hh").val())) {
+
+                        $("#course-effort-hh").focus();
+                    } else if (isNaN($("#course-effort-mm").val())) {
+
+                        $("#course-effort-mm").focus();
+                    } else if (isNaN($("#Calculated").val())) {
+
+                        $("#Calculated").focus();
+                    }
+                    errors.effort = gettext("Effort time must have number");
+                }
+
+                if ($("#course-video-hh").val() && isNaN($("#course-video-hh").val())) {
+                    $("#course-video-hh").focus();
+                    errors.effort = gettext("Video time must have number");
+                }
+
+                if ($("#course-video-mm").val() && isNaN($("#course-video-mm").val())) {
+                    $("#course-video-mm").focus();
+                    errors.effort = gettext("Video time must have number");
+                }
+
+                if ($("#course-effort-week").val() && isNaN($("#course-effort-week").val())) {
+                    $("#course-effort-week").focus();
+                    errors.effort = gettext("Chapters must have number");
+                }
+                if ($("#Calculated").val() && isNaN($("#Calculated").val())) {
+                    $("#Calculated").focus();
+                    //errors.effort = gettext("Total recognized learning hours must have number");
+                    errors.effort = gettext("학습인정시간에는 숫자만 입력 가능합니다");
+                }
+                if ($("#Calculated_mm").val() && isNaN($("#Calculated_mm").val())) {
+                    $("#Calculated_mm").focus();
+                    //errors.effort = gettext("Total recognized learning hours must have number");
+                    errors.effort = gettext("학습인정시간에는 숫자만 입력 가능합니다");
+
+                }
+
                 newattrs = DateUtils.convertDateStringsToObjects(
                     newattrs,
                     ['start_date', 'end_date', 'certificate_available_date', 'enrollment_start', 'enrollment_end']
@@ -70,8 +124,65 @@ define(['backbone', 'underscore', 'gettext', 'js/models/validation_helpers', 'js
                     if (this._videokey_illegal_chars.exec(newattrs.intro_video)) {
                         errors.intro_video = gettext('Key should only contain letters, numbers, _, or -');
                     }
-            // TODO check if key points to a real video using google's youtube api
+                    // TODO check if key points to a real video using google's youtube api
                 }
+                if ((
+                    newattrs.end_date != null &&
+                    newattrs.enrollment_end != null &&
+                    newattrs.end_date != null &&
+                    newattrs.enrollment_end != null) && !$("#Calculated").val()) {
+                    errors.effort = gettext("Calculated must have value");
+                    //$("#course-effort-week").focus();
+                }
+                if ((
+                    newattrs.end_date != null &&
+                    newattrs.enrollment_end != null &&
+                    newattrs.end_date != null &&
+                    newattrs.enrollment_end != null) && !$("#Calculated_mm").val()) {
+                    errors.effort = gettext("Calculated must have value");
+                    //$("#course-effort-week").focus();
+                }
+                if ((
+                    newattrs.end_date != null &&
+                    newattrs.enrollment_end != null &&
+                    newattrs.end_date != null &&
+                    newattrs.enrollment_end != null) && !$("#course-effort-week").val()) {
+                    errors.effort = gettext("Chapters must have value");
+                    //$("#course-effort-week").focus();
+                }
+                if ((
+                    newattrs.end_date != null &&
+                    newattrs.enrollment_end != null &&
+                    newattrs.end_date != null &&
+                    newattrs.enrollment_end != null) && !$("#course-effort-hh").val()) {
+                    errors.effort = gettext("Chapters must have value");
+                    //$("#course-effort-week").focus();
+                }
+                if ((
+                    newattrs.end_date != null &&
+                    newattrs.enrollment_end != null &&
+                    newattrs.end_date != null &&
+                    newattrs.enrollment_end != null) && !$("#course-effort-mm").val()) {
+                    errors.effort = gettext("Effort time must have values");
+                    //$("#course-effort-week").focus();
+                }
+                if ((
+                    newattrs.end_date != null &&
+                    newattrs.enrollment_end != null &&
+                    newattrs.end_date != null &&
+                    newattrs.enrollment_end != null) && !$("#course-video-hh").val()) {
+                    errors.effort = gettext("Video time must have value");
+                    //$("#course-video-mm").focus();
+                }
+                if ((
+                    newattrs.end_date != null &&
+                    newattrs.enrollment_end != null &&
+                    newattrs.end_date != null &&
+                    newattrs.enrollment_end != null) && !$("#course-video-mm").val()) {
+                    errors.effort = gettext("Video time must have value");
+                    //$("#course-video-mm").focus();
+                }
+
                 if (_.has(newattrs, 'entrance_exam_minimum_score_pct')) {
                     var range = {
                         min: 1,
@@ -82,16 +193,16 @@ define(['backbone', 'underscore', 'gettext', 'js/models/validation_helpers', 'js
                     }
                 }
                 if (!_.isEmpty(errors)) return errors;
-        // NOTE don't return empty errors as that will be interpreted as an error state
+                // NOTE don't return empty errors as that will be interpreted as an error state
             },
 
             _videokey_illegal_chars: /[^a-zA-Z0-9_-]/g,
 
             set_videosource: function(newsource) {
-        // newsource either is <video youtube="speed:key, *"/> or just the "speed:key, *" string
-        // returns the videosource for the preview which iss the key whose speed is closest to 1
+                // newsource either is <video youtube="speed:key, *"/> or just the "speed:key, *" string
+                // returns the videosource for the preview which iss the key whose speed is closest to 1
                 if (_.isEmpty(newsource) && !_.isEmpty(this.get('intro_video'))) this.set({intro_video: null}, {validate: true});
-        // TODO remove all whitespace w/in string
+                // TODO remove all whitespace w/in string
                 else {
                     if (this.get('intro_video') !== newsource) this.set('intro_video', newsource, {validate: true});
                 }
@@ -104,8 +215,8 @@ define(['backbone', 'underscore', 'gettext', 'js/models/validation_helpers', 'js
                 else return '';
             },
 
-    // Whether or not the course pacing can be toggled. If the course
-    // has already started, returns false; otherwise, returns true.
+            // Whether or not the course pacing can be toggled. If the course
+            // has already started, returns false; otherwise, returns true.
             canTogglePace: function() {
                 return new Date() <= new Date(this.get('start_date'));
             }
