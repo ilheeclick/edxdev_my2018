@@ -35,7 +35,9 @@ define(['backbone', 'underscore', 'gettext', 'js/models/validation_helpers', 'js
                 self_paced: null
             },
 
-            validate: function(newattrs) {
+            validate: function (newattrs) {
+                console.log('validate called');
+
                 // Returns either nothing (no return call) so that validate works or an object of {field: errorstring} pairs
                 // A bit funny in that the video key validation is asynchronous; so, it won't stop the validation.
                 var errors = {};
@@ -94,38 +96,48 @@ define(['backbone', 'underscore', 'gettext', 'js/models/validation_helpers', 'js
                 }
 
                 newattrs = DateUtils.convertDateStringsToObjects(
-                    newattrs,
-                    ['start_date', 'end_date', 'certificate_available_date', 'enrollment_start', 'enrollment_end']
+                    newattrs, ["start_date", "end_date", "enrollment_start", "enrollment_end"]
                 );
 
                 if (newattrs.start_date === null) {
-                    errors.start_date = gettext('The course must have an assigned start date.');
+                    errors.start_date = gettext("The course must have an assigned start date.");
+                }
+
+                //Add Condition
+
+                if (newattrs.end_date === null) {
+                    errors.end_date = gettext("The course must have an assigned end date.");
+                }
+                if (newattrs.enrollment_start === null) {
+                    errors.enrollment_start = gettext("The course must have an assigned enrollment start date.");
+                }
+                if (newattrs.enrollment_end === null) {
+                    errors.enrollment_end = gettext("The course must have an assigned enrollment end date.");
                 }
 
                 if (newattrs.start_date && newattrs.end_date && newattrs.start_date >= newattrs.end_date) {
-                    errors.end_date = gettext('The course end date must be later than the course start date.');
+                    errors.end_date = gettext("The course end date must be later than the course start date.");
                 }
+
                 if (newattrs.start_date && newattrs.enrollment_start && newattrs.start_date < newattrs.enrollment_start) {
-                    errors.enrollment_start = gettext('The course start date must be later than the enrollment start date.');
+                    errors.enrollment_start = gettext("The course start date must be later than the enrollment start date.");
                 }
+
                 if (newattrs.enrollment_start && newattrs.enrollment_end && newattrs.enrollment_start >= newattrs.enrollment_end) {
-                    errors.enrollment_end = gettext('The enrollment start date cannot be after the enrollment end date.');
+                    errors.enrollment_end = gettext("The enrollment start date cannot be after the enrollment end date.");
                 }
+
                 if (newattrs.end_date && newattrs.enrollment_end && newattrs.end_date < newattrs.enrollment_end) {
-                    errors.enrollment_end = gettext('The enrollment end date cannot be after the course end date.');
+                    errors.enrollment_end = gettext("The enrollment end date cannot be after the course end date.");
                 }
-                if (this.showCertificateAvailableDate && newattrs.end_date && newattrs.certificate_available_date &&
-                    newattrs.certificate_available_date < newattrs.end_date) {
-                    errors.certificate_available_date = gettext(
-                        'The certificate available date must be later than the course end date.'
-                    );
-                }
+
                 if (newattrs.intro_video && newattrs.intro_video !== this.get('intro_video')) {
                     if (this._videokey_illegal_chars.exec(newattrs.intro_video)) {
-                        errors.intro_video = gettext('Key should only contain letters, numbers, _, or -');
+                        errors.intro_video = gettext("Key should only contain letters, numbers, _, or -");
                     }
                     // TODO check if key points to a real video using google's youtube api
                 }
+
                 if ((
                     newattrs.end_date != null &&
                     newattrs.enrollment_end != null &&
@@ -189,9 +201,10 @@ define(['backbone', 'underscore', 'gettext', 'js/models/validation_helpers', 'js
                         max: 100
                     };
                     if (!ValidationHelpers.validateIntegerRange(newattrs.entrance_exam_minimum_score_pct, range)) {
-                        errors.entrance_exam_minimum_score_pct = interpolate(gettext('Please enter an integer between %(min)s and %(max)s.'), range, true);
+                        errors.entrance_exam_minimum_score_pct = interpolate(gettext("Please enter an integer between %(min)s and %(max)s."), range, true);
                     }
                 }
+
                 if (!_.isEmpty(errors)) return errors;
                 // NOTE don't return empty errors as that will be interpreted as an error state
             },
