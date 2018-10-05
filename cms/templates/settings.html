@@ -179,30 +179,7 @@ ${can_show_certificate_available_date_field(context_course) | n, dump_js_escaped
         <hr class="divide" />
         % endif
 
-        <div class="group-settings pacing">
-          <fieldset role="radiogroup">
-            <legend>
-              <header>
-                <h2 class="title-2">${_("Course Pacing")}</h2>
-                <span class="tip">${_("Set the pacing for this course")}</span>
-              </header>
-            </legend>
-            <span class="msg" id="course-pace-toggle-tip"></span>
 
-            <ol class="list-input">
-              <li class="field">
-                <input type="radio" class="field-radio" name="self-paced" id="course-pace-instructor-paced" value="false" aria-labelledby="course-pace-instructor-label" />
-                <label id="course-pace-instructor-label" class="course-pace-label" for="course-pace-instructor-paced">${_("Instructor-Paced")}</label>
-                <span class="tip">${_("Instructor-paced courses progress at the pace that the course author sets. You can configure release dates for course content and due dates for assignments.")}</span>
-              </li>
-              <li class="field">
-                <input type="radio" class="field-radio" name="self-paced" id="course-pace-self-paced" value="true" aria-labelledby="course-pace-self-paced-label"/>
-                <label id="course-pace-self-paced-label" class="course-pace-label" for="course-pace-self-paced">${_("Self-Paced")}</label>
-                <span class="tip">${_("Self-paced courses do not have release dates for course content or due dates for assignments. Learners can complete course material at any time before the course end date.")}</span>
-              </li>
-            </ol>
-          </fieldset>
-        </div>
 
         <hr class="divide" />
 
@@ -392,6 +369,7 @@ ${can_show_certificate_available_date_field(context_course) | n, dump_js_escaped
               <button type="submit" class="sr" name="submit" value="submit">${_("set pre-requisite course")}</button>
             </li>
             % endif
+
             % if is_entrance_exams_enabled:
             <li>
               <h3 id="heading-entrance-exam">${_("Entrance Exam")}</h3>
@@ -402,12 +380,12 @@ ${can_show_certificate_available_date_field(context_course) | n, dump_js_escaped
                   <label for="entrance-exam-enabled">${_("Require students to pass an exam before beginning the course.")}</label>
                 </div>
                 <div class="div-grade-requirements" hidden="hidden">
-                  <p><span class="tip tip-inline">
-                                                    ${Text(_("You can now view and author your course entrance exam from the {link_start}Course Outline{link_end}.")).format(
-                                                    link_start=HTML("<a href='{course_handler_url}'>").format(course_handler_url=course_handler_url),
-                                                    link_end=HTML("</a>")
-                                                    )}</span></p>
-
+                  <p>
+                    <span class="tip tip-inline">
+                      ${Text(_("You can now view and author your course entrance exam from the {link_start}Course Outline{link_end}.")).format(
+                      link_start=HTML("<a href='{course_handler_url}'>").format(course_handler_url=course_handler_url),
+                      link_end=HTML("</a>")
+                      )}</span></p>
                   <p>
 
                   <h3>${_("Grade Requirements")}</h3></p>
@@ -669,10 +647,33 @@ ${can_show_certificate_available_date_field(context_course) | n, dump_js_escaped
           </div>
         </div>
         % endif
+        <div class="group-settings pacing">
+          <fieldset role="radiogroup">
+            <legend>
+              <header>
+                <h2 class="title-2">${_("Course Pacing")}</h2>
+                <span class="tip">${_("Set the pacing for this course")}</span>
+              </header>
+            </legend>
+            <span class="msg" id="course-pace-toggle-tip"></span>
 
+            <ol class="list-input">
+              <li class="field">
+                <input type="radio" class="field-radio" name="self-paced" id="course-pace-instructor-paced" value="false" aria-labelledby="course-pace-instructor-label" />
+                <label id="course-pace-instructor-label" class="course-pace-label" for="course-pace-instructor-paced">${_("Instructor-Paced")}</label>
+                <span class="tip">${_("Instructor-paced courses progress at the pace that the course author sets. You can configure release dates for course content and due dates for assignments.")}</span>
+              </li>
+              <li class="field">
+                <input type="radio" class="field-radio" name="self-paced" id="course-pace-self-paced" value="true" aria-labelledby="course-pace-self-paced-label"/>
+                <label id="course-pace-self-paced-label" class="course-pace-label" for="course-pace-self-paced">${_("Self-Paced")}</label>
+                <span class="tip">${_("Self-paced courses do not have release dates for course content or due dates for assignments. Learners can complete course material at any time before the course end date.")}</span>
+              </li>
+            </ol>
+          </fieldset>
+        </div>
         % if about_page_editable or is_prerequisite_courses_enabled or is_entrance_exams_enabled:
         <hr class="divide" />
-
+        <!--
         <div class="group-settings requirements">
           <header>
             <h2 class="title-2">${_("Requirements")}</h2>
@@ -680,6 +681,7 @@ ${can_show_certificate_available_date_field(context_course) | n, dump_js_escaped
           </header>
 
           <ol class="list-input">
+
             % if about_page_editable:
             <li class="field text" id="field-course-effort">
               <label for="course-effort">${_("Hours of Effort per Week")}</label>
@@ -700,6 +702,7 @@ ${can_show_certificate_available_date_field(context_course) | n, dump_js_escaped
               <button type="submit" class="sr" name="submit" value="submit">${_("set pre-requisite course")}</button>
             </li>
             % endif
+
             % if is_entrance_exams_enabled:
             <li>
               <h3 id="heading-entrance-exam">${_("Entrance Exam")}</h3>
@@ -721,9 +724,11 @@ ${can_show_certificate_available_date_field(context_course) | n, dump_js_escaped
               </div>
             </li>
             % endif
+
           </ol>
         </div>
         % endif
+        -->
 
         % if settings.FEATURES.get("LICENSING", False):
         <hr class="divide" />
