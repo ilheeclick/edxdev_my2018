@@ -1,56 +1,82 @@
 define(['js/views/validation',
-    'jquery',
-    'underscore',
-    'gettext',
-    'codemirror',
-    'js/views/modals/validation_error_modal',
-    'edx-ui-toolkit/js/utils/html-utils'],
+        'jquery',
+        'underscore',
+        'gettext',
+        'codemirror',
+        'js/views/modals/validation_error_modal',
+        'edx-ui-toolkit/js/utils/html-utils'],
     function(ValidatingView, $, _, gettext, CodeMirror, ValidationErrorModal, HtmlUtils) {
         var AdvancedView = ValidatingView.extend({
             error_saving: 'error_saving',
             successful_changes: 'successful_changes',
             render_deprecated: false,
 
-    // Model class is CMS.Models.Settings.Advanced
+            // Model class is CMS.Models.Settings.Advanced
             events: {
                 'focus :input': 'focusInput',
                 'blur :input': 'blurInput'
-        // TODO enable/disable save based on validation (currently enabled whenever there are changes)
+                // TODO enable/disable save based on validation (currently enabled whenever there are changes)
             },
             initialize: function() {
                 this.template = HtmlUtils.template(
-            $('#advanced_entry-tpl').text()
-        );
+                    $('#advanced_entry-tpl').text()
+                );
                 this.listenTo(this.model, 'invalid', this.handleValidationError);
                 this.render();
             },
             render: function() {
-        // catch potential outside call before template loaded
+                // catch potential outside call before template loaded
                 if (!this.template) return this;
 
                 var listEle$ = this.$el.find('.course-advanced-policy-list');
                 listEle$.empty();
 
-        // b/c we've deleted all old fields, clear the map and repopulate
+                // b/c we've deleted all old fields, clear the map and repopulate
                 this.fieldToSelectorMap = {};
                 this.selectorToField = {};
 
-        // iterate through model and produce key : value editors for each property in model.get
+                // iterate through model and produce key : value editors for each property in model.get
                 var self = this;
                 _.each(_.sortBy(_.keys(this.model.attributes), function(key) { return self.model.get(key).display_name; }),
-            function(key) {
-                if (self.render_deprecated || !self.model.get(key).deprecated) {
-                    HtmlUtils.append(listEle$, self.renderTemplate(key, self.model.get(key)));
-                }
-            });
+                    function(key) {
+                        if (self.render_deprecated || !self.model.get(key).deprecated) {
+                            HtmlUtils.append(listEle$, self.renderTemplate(key, self.model.get(key)));
+                        }
+                    });
 
                 var policyValues = listEle$.find('.json');
                 _.each(policyValues, this.attachJSONEditor, this);
                 return this;
             },
+            attachJSONInput : function (input) {
+                //console.log('attachJSONInput : '+input);
+                var self = this;
+                var oldValue = $(input).val();
+                //console.log('attachJSONInput changed : '+oldValue);
+                var cm = $("#selectfixid")
+
+                cm.on('change', function (instance, changeobj) {
+                    //console.log('attachJSONInput changed');
+                    var index = $("#selectfixid").val();
+
+                    $("#txtfixid").text(index);
+                    $(".cm-string").eq(4).text(index);  // difficult_degree
+
+                    var newValue = $("#txtfixid").val();
+                    // save process
+                    if (newValue !== oldValue) {
+                        //console.log("attachJSONInput newValue : " + newValue + " : " + oldValue);
+                        var message = gettext("Your changes will not take effect until you save your progress. Take care with key and value formatting, as validation is not implemented.");
+                        self.showNotificationBar(message,
+                            _.bind(self.saveView, self),
+                            _.bind(self.revertView, self));
+                    }
+
+                });
+            },
             attachJSONEditor: function(textarea) {
-        // Since we are allowing duplicate keys at the moment, it is possible that we will try to attach
-        // JSON Editor to a value that already has one. Therefore only attach if no CodeMirror peer exists.
+                // Since we are allowing duplicate keys at the moment, it is possible that we will try to attach
+                // JSON Editor to a value that already has one. Therefore only attach if no CodeMirror peer exists.
                 if ($(textarea).siblings().hasClass('CodeMirror')) {
                     return;
                 }
@@ -63,12 +89,12 @@ define(['js/views/validation',
                     lineWrapping: false});
                 cm.on('change', function(instance, changeobj) {
                     instance.save();
-                // this event's being called even when there's no change :-(
+                    // this event's being called even when there's no change :-(
                     if (instance.getValue() !== oldValue) {
                         var message = gettext('Your changes will not take effect until you save your progress. Take care with key and value formatting, as validation is not implemented.');
                         self.showNotificationBar(message,
-                                             _.bind(self.saveView, self),
-                                             _.bind(self.revertView, self));
+                            _.bind(self.saveView, self),
+                            _.bind(self.revertView, self));
                     }
                 });
                 cm.on('focus', function(mirror) {
@@ -78,14 +104,14 @@ define(['js/views/validation',
                     $(textarea).parent().children('label').removeClass('is-focused');
                     var key = $(mirror.getWrapperElement()).closest('.field-group').children('.key').attr('id');
                     var stringValue = $.trim(mirror.getValue());
-                // update CodeMirror to show the trimmed value.
+                    // update CodeMirror to show the trimmed value.
                     mirror.setValue(stringValue);
                     var JSONValue = undefined;
                     try {
                         JSONValue = JSON.parse(stringValue);
                     } catch (e) {
-                    // If it didn't parse, try converting non-arrays/non-objects to a String.
-                    // But don't convert single-quote strings, which are most likely errors.
+                        // If it didn't parse, try converting non-arrays/non-objects to a String.
+                        // But don't convert single-quote strings, which are most likely errors.
                         var firstNonWhite = stringValue.substring(0, 1);
                         if (firstNonWhite !== '{' && firstNonWhite !== '[' && firstNonWhite !== "'") {
                             try {
@@ -93,9 +119,9 @@ define(['js/views/validation',
                                 JSONValue = JSON.parse(stringValue);
                                 mirror.setValue(stringValue);
                             } catch (quotedE) {
-                            // TODO: validation error
-                            // console.log("Error with JSON, even after converting to String.");
-                            // console.log(quotedE);
+                                // TODO: validation error
+                                // console.log("Error with JSON, even after converting to String.");
+                                // console.log(quotedE);
                                 JSONValue = undefined;
                             }
                         }
@@ -108,9 +134,9 @@ define(['js/views/validation',
                 });
             },
             saveView: function() {
-        // TODO one last verification scan:
-        //    call validateKey on each to ensure proper format
-        //    check for dupes
+                // TODO one last verification scan:
+                //    call validateKey on each to ensure proper format
+                //    check for dupes
                 var self = this;
                 this.model.save({}, {
                     success: function() {
@@ -126,14 +152,14 @@ define(['js/views/validation',
                     error: function(model, response, options) {
                         var json_response, reset_callback, err_modal;
 
-                /* Check that the server came back with a bad request error*/
+                        /* Check that the server came back with a bad request error*/
                         if (response.status === 400) {
                             json_response = $.parseJSON(response.responseText);
                             reset_callback = function() {
                                 self.revertView();
                             };
 
-                    /* initialize and show validation error modal */
+                            /* initialize and show validation error modal */
                             err_modal = new ValidationErrorModal();
                             err_modal.setContent(json_response);
                             err_modal.setResetCallback(reset_callback);

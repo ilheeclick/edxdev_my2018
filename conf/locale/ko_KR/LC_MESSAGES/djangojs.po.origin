@@ -243,17 +243,17 @@ msgstr ""
 #: cms/static/js/features_jsx/studio/CourseOrLibraryListing.jsx
 #: common/static/bundles/CourseOrLibraryListing.js
 msgid "Organization:"
-msgstr "기관 번호:"
+msgstr ""
 
 #: cms/static/js/features_jsx/studio/CourseOrLibraryListing.jsx
 #: common/static/bundles/CourseOrLibraryListing.js
 msgid "Course Number:"
-msgstr "강좌 번호:"
+msgstr ""
 
 #: cms/static/js/features_jsx/studio/CourseOrLibraryListing.jsx
 #: common/static/bundles/CourseOrLibraryListing.js
 msgid "Course Run:"
-msgstr "기관별 강좌 번호"
+msgstr ""
 
 #: cms/static/js/features_jsx/studio/CourseOrLibraryListing.jsx
 #: common/static/bundles/CourseOrLibraryListing.js
@@ -263,13 +263,13 @@ msgstr ""
 #: cms/static/js/features_jsx/studio/CourseOrLibraryListing.jsx
 #: common/static/bundles/CourseOrLibraryListing.js
 msgid "Re-run Course"
-msgstr "강좌 다시 시작하기"
+msgstr ""
 
 #: cms/static/js/features_jsx/studio/CourseOrLibraryListing.jsx
 #: common/static/bundles/CourseOrLibraryListing.js
 #: cms/templates/js/show-textbook.underscore
 msgid "View Live"
-msgstr "적용 결과 보기"
+msgstr ""
 
 #. Translators: This is the status of an active video upload
 #: cms/static/js/models/active_video_upload.js cms/static/js/views/assets.js
@@ -5838,15 +5838,15 @@ msgstr ""
 
 #: cms/static/js/views/course_info_update.js
 msgid "Are you sure you want to delete this update?"
-msgstr "이 업데이트를 삭제하기를 원하십니까?"
+msgstr ""
 
 #: cms/static/js/views/course_rerun.js
 msgid "Create Re-run"
-msgstr "강좌 재개강하기"
+msgstr ""
 
 #: cms/static/js/views/course_rerun.js
 msgid "Processing Re-run Request"
-msgstr "Re-run 요청을 처리합니다."
+msgstr ""
 
 #: cms/static/js/views/course_video_settings.js
 msgid "An error has occurred. Wait a few minutes, and then try again."
@@ -6341,7 +6341,7 @@ msgstr ""
 
 #: cms/static/js/views/partition_group_list.js
 msgid "You have not created any content groups yet."
-msgstr "어떤 콘텐츠 그룹도 만들지 않았습니다."
+msgstr ""
 
 #: cms/static/js/views/previous_video_upload.js
 msgid "Are you sure you want to remove this video from the list?"
@@ -11075,27 +11075,25 @@ msgid ""
 "another version. These URLs cannot be YouTube URLs. The first listed video "
 "that's compatible with the student's computer will play."
 msgstr ""
-"모든 학습자가 강좌 동영상에 접근할 수 있도록, 동영상을 .mp4와 .webm 파일로 제공하길 권합니다. 다른 버전으로 URL 을 "
-"추가하려면 아래를 클릭하세요. URL은 YouTube URL일 수 없습니다. 학습자의 컴퓨터와 호환되는 첫번째 동영상이 재생될 것입니다."
 
 #: cms/templates/js/video/transcripts/metadata-videolist-entry.underscore
 msgid "Default Timed Transcript"
-msgstr "기본 자막 "
+msgstr ""
 
 #: cms/templates/js/video/transcripts/messages/transcripts-choose.underscore
 #: cms/templates/js/video/transcripts/messages/transcripts-replace.underscore
 msgid "Timed Transcript Conflict"
-msgstr "자막 충돌"
+msgstr ""
 
 #: cms/templates/js/video/transcripts/messages/transcripts-choose.underscore
 msgid ""
 "The timed transcript for the first video file does not appear to be the same"
 " as the timed transcript for the second video file."
-msgstr "첫 번째 영상 파일의 자막이 두 번째 영상 파일의 자막과 다릅니다."
+msgstr ""
 
 #: cms/templates/js/video/transcripts/messages/transcripts-choose.underscore
 msgid "Which timed transcript would you like to use?"
-msgstr "어느 자막을 사용하시겠습니까?"
+msgstr ""
 
 #: cms/templates/js/video/transcripts/messages/transcripts-choose.underscore
 #: cms/templates/js/video/transcripts/messages/transcripts-found.underscore
@@ -11105,15 +11103,16 @@ msgstr "어느 자막을 사용하시겠습니까?"
 #: cms/templates/js/video/transcripts/messages/transcripts-uploaded.underscore
 #: cms/templates/js/video/transcripts/messages/transcripts-use-existing.underscore
 msgid "Error."
-msgstr "오류."
+msgstr ""
 
 #: cms/templates/js/video/transcripts/messages/transcripts-choose.underscore
+#, python-format
 msgid "Timed Transcript from %(filename)s"
-msgstr "%(filename)s으로 부터 시간이 나타나 있는 자막 "
+msgstr ""
 
 #: cms/templates/js/video/transcripts/messages/transcripts-found.underscore
 msgid "Timed Transcript Found"
-msgstr "자막 있음"
+msgstr ""
 
 #: cms/templates/js/video/transcripts/messages/transcripts-found.underscore
 msgid ""
@@ -11121,8 +11120,6 @@ msgid ""
 "transcript, you can download, edit, and re-upload the existing transcript. "
 "If you want to replace this transcript, upload a new .srt transcript file."
 msgstr ""
-"동영상 자막이 있습니다. 자막을 수정하려면, 다운로드하여 수정하고 다시 업로드할 수 있습니다. 자막을 교체할 경우 새 .srt로 "
-"업로드합니다."
 
 #: cms/templates/js/video/transcripts/messages/transcripts-found.underscore
 #: cms/templates/js/video/transcripts/messages/transcripts-import.underscore
@@ -11130,22 +11127,22 @@ msgstr ""
 #: cms/templates/js/video/transcripts/messages/transcripts-uploaded.underscore
 #: cms/templates/js/video/transcripts/messages/transcripts-use-existing.underscore
 msgid "Upload New Transcript"
-msgstr "신규 자막 업로드"
+msgstr ""
 
 #: cms/templates/js/video/transcripts/messages/transcripts-found.underscore
 #: cms/templates/js/video/transcripts/messages/transcripts-import.underscore
 msgid "Upload New .srt Transcript"
-msgstr "신규 .srt 자막 파일 업로드하기"
+msgstr ""
 
 #: cms/templates/js/video/transcripts/messages/transcripts-found.underscore
 #: cms/templates/js/video/transcripts/messages/transcripts-not-found.underscore
 #: cms/templates/js/video/transcripts/messages/transcripts-uploaded.underscore
 msgid "Download Transcript for Editing"
-msgstr "편집용 자막 다운로드"
+msgstr ""
 
 #: cms/templates/js/video/transcripts/messages/transcripts-import.underscore
 msgid "No EdX Timed Transcript"
-msgstr "자막이 없습니다."
+msgstr ""
 
 #: cms/templates/js/video/transcripts/messages/transcripts-import.underscore
 msgid ""
@@ -11153,40 +11150,38 @@ msgid ""
 " transcript on YouTube. You can import the YouTube transcript or upload your"
 " own .srt transcript file."
 msgstr ""
-"EdX는 스튜디오에서 동영상의 시간에 맞춰진 자막을 갖고 있지 않지만, 유튜브에서 자막을 발견했습니다.  YouTube 자막을 가져오거나"
-" .srt 자막파일로 업로드할 수 있습니다."
 
 #: cms/templates/js/video/transcripts/messages/transcripts-import.underscore
 msgid "Import YouTube Transcript"
-msgstr "YouTube 자막 가져오기"
+msgstr ""
 
 #: cms/templates/js/video/transcripts/messages/transcripts-not-found.underscore
 msgid "No Timed Transcript"
-msgstr "자막 없음"
+msgstr ""
 
 #: cms/templates/js/video/transcripts/messages/transcripts-not-found.underscore
 msgid ""
 "EdX doesn\\'t have a timed transcript for this video. Please upload an .srt "
 "file."
-msgstr "동영상의 자막 파일이 없습니다. .srt 자막 파일을 업로드 하세요."
+msgstr ""
 
 #: cms/templates/js/video/transcripts/messages/transcripts-replace.underscore
 msgid ""
 "The timed transcript for this video on edX is out of date, but YouTube has a"
 " current timed transcript for this video."
-msgstr "K-MOOC에는 기간이 만료된 이 동영상의 자막이 있지만, YouTube에는 현재 사용되는 자막이 있습니다."
+msgstr ""
 
 #: cms/templates/js/video/transcripts/messages/transcripts-replace.underscore
 msgid "Do you want to replace the edX transcript with the YouTube transcript?"
-msgstr "YouTube 자막과 K-MOOC 자막을 바꾸시겠습니까?"
+msgstr ""
 
 #: cms/templates/js/video/transcripts/messages/transcripts-replace.underscore
 msgid "Yes, replace the edX transcript with the YouTube transcript"
-msgstr "네, K-MOOC 자막을 YouTube 자막으로 교체합니다."
+msgstr ""
 
 #: cms/templates/js/video/transcripts/messages/transcripts-uploaded.underscore
 msgid "Timed Transcript Uploaded Successfully"
-msgstr "자막 업로드가 완료되었습니다."
+msgstr ""
 
 #: cms/templates/js/video/transcripts/messages/transcripts-uploaded.underscore
 msgid ""
@@ -11194,20 +11189,18 @@ msgid ""
 "transcript, upload a new .srt transcript file. If you want to edit this "
 "transcript, you can download, edit, and re-upload the existing transcript."
 msgstr ""
-"EdX는 자막을 가지고 있습니다. 자막을 교체 할 경우 새 .SRT 자막 파일을 업로드합니다. 자막 파일을 편집 할 경우,  다운로드 후"
-" 편집하고 변경한 자막 파일을 다시 업로드 할 수 있습니다."
 
 #: cms/templates/js/video/transcripts/messages/transcripts-use-existing.underscore
 msgid "Confirm Timed Transcript"
-msgstr "자막 승인"
+msgstr ""
 
 #: cms/templates/js/video/transcripts/messages/transcripts-use-existing.underscore
 msgid ""
 "You changed a video URL, but did not change the timed transcript file. Do "
 "you want to use the current timed transcript or upload a new .srt transcript"
 " file?"
-msgstr "동영상의 URL을 변경했지만, 자막 파일은 변경되지 않았습니다. 새 .srt 자막 파일을 업로드 할까요?"
+msgstr ""
 
 #: cms/templates/js/video/transcripts/messages/transcripts-use-existing.underscore
 msgid "Use Current Transcript"
-msgstr "지금 자막 쓰기"
+msgstr ""

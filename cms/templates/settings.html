@@ -404,6 +404,7 @@ ${can_show_certificate_available_date_field(context_course) | n, dump_js_escaped
         % endif
 
 
+
         % if about_page_editable:
         <div class="group-settings course_details">
           <header>
@@ -414,16 +415,34 @@ ${can_show_certificate_available_date_field(context_course) | n, dump_js_escaped
             <li class="field" id="field-course-language">
               <label for="course-language">${_("Course Language")}</label>
               <select id="course-language">
-                <option value="" selected> - </option>
+                <option value="" selected>-미선택-</option>
                 % for lang, label in language_options:
-                <option value="${lang}">${label}</option>
+                <option value="${lang}">${_(label)}</option>
                 % endfor
               </select>
               <span class="tip tip-stacked">${_("Identify the course language here. This is used to assist users find courses that are taught in a specific language. It is also used to localize the 'From:' field in bulk emails.")}</span>
             </li>
+            <li class="field" id="field-course-language selectdiv">
+              <label for="동">강좌 난이도</label>
+              <select class="select difficult-degree" id="selectfixid">
+                <option value="">-미선택-</option>
+              </select>
+              <span class="tip tip-stacked">강좌 내용의 어려운 수준을 선택하세요.</span>
+            </li>
+            <li class="field" id="field-course-language">
+                <label for="course-language">교수자명</label>
+                <input type="text" id = "teacher_name" value="마코템플릿 삭제teacher_name" placeholder="예: 홍길동, 임꺽정">
+                <span class="tip tip-stacked">교수자가 복수인 경우 콤마(,) 로 구분해서 입력해주세요(예: 홍길동, 임꺽정)</span>
+                <div style="display: none">
+                    <div id="addinfo_course_id" >${lms_link_for_about_page}</div>
+                    <div id="addinfo_user_id" >${user.id}</div>
+                </div>
+            </li>
           </ol>
         </div>
         % endif
+
+
 
         <hr class="divide" />
         <div class="group-settings marketing">

@@ -39,6 +39,19 @@ define(['js/views/validation', 'codemirror', 'underscore', 'jquery', 'jquery.ui'
                 'click .action-upload-image': 'uploadImage',
                 'click .add-course-learning-info': 'addLearningFields',
                 'click .add-course-instructor-info': 'addInstructorFields'
+                //강좌 운영진 소개의 추가 및 삭제 이벤트
+                'click #overview-tab3 .remove-item': "delStaffItem",
+                'click #overview-tab3 .add-item': "addStaffItem",
+
+                //FAQ 추가 및 삭제 이벤트
+                'click #overview-tab5 .remove-item': "delQuestionItem",
+                'click #overview-tab5 .add-item': "addQuestionItem",
+
+                'change #teacher_name': "modi_teacher_name",
+                'change #selectfixid': "modi_course_level",
+
+                //강좌소개 HTML 직접 수정 확인 이벤트
+                'click #edit_check': "course_editor_html",
             },
 
             initialize: function(options) {
@@ -225,6 +238,8 @@ define(['js/views/validation', 'codemirror', 'underscore', 'jquery', 'jquery.ui'
                 console.log(course_period)
                 console.log('Test Index ==============')
 
+                // 뒷단 작업 필요
+
                 // $.post("/modi_course_period", {
                 //     csrfmiddlewaretoken: $.cookie('csrftoken'),
                 //     addinfo_course_id: addinfo_course_id,
@@ -233,6 +248,47 @@ define(['js/views/validation', 'codemirror', 'underscore', 'jquery', 'jquery.ui'
                 //     method : 'addinfo',
                 // });
             },
+
+            // 뒷단 작업 필요
+
+            // modi_course_level: function (e){
+            //     this.model.set('course_level', $('#selectfixid').val());
+            //     $('.action-primary').click(function() {
+            //         var addinfo_course_id = 'course-v1:' + $('#course-organization').val() + '+' + $('#course-number').val() + '+' + $('#course-name').val();
+            //         var addinfo_user_id = $('#addinfo_user_id').text();
+            //         var course_level = $('#selectfixid').val();
+            //
+            //         console.log('?????????????')
+            //         console.log(addinfo_course_id)
+            //         console.log(addinfo_user_id)
+            //         console.log(course_level)
+            //         console.log('?????????????')
+            //
+            //         $.post("/modi_course_level", {
+            //             csrfmiddlewaretoken: $.cookie('csrftoken'),
+            //             addinfo_course_id: addinfo_course_id,
+            //             addinfo_user_id: addinfo_user_id,
+            //             course_level: course_level,
+            //             method: 'addinfo',
+            //         });
+            //     });
+            // },
+            // modi_teacher_name: function (e) {
+            //     this.model.set('modi_teacher_name', 'modi_teacher_name');
+            //     $('.action-primary').click(function() {
+            //         var addinfo_course_id = 'course-v1:' + $('#course-organization').val() + '+' + $('#course-number').val() + '+' + $('#course-name').val();
+            //         var addinfo_user_id = $('#addinfo_user_id').text();
+            //         var teacher_name = $('#teacher_name').val();
+            //
+            //         $.post("/modi_teacher_name", {
+            //             csrfmiddlewaretoken: $.cookie('csrftoken'),
+            //             addinfo_course_id: addinfo_course_id,
+            //             addinfo_user_id: addinfo_user_id,
+            //             teacher_name: teacher_name,
+            //             method : 'addinfo',
+            //         });
+            //     });
+            // },
 
 
             render: function() {
