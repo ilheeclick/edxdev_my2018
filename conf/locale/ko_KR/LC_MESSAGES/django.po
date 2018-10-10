@@ -11332,7 +11332,7 @@ msgstr "강좌 번호"
 #: cms/templates/course_outline.html
 #: openedx/features/course_experience/templates/course_experience/course-home-fragment.html
 msgid "Course Outline"
-msgstr ""
+msgstr "강좌 개요"
 
 #: cms/templates/html_error.html lms/templates/module-error.html
 msgid "Error:"

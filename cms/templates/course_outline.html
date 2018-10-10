@@ -158,9 +158,9 @@ from openedx.core.djangolib.markup import HTML, Text
         <article class="content-primary" role="main">
             <div class="course-status">
                 <div class="status-release">
-                    <h2 class="status-release-label">${_("Course Start Date")}</h2>
-                    <br>
+                    <h2 class="status-release-label">${_("Course Start Date:")}</h2>
                     <p class="status-release-value">${course_release_date}</p>
+
                     <ul class="status-actions">
                       <li class="action-item action-edit">
                         <a href="${settings_url}" class="edit-button action-button" data-tooltip="${_("Edit Start Date")}">
@@ -171,13 +171,12 @@ from openedx.core.djangolib.markup import HTML, Text
                     </ul>
                 </div>
                 <div class="status-pacing">
-                    <h2 class=status-pacing-label>${_("Course Pacing")}</h2>
-                    <br>
-                    % if context_course.self_paced:
-                        <p class="status-pacing-value">${_("Self-Paced")}</p>
-                    % else:
-                        <p class="status-pacing-value">${_("Instructor-Paced")}</p>
-                    % endif
+                    <h2 class=status-pacing-label>${_("Course Pacing:")}</h2>
+                        % if context_course.self_paced:
+                            <p class="status-pacing-value">${_("Self-Paced")}</p>
+                        % else:
+                            <p class="status-pacing-value">${_("Instructor-Paced")}</p>
+                        % endif
                 </div>
                 <div class="status-highlights-enabled"></div>
                 % if should_show_checklists_page(request.user):
