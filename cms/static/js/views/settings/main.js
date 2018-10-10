@@ -38,7 +38,7 @@ define(['js/views/validation', 'codemirror', 'underscore', 'jquery', 'jquery.ui'
                 'blur :input': 'inputUnfocus',
                 'click .action-upload-image': 'uploadImage',
                 'click .add-course-learning-info': 'addLearningFields',
-                'click .add-course-instructor-info': 'addInstructorFields'
+                'click .add-course-instructor-info': 'addInstructorFields',
                 //강좌 운영진 소개의 추가 및 삭제 이벤트
                 'click #overview-tab3 .remove-item': "delStaffItem",
                 'click #overview-tab3 .add-item': "addStaffItem",
