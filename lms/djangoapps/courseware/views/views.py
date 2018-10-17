@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Courseware views functions
 """
@@ -1729,3 +1730,24 @@ def get_financial_aid_courses(user):
             )
 
     return financial_aid_courses
+
+@ensure_csrf_cookie
+@cache_if_anonymous()
+def schools(request):
+    return render_to_response("courseware/schools.html")
+
+@ensure_csrf_cookie
+@cache_if_anonymous()
+def haewoondaex(request, org):
+    user = request.user
+
+    f1 = None if user.is_staff else {'enrollment_start__isnull': False, 'enrollment_start__lte': datetime.now()}
+    log.info(f1)
+    courses_list = get_courses(user, org=org, filter_=f1)
+
+    course_discovery_meanings = getattr(settings, 'COURSE_DISCOVERY_MEANINGS', False)
+
+    return render_to_response(
+        "courseware/univ_intro_" + org + ".html",
+        {'courses': courses_list, 'course_discovery_meanings': course_discovery_meanings}
+    )

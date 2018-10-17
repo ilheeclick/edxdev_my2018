@@ -1,0 +1,47 @@
+<%!
+  import json
+  from django.utils.translation import ugettext as _
+  from microsite_configuration import microsite
+%>
+<%inherit file="../main.html" />
+
+<%namespace name='static' file='../static_content.html'/>
+<%block name="pagetitle">${_("YeungnamUnivK")}</%block>
+
+<section class="container full home" id="main">
+    <!-- [s]  -->
+    <div class="univ-list-infotop"><img src="/static/images/univ_intro/univ_top_YeungnamUnivK.png" alt=""></div>
+
+    <section class="container univ">
+        <h2>${_("YOUNGNAM UNIVERSITY")}</h2>
+        <div class="univ-info">
+            <div class="sns-box">
+                 <a target="_blank" href="https://www.youtube.com/user/YeungnamUniversity"><img src="/static/images/common/footer_icon01.png" alt="youtube 링크 공유하기" class="univSns"/></a>
+                 <a target="_blank" href="https://www.facebook.com/yu1947"><img src="/static/images/common/footer_icon02.png" alt="facebook 링크 공유하기" class="univSns"/></a>
+            </div>
+            ${_(
+                "<p>The Yeungnam University educational philosophy is aimed at advancing and continuing the school's historical march towards a quality education, encouraging creative, personal growth and elevating the individual's belief, trust, devotion and patriotic allegiance to the beloved country.<br/><br/>"
+                "Based on the educational philosophy, we have contributed greatly to the industrialization, democratization and advancement of Korea producing more than 210,000 excellent alumni.<br/><br/>"
+                "On the basis of our vast experience and capability accumulated over the last 70 years, we are continually striving to create a better future to meet the expectations of each new generation.</p>"
+            )}
+        </div>
+
+        <section class="courses-container">
+            <section class="courses${'' if course_discovery_enabled else ' no-course-discovery'}">
+                <ul class="courses-listing">
+                %if courses and len(courses) > 0:
+                    %for course in courses:
+                    <li class="courses-listing-item">
+                        <%include file="../course.html" args="course=course" />
+                    </li>
+                    %endfor
+                %else:
+                    <div class="noCourse">※ ${_("There are currently no courses available.")}</div>
+                %endif
+                </ul>
+            </section>
+        </section>
+    </section>
+
+    <!-- [e]  -->
+</section>

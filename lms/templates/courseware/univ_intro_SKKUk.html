@@ -1,0 +1,47 @@
+<%!
+  import json
+  from django.utils.translation import ugettext as _
+  from microsite_configuration import microsite
+%>
+<%inherit file="../main.html" />
+
+<%namespace name='static' file='../static_content.html'/>
+<%block name="pagetitle">${_("SKKUk")}</%block>
+
+<section class="container full home" id="main">
+    <!-- [s]  -->
+    <div class="univ-list-infotop"><img src="/static/images/univ_intro/univ_top_skku.png" alt=""></div>
+
+    <section class="container univ">
+        <h2>${_("SUNGKYUNKWAN UNIVERSITY")}</h2>
+        <div class="univ-info">
+            <div class="sns-box">
+                 <a target="_blank" href="https://www.youtube.com/channel/UCMSzjNHLZNNUUA-Z8OrXY9Q"><img src="/static/images/common/footer_icon01.png" alt="youtube 링크 공유하기" class="univSns"/></a>
+                 <a target="_blank" href="https://www.facebook.com/sungkyunkwanuniversity1398"><img src="/static/images/common/footer_icon02.png" alt="facebook 링크 공유하기" class="univSns"/></a>
+            </div>
+            ${_(
+                "<p>For over six hundred years, Sungkyunkwan University has held an extraordinarily special place in the history of Korea. Sungkyunkwan's contributions to the education and training of royal scholar-officials by preeminent Korean philosophers have laid the foundation for numerous national advancements. Since its establishment, the school's educational tradition has emphasized the four principles of benevolence, righteousness, propriety, and wisdom.</p>"
+                "<p>We believe these are values which can carry our university to greater heights in the globalized world, especially when pursuing innovation with humanity and integrity. The complementary principles of mutual understanding, respect for peers, striving toward the common good, and unity have become increasingly important as the demands of modern life challenge us on a daily basis. </p>"
+                "<p>Sungkyunkwan University has also evolved to incorporate a modern educational paradigm that prioritizes cutting-edge research and innovative education. This has led to important advances in the arts, sciences, medicine, and technology in ways that allow greater synergy with other leading universities and institutions throughout the world.</p>"
+            )}
+        </div>
+
+        <section class="courses-container">
+            <section class="courses${'' if course_discovery_enabled else ' no-course-discovery'}">
+                <ul class="courses-listing">
+                %if courses and len(courses) > 0:
+                    %for course in courses:
+                    <li class="courses-listing-item">
+                        <%include file="../course.html" args="course=course" />
+                    </li>
+                    %endfor
+                %else:
+                    <div class="noCourse">※ ${_("There are currently no courses available.")}</div>
+                %endif
+                </ul>
+            </section>
+        </section>
+    </section>
+
+    <!-- [e]  -->
+</section>
