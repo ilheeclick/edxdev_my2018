@@ -1,0 +1,68 @@
+<%page expression_filter="h"/>
+<%! from django.utils.translation import ugettext as _ %>
+<%inherit file="../main.html" />
+<%block name="pagetitle">${_("IPIN certification.")}</%block>
+<%block name="js_extra">
+    <script>
+        function registrationForm(gubn){
+            /*gubn 'Y' is over 14, 'N' is under 14*/
+
+            if(window.sessionStorage) {
+                sessionStorage.setItem("reg_gubn", gubn);
+                sessionStorage.setItem("step", "1");
+            }else {
+                console.log("window.sessionStorage is Not Exists");
+            }
+
+            //sessionStorage.setItem('저장할 이름 - 문자열', '저장할 객체');
+            document.location.href = "/agree";
+        }
+
+        window.name ="Parent_window";
+
+        function fnPopup(){
+            window.open('', 'popupIPIN2', 'width=450, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no');
+            document.form_ipin.target = "popupIPIN2";
+            document.form_ipin.action = "https://cert.vno.co.kr/ipin.cb";
+            document.form_ipin.submit();
+        }
+
+        function nextStep(){
+            if($("#isAuth").val()=="Y")
+                document.location.href="/register";
+            else
+                alert("${_('IPIN certification is not completed.')}");
+        }
+
+
+    </script>
+</%block>
+
+<main id="main" aria-label="Content" tabindex="-1">
+    <form id="form_ipin" name="form_ipin" method="post">
+    <input type="hidden" id="isAuth" name="isAuth" value="N">
+    <input type="hidden" name="m" value="pubmain">
+    <input type="hidden" name="enc_data" value="${sEncData}">
+    <input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" />
+    </form>
+    <section class="container join-type">
+        <!-- [s] 오픈 API -->
+        <h2>${_("IPIN certification.")}</h2>
+        <p class="join-type-txt small">
+            ${_("Child members (under 14 years of age) must have the consent of their parents or guardian (legal representative) to join.")}<br>
+            ${_("Please click the 'IPIN Certification' button and proceed with the consent of the guardian (legal representative).")}
+        </p>
+        <section class="ipin-box">
+            <div class="ipin-block">
+                <img src="/static/images/contents/ipin.png" alt="">
+                <dl>
+                    <dt>${_("IPIN certification.")}</dt>
+                    <dd>${_("Proceed with the consent process of guardian by IPIN certification.")}</dd>
+                </dl>
+                <a href="javascript:fnPopup();">${_("Certificating")}</a>
+            </div>
+            <a href="javascript:nextStep();">${_("Movement to the next stage")}</a>
+        </section>
+        <!-- [e] 오픈 API -->
+    </section>
+</main>

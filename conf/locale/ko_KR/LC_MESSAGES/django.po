@@ -24721,3 +24721,7 @@ msgstr "커뮤니티"
  #: lms/templates/header/navbar-authenticated.html
 msgid "Participating Institutions"
 msgstr "참여기관"
+
+#: lms/templates/header/navbar-authenticated.html
+msgid "About Us"
+msgstr "K-MOOC란?"

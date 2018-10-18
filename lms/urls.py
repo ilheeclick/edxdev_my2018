@@ -70,6 +70,11 @@ urlpatterns = [
     url(r'^schools/?$', courseware_views.schools, name="schools"),
     url(r'^school/(?P<org>.*?)$', courseware_views.haewoondaex, name="school"),
 
+    url(r'^agree$', student_account_views.agree, name="agree"),
+    url(r'^agree_done$', student_account_views.agree_done, name="agree_done"),
+    url(r'^parent_agree$', student_account_views.parent_agree, name="parent_agree"),
+    url(r'^parent_agree_done$', student_account_views.parent_agree_done, name="parent_agree_done"),
+
     url(r'', include('student.urls')),
     # TODO: Move lms specific student views out of common code
     url(r'^dashboard/?$', student_views.student_dashboard, name='dashboard'),

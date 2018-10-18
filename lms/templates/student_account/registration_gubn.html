@@ -1,0 +1,51 @@
+<%! from django.utils.translation import ugettext as _ %>
+<%namespace name='static' file='/static_content.html'/>
+
+<%inherit file="../main.html" />
+
+<%block name="pagetitle">${_("Register (member classification)")}</%block>
+
+<%block name="js_extra">
+    <script>
+        function member_division(gubn){
+            /*division 'Y' is over 14, 'N' is under 14*/
+            $("#division").val(gubn);
+            $("#form").submit();
+        }
+    </script>
+</%block>
+
+<%block name="header_extras"></%block>
+
+<section class="container join-type" id="main">
+    <form id="form" name="form" method="post" action="/agree">
+    <input type="hidden" id="division" name="division" />
+    <input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" />
+    </form>
+    <!-- [s] 가입유형 선택 -->
+    <h2>${_("Choose your subscription type.")}</h2>
+
+    <p class="join-type-txt">${_("Please be sure to select the case that applies to you, as there is a difference in the registration process depending on the membership classification.")}</p>
+    <section class="join-type-box">
+        <div class="join-type-block">
+            <img src="/static/images/contents/join_type01.png" alt="일반 회원">
+            <dl>
+                <dt>${_("General member")}</dt>
+                <dd>${_("General member over 14 years old")}</dd>
+            </dl>
+            <a href="#" onclick="member_division('Y');" title="일반회원 가입하기">${_("Join")}</a>
+        </div>
+        <div class="join-type-block">
+            <img src="/static/images/contents/join_type02.png" alt="어린이 회원">
+            <dl>
+                <dt>${_("Children member")}</dt>
+                <dd>${_("General member below 14 years old")}</dd>
+            </dl>
+            <a href="#" onclick="member_division('N');" title="어린이회원 가입하기">${_("Join")}</a>
+        </div>
+    </section>
+    <!-- [e] 가입유형 선택 -->
+</section>
+
+
+
