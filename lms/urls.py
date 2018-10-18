@@ -66,6 +66,10 @@ if settings.DEBUG or settings.FEATURES.get('ENABLE_DJANGO_ADMIN_SITE'):
 urlpatterns = [
     url(r'^$', branding_views.index, name='root'),   # Main marketing page, or redirect to courseware
 
+    #schools
+    url(r'^schools/?$', courseware_views.schools, name="schools"),
+    url(r'^school/(?P<org>.*?)$', courseware_views.haewoondaex, name="school"),
+
     url(r'', include('student.urls')),
     # TODO: Move lms specific student views out of common code
     url(r'^dashboard/?$', student_views.student_dashboard, name='dashboard'),

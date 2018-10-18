@@ -1,0 +1,56 @@
+<%!
+  import json
+  from django.utils.translation import ugettext as _
+  from microsite_configuration import microsite
+%>
+<%inherit file="../main.html" />
+
+<%namespace name='static' file='../static_content.html'/>
+<%block name="pagetitle">${_("SejonguniversityK")}</%block>
+
+<section class="container full home" id="main">
+    <!-- [s]  -->
+    <div class="univ-list-infotop"><img src="/static/images/univ_intro/univ_top_SejonguniversityK.jpg" alt=""></div>
+
+    <section class="container univ">
+        <h2>${_("SEJONG UNIVERSITY")}</h2>
+        <div class="univ-info">
+            <div class="sns-box">
+                 <a target="_blank" href="https://www.youtube.com/user/channelsejongUCC"><img src="/static/images/common/footer_icon01.png" alt="youtube 링크 공유하기" class="univSns"/></a>
+                 <a target="_blank" href="https://www.facebook.com/sejongpr"><img src="/static/images/common/footer_icon02.png" alt="facebook 링크 공유하기" class="univSns"/></a>
+            </div>
+            ${_(
+                "<p>Established in 1940, Sejong University has become a prestigious private university with a"
+                "long history and tradition by continuously nurturing human capital for Korea and its people"
+                "without succumbing to the turbulence of modern history or the Japanese occupation.<br/><br/>"
+                "Together, infrastructure and human capital must be fully equipped for Sejong University to"
+                "be a global player. The university will only continue to grow with excellent facilities, creative"
+                "education programs and world-class faculty. We must take the lead with bold innovation for"
+                "the future, looking toward a better tomorrow.<br/><br/>"
+                "Sejong University holds greater research capability than many of its domestic counterparts."
+                "The institution is filled with enthusiasm for academic research, and now is the time to reach"
+                "outside our borders. To expand our scope in this globalized world, we must maintain our"
+                "momentum until the name Sejong is more widely recognized in the world.</p>"
+            )}
+        </div>
+
+
+        <section class="courses-container">
+            <section class="courses${'' if course_discovery_enabled else ' no-course-discovery'}">
+                <ul class="courses-listing">
+                %if courses and len(courses) > 0:
+                    %for course in courses:
+                    <li class="courses-listing-item">
+                        <%include file="../course.html" args="course=course" />
+                    </li>
+                    %endfor
+                %else:
+                    <div class="noCourse">※ ${_("There are currently no courses available.")}</div>
+                %endif
+                </ul>
+            </section>
+        </section>
+    </section>
+
+    <!-- [e]  -->
+</section>
