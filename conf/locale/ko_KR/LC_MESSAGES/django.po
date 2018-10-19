@@ -24725,3 +24725,1367 @@ msgstr "참여기관"
 #: lms/templates/header/navbar-authenticated.html
 msgid "About Us"
 msgstr "K-MOOC란?"
+
+# templates/student_account/agree.html
+
+msgid "Terms and conditions for subscription"
+msgstr "회원가입 (가입약관)"
+
+msgid "In order to become a member, you have to agree to the terms and conditions for use."
+msgstr "이용약관을 동의하여야 회원가입이 가능합니다."
+
+msgid "If you agree to the personal information processing policy, membership is possible."
+msgstr "개인정보 수집 및 이용 동의를 동의하여야 회원가입이 가능합니다."
+
+msgid "Terms and conditions for use"
+msgstr "이용약관 동의"
+
+msgid "Agree"
+msgstr "동의함"
+
+msgid "Do not agree"
+msgstr "동의하지 않음"
+
+msgid "All Agree"
+msgstr "전체 동의함"
+
+msgid "Do not all agree"
+msgstr "전체 동의하지 않음"
+
+msgid "Privacy policy (or Personal information processing policy)"
+msgstr "개인정보 수집 및 이용 동의"
+
+# templates/student_account/registration_gubn.html
+
+msgid "Choose your subscription type."
+msgstr "가입유형 선택"
+
+msgid "Please be sure to select the case that applies to you, as there is a difference in the registration process depending on the membership classification."
+msgstr "회원구분에 따라 가입절차에 차이가 있으니 반드시 본인에 해당하는 경우를 선택해 주시기 바랍니다."
+
+msgid "General member"
+msgstr "일반회원"
+
+msgid "General member over 14 years old"
+msgstr "만 14세 이상"
+
+msgid "Children member"
+msgstr "어린이 회원"
+
+msgid "General member below 14 years old"
+msgstr "만 14세 미만"
+
+# templates/student_account/parent_agree_done.html
+
+msgid "IPIN certification is succeeded."
+msgstr "아이핀 인증에 성공하였습니다."
+
+msgid "Minors can not be egal representatives."
+msgstr "미성년자는 법정대리인이 될 수 없습니다."
+
+msgid "IPIN authentication failed."
+msgstr "아이핀 인증에 실패하였습니다."
+
+# templates/student_account/agree.html
+
+msgid "IPIN certification."
+msgstr "회원가입 (아이핀 인증)"
+
+msgid "IPIN certification is not completed."
+msgstr "아이핀 인증이 완료되지 않았습니다."
+
+msgid "Child members (under 14 years of age) must have the consent of their parents or guardian (legal representative) to join."
+msgstr "만 14세 미만 학습자는 부모님 또는 보호자(법정 대리인)의 동의가 있어야 가입이 가능합니다."
+
+msgid "Please click the 'IPIN Certification' button and proceed with the consent of the guardian (legal representative)."
+msgstr "“아이핀 인증” 버튼을 클릭하여 보호자(법정 대리인)의 동의절차를 진행해주세요."
+
+msgid "Proceed with the consent process of guardian by IPIN certification."
+msgstr "아이핀 인증으로 보호자의 동의절차를 진행"
+
+msgid "Certificating"
+msgstr "인증하기"
+
+msgid "Movement to the next stage"
+msgstr "다음 단계 이동"
+
+msgid "There are currently no courses available."
+msgstr "현재 수강할 수 있는 강좌가 없습니다."
+
+msgid "Notices"
+msgstr "공지사항"
+
+msgid "Plagiarism testing"
+msgstr "표절검사"
+
+# account_settings_confirm.html
+msgid "Please enter a password"
+msgstr "비밀번호를 입력해 주세요"
+
+msgid "The password is incorrect."
+msgstr "비밀번호가 맞지 않습니다."
+
+msgid "Access path is abnormal."
+msgstr "접근경로가 비정상적입니다."
+
+msgid "Move the home"
+msgstr "메인페이지로 이동합니다."
+
+msgid "Confirm your password"
+msgstr "비밀번호 확인"
+
+msgid "We check password for your privacy."
+msgstr "개인정보 보호를 위해 회원님의 비밀번호를 확인합니다."
+
+msgid "Please be careful your password."
+msgstr "항상 비밀번호는 타인에게 노출되지 않도록 주의해주세요."
+#-------------------------------------------------------
+
+# Main
+msgid "Availability"
+msgstr "수강신청 강좌 찾기"
+
+msgid "Courses by Subject"
+msgstr "전공별 강좌 보기"
+
+msgid "Humanities"
+msgstr "인문"
+
+msgid "Social"
+msgstr "사회"
+
+msgid "Social Sciences"
+msgstr "사회"
+
+msgid "Education"
+msgstr "교육"
+
+msgid "Engineering"
+msgstr "공학"
+
+msgid "Natural"
+msgstr "자연"
+
+msgid "Natural Sciences"
+msgstr "자연"
+
+msgid "Medical"
+msgstr "의약"
+
+msgid "Medical Sciences"
+msgstr "의약"
+
+msgid "Arts&Physical"
+msgstr "예체능"
+
+msgid "Arts & Physical"
+msgstr "예체능"
+
+msgid "Interdisciplinary"
+msgstr "융ㆍ복합"
+
+msgid "Interdiscip."
+msgstr "융ㆍ복합"
+
+msgid "Korean Studies"
+msgstr "한국학"
+
+msgid "Find Courses for me"
+msgstr "나에게 맞는 강좌 찾기"
+
+msgid "Opening Status"
+msgstr "개강상태"
+
+msgid "Finish"
+msgstr "종료 강좌"
+
+msgid "Period of studing"
+msgstr "학습기간"
+
+msgid "Short (1~6 weeks)"
+msgstr "단기 (1주~6주)"
+
+msgid "Middle (7~12 weeks)"
+msgstr "중기 (7주~12주)"
+
+msgid "Long (over 13 weeks)"
+msgstr "장기 (13주 이상)"
+
+msgid "Korean"
+msgstr "한국어"
+
+msgid "English"
+msgstr "영어"
+
+msgid "Chiness"
+msgstr "중국어"
+#---------------------------------------------------
+# templates/instructor/instructor_dashboard_2/instructor_dashboard_2.html
+
+msgid "Plagiarism test implementation"
+msgstr "표절검사 수행"
+
+msgid "The plagiarism test can be performed on the learners' narrative answers among the mutual losing questions."
+msgstr "표절검사는 K-MOOC의 서술형 문제 유형(상호평가, 교수자 채점 과제)에 대해 학습자가 제출한 답안을 대상으로 이루어집니다."
+
+msgid "Since it is performed by the automatic scheduler once a day, the result is calculated within maximum one day after the execution request."
+msgstr "표절검사는 실시간이 아닌 1일 1회 자동 스케줄러에 의해 수행되므로, 요청 후 최대 1일 이내에 결과를 확인할 수 있습니다."
+
+msgid "Performing a plagiarism test"
+msgstr "표절검사 수행하기"
+
+msgid "Performing test target is not exists."
+msgstr "표절검사 대상이 없습니다."
+
+msgid "Plagiarism test is in progress."
+msgstr "표절검사가 진행중입니다."
+
+msgid "Test progress status"
+msgstr "검사 진행상태"
+
+msgid "Plagiarism test is completed."
+msgstr "표절검사가 완료되었습니다."
+
+msgid "There is currently no work in progress."
+msgstr "현재 진행중인 작업이 없습니다."
+
+msgid "Plagiarism test result"
+msgstr "표절 검사 결과"
+
+msgid "Outputs the final plagiarism test result as a CSV file."
+msgstr "표절검사 결과를 CSV 파일로 출력합니다."
+
+msgid "CSV file download"
+msgstr "표절검사 결과 다운로드"
+
+# templates/courseware/schools.html
+
+msgid "Introduction of participating universities and shortcut to homepage"
+msgstr "참여대학 소개 및 홈페이지 바로가기"
+
+msgid "Introducing participating universities with K-MOOC."
+msgstr "K-MOOC과 함께하는 참여대학을 소개합니다."
+
+msgid "K-MOOC promotes the autonomy and diversity of participating universities to be respected and exercised as much as possible during the entire business process, and creates close cooperation between related institutions and participating universities."
+msgstr "K-MOOC은 사업 전 과정에서 참여대학의 자율성과 다양성이 최대한 존중되고 발휘될 수 있도록 추진합니다.또한 관계 기관과 참여대학간의 긴밀한 협력을 만들어 나갑니다."
+
+# templates/courseware/cert_check.html
+
+msgid "Certificate verification"
+msgstr "이수증 검증"
+
+msgid "You can check the validity of the certifiate issued by K-MOOC"
+msgstr "K-MOOC에서 발급받은 이수증의 유효성을 확인하실 수 있습니다."
+
+msgid "Please enter your authotification number at the top of your certificate"
+msgstr "이수증 상단의 인증번호를 입력하세요."
+
+msgid "Verificating"
+msgstr "검증하기"
+
+# templates/certificates/_accomplishment-rendering_kmooc.html
+
+msgid "Certificatiion ID"
+msgstr "인증번호 CERTIFICATE ID"
+
+msgid "This certificate will be awarded by faithfully completing the above course"
+msgstr "위 과정을 성실히 이수하여 이 증서를 수여합니다."
+
+msgid "Completion date"
+msgstr "이수일자"
+
+msgid "Completion"
+msgstr "완료여부 확인 문제"
+
+# templates/student_account/remove_account.html
+
+msgid "Withdrawal guidance"
+msgstr "탈퇴안내"
+
+msgid "Please make sure to check the instructions before submitting your membership withdrawal"
+msgstr "회원탈퇴를 신청하기 전에 안내 사항을 꼭 확인해주세요."
+
+msgid "If you wirthdraw your membership, you can not reuse or recover the ID in use"
+msgstr "사용하고 계신 아이디는 탈퇴할 경우 재사용 및 복구가 불가능합니다."
+
+msgid "Please be careful that you and others can not reuse or recover your ID if you withdraw your membership."
+msgstr "탈퇴한 아이디는 본인과 타인 모두 재사용 및 복구가 불가하오니 신중하게 선택하시기 바랍니다."
+
+msgid "After your withdrawal of membership, the membership information and personal service use history will be deleted."
+msgstr "탈퇴 후 회원정보 및 개인형 서비스 이용기록은 모두 삭제됩니다."
+
+msgid "Personal service use information such as member information, e-mail addresse, and profiles will be deleted, and the deleted data will not be recovered."
+msgstr "회원정보 및 메일주소, 프로파일 등 개인형 서비스 이용기록은 모두 삭제되며, 삭제된 데이터는 복구되지 않습니다."
+
+msgid "Please confirm the deleted information and backup the necessary data in advance."
+msgstr "삭제되는 내용을 확인하시고 필요한 데이터는 미리 백업을 해주세요."
+
+msgid "Postings registered on the bulletin board service remain after the withdrawal."
+msgstr "탈퇴 후에도 게시판형 서비스에 등록한 게시물은 그대로 남아 있습니다."
+
+msgid "Bulletin board"
+msgstr "게시판"
+
+msgid "Question answer opinion"
+msgstr "질문 답변 의견"
+
+msgid "Posts"
+msgstr "게시글"
+
+msgid "After withdrawal, you can not subscribe to the current ID again and ID and data can not be recovered."
+msgstr "탈퇴 후에는 현재 아이디로 다시 가입할 수 없으며 아이디와 데이터는 복구할 수 없습니다."
+
+msgid "Postings registered on the bulletin board service can not be deleted after the withdrawal."
+msgstr "게시판형 서비스에 남아있는 게시글은 탈퇴 후 삭제할 수 없습니다."
+
+msgid "I have read and agree to all the instructions."
+msgstr "안내 사항을 모두 확인하였으며, 이에 동의합니다."
+
+msgid "Withdrawal after consent"
+msgstr "동의 후 탈퇴하기"
+
+msgid "Withdrawal"
+msgstr "탈퇴하기"
+
+#msgstr "계정활성화를 위한 메일을 보냈으니, 계정활성화 메일을 통해 사이트에 다시 접속하여 로그인해주십시오. 확인 버튼 클릭 후 자동으로 로그아웃 됩니다."
+msgid "Since we sent an email to activate your account, please log back in to your site via your account activation email.. Click OK button to log out automatically."
+msgstr "회원가입을 축하합니다! 수강신청을 위해서는 가입하신 메일주소로 발송된 메일을 확인하셔야 합니다. /n \n/n \n/n \n/n \n(확인 버튼을 누르시면 자동으로 로그아웃 됩니다)"
+
+msgid "You have to agree to the instructions."
+msgstr "안내 사항을 동의하세요"
+
+msgid "Input your password"
+msgstr "비밀번호 입력"
+
+# edx-platform/lms/templates/courseware/privacy.html
+
+msgid "K-MOOC Homepage Personal Information Processing Policy (Plan)"
+msgstr "K-MOOC 개인정보처리방침"
+
+msgid ""
+"The K-MOOC homepage (http://www.kmooc.kr, hereinafter referred to as the 'homepage') is a system run by the National Institute for Lifelong Education (hereinafter referred to as 'NILE'), a member institution of the Ministry of Education. All the personal information are collected, possessed and processed based on related laws and regulations."
+"The 'Personal Information Protection Act' provides general rules for the handling of such personal information, and on the homepage, personal information collected, possessed and processed in accordance with the provisions of this Act shall be used for proper execution of public works and protection of users' interests. We will treat it legally and properly.<br><br>"
+"In addition, the homepage respects the interests of users in handling personal information such as requests for viewing, correction, deletion, and suspension of personal information held by relevant laws and regulations, Users may file an administrative appeal as required by the Administrative Appeals Act with regard to the infringement of rights and interests in these laws and regulations.<br><br>"
+"○ This policy will be made public on the homepage after establishing it in accordance with Article 30 (Establishment and Disclosure of Personal Information Processing Policy) of the 「Personal Information Protection Act」.<br><br>"
+msgstr ""
+"K-MOOC 홈페이지(http://www.kmooc.kr, 이하 ‘당 홈페이지’라 한다)는 교육부 출연기관인 국가평생교육진흥원(이하 ‘진흥원’이라 한다)에서 운영하고 있는 시스템으로 모든 개인정보는 관련 법령에 근거하여 수집ㆍ보유 및 처리되고 있습니다.<br><br>"
+"「개인정보 보호법」 은 이러한 개인정보의 취급에 대한 일반적인 규범을 제시하고 있으며, 당 홈페이지에서는 이러한 법령의 규정에 따라 수집ㆍ보유 및 처리하는 개인정보를 공공업무의 적절한 수행과 이용자의 권익을 보호하기 위해 적법하고 적정하게 취급할 것입니다.<br><br>"
+"또한, 당 홈페이지는 관련 법령에서 규정한 바에 따라 보유하고 있는 개인정보에 대한 열람, 정정, 삭제, 처리정지 요구 등 개인정보를 처리 시 이용자의 권익을 존중하며, 이용자는 이러한 법령상 권익의 침해 등에 대하여 행정심판법에서 정하는 바에 따라 행정심판을 청구할 수 있습니다.<br><br>"
+"당 홈페이지는 「개인정보 보호법」에 따라 이용자의 개인정보 보호 및 권익을 보호하고 개인정보와 관련한 이용자의 고충을 원활하게 처리할 수 있도록 다음과 같은 처리방침을 두고 있으며, 개인정보 처리방침을 개정하는 경우 당 홈페이지 공지사항(또는 개별공지)을 통하여 공지할 것입니다. <br><br>"
+"○ 본 방침은 「개인정보 보호법」 제30조(개인정보 처리방침의 수립 및 공개)에 의거 수립 후 당 홈페이지를 통하여 공개됩니다.<br><br>"
+
+msgid "Article 1 (Purpose of Personal Information Processing)"
+msgstr "제1조(개인정보의 처리 목적)"
+
+msgid "Article 2 (Retention Period of Personal Information Processing)"
+msgstr "제2조(개인정보의 처리 보유 기간)"
+
+msgid "Article 3 (Providing Third Parties with Personal Information)"
+msgstr "제3조(개인정보의 제3자 제공)"
+
+msgid "Article 4 (Consignment of Personal Information Processing)"
+msgstr "제4조(개인정보처리의 위탁)"
+
+msgid "Article 5 (Rights, Duties and Execution Methods of Information Subjects)"
+msgstr "제5조(정보주체의 권리∙의무 및 행사방법)"
+
+msgid "Article 6 (Personal Information Collection Items)"
+msgstr "제6조(개인정보 수집 항목)"
+
+msgid "Article 7 (Matters Concerning the Installation, Operation and Rejection of Devices that Automatically Collect Personal Information)"
+msgstr "제7조(개인정보를 자동으로 수집하는 장치의 설치․운영 및 그 거부에 관한 사항)"
+
+msgid "Article 8 (Destruction of Personal Information)"
+msgstr "제8조(개인정보 파기)"
+
+msgid "Article 9 (Measures to Ensure the Safety of Personal Information)"
+msgstr "제9조(개인정보의 안전성 확보 조치)"
+
+msgid "Article 10 (Responsible Chief Officer for Personal Information Protection)"
+msgstr "제10조(개인정보 보호책임자)"
+
+msgid "Article 11 (Request to View Personal Information)"
+msgstr "제11조(개인정보 열람청구)"
+
+msgid "Article 12 (Remedies for Rights and Interests Infringement)"
+msgstr "제12조(권익침해 구제방법)"
+
+msgid "Article 13 (Changes in Personal Information Processing Policy)"
+msgstr "제13조(개인정보 처리방침의 변경)"
+
+msgid "① The homepage handles personal information for the following purposes. The personal information being processed is not used for any purpose other than the following purposes, and if the purpose of use is changed, we will implement necessary measures such as receiving extra consent in accordance with Article 18 of the 「Personal Information Protection Act」."
+msgstr "① 당 홈페이지는 다음의 목적을 위하여 개인정보를 처리합니다. 처리하고 있는 개인정보는 다음의 목적 이외의 용도로는 이용되지 않으며, 이용 목적이 변경되는 경우에는 「개인정보 보호법」 제18조에 따라 별도의 동의를 받는 등 필요한 조치를 이행할 예정입니다."
+
+msgid "1. Homepage membership sign up and management"
+msgstr "1. 홈페이지 회원 가입 및 관리"
+
+msgid "We process personal information for the following purposes: confirmation of the intention of membership sign up; confirmation of identity by providing membership service; maintenance and management of membership status; prevention of illegal use of service; confirmation of consent of a legal representative when collecting personal information of children under 14 years old; record keeping for dispute settlement; various notices/notification. "
+msgstr "회원 가입의사 확인, 회원제 서비스 제공에 따른 본인 확인, 회원자격 유지ㆍ관리, 서비스 부정이용 방지, 만 14세 미만 아동의 개인정보 수집 시 법정대리인의 동의 여부 확인, 분쟁 조정을 위한 기록 보존, 각종 고지ㆍ통지 등을 목적으로 개인정보를 처리합니다."
+
+msgid "2. Civil petition processing"
+msgstr "2. 민원사무 처리"
+
+msgid "We process personal information for the purpose of confirming the identity of the complainant, confirming the complaint, contacting and notifying for the investigation, reporting the processing result, and improving and providing the service."
+msgstr "민원인의 신원 확인, 민원사항 확인, 사실조사를 위한 연락ㆍ통지, 처리결과 통보, 서비스 개선 및 제공 등의 목적으로 개인정보를 처리합니다."
+
+msgid "② The purposes of processing personal information files registered and disclosed in accordance with Article 32 of the 「Personal Information Protection Act」 of the homepage are as follows."
+msgstr "② 당 홈페이지가 「개인정보 보호법」 제32조에 따라 등록ㆍ공개하는 개인정보파일의 처리목적은 다음과 같습니다."
+
+msgid "File Name"
+msgstr "파일명"
+
+msgid "Operating Basis"
+msgstr "운영 근거"
+
+msgid "Purpose of Processing"
+msgstr "처리 목적"
+
+msgid "Personal Information Items"
+msgstr "개인정보 항목"
+
+msgid "Holding Period"
+msgstr "보유 기간"
+
+msgid "K-MOOC homepage member information"
+msgstr "K-MOOC 홈페이지 회원정보"
+
+msgid "Agreement of Information subject"
+msgstr "정보주체 동의"
+
+msgid "Homepage membership sign up and management, civil petition processing"
+msgstr "홈페이지 회원가입 및 관리, 민원사무 처리"
+
+msgid "- Required items : Email, actual name, ID, password, country, sex, the year of birth"
+msgstr "- 필수항목 : 이메일, 실명, 아이디, 비밀번호, 국가, 성별, 출생연도"
+
+msgid "- Optional items : residence, the highest level of education, purpose of joining"
+msgstr "- 선택항목 : 거주지, 최종학력, 가입목적"
+
+msgid "Until membership withdrawal"
+msgstr "회원 탈퇴시 까지"
+
+# templates/index.html
+
+msgid "Enable video progress check"
+msgstr "동영상 진도체크 활성화"
+
+msgid "If you set the value to 'True', the video progress check is enabled."
+msgstr "'True'로 값을 설정할 경우 동영상 진도체크가 활성화 됩니다."
+
+msgid "Notification"
+msgstr "알림"
+
+msgid "NOTIFICATION"
+msgstr "알림"
+
+msgid "Viewing all"
+msgstr "전체보기"
+
+msgid "University List"
+msgstr "대학목록"
+
+msgid "Available Courses"
+msgstr "수강신청 가능강좌"
+
+msgid "Courses by major"
+msgstr "전공별 강좌"
+
+msgid "Courses that suit you"
+msgstr "나에게 맞는 강좌"
+
+msgid "Opening course status"
+msgstr "개강상태"
+
+msgid "Join Us"
+msgstr "회원가입 (계정연동 및 정보입력)"
+
+msgid "Join"
+msgstr "가입하기"
+
+# /lms/templates/courseware/univ_intro_KOCWk.html
+
+msgid "KOCW (Korea Open CourseWare) is"
+msgstr "KOCW (Korea Open CourseWare)는"
+
+msgid "the common use service of national higher education teaching and learning materials, which share lecture materials in conjunction with the domestic Universities and overseas OER(Open Educational Resources) councils."
+msgstr "국내 대학 및 해외 교육자료 공개(OER: Open Educational Resources) 운동 협의체와 연계하여 강의자료 정보를 공유하는 국가 대표 고등교육 교수학습자료 공동활용 서비스 입니다."
+
+msgid "KOCW service has the following objectives."
+msgstr "KOCW 서비스는 다음과 같은 목표를 가지고 서비스를 제공하고 있습니다."
+
+msgid "Improving the quality of higher education through the common use of e-learning contents"
+msgstr "이러닝 콘텐츠 공동활용을 통한 대학교육의 질 제고"
+
+msgid "Securing educational excellence with the power of sharing materials"
+msgstr "공유의 힘을 이용한 교육내용/방법의 수월성 확보"
+
+msgid "Expanding life-long learning opportunities through the enhancement of general public accessibility"
+msgstr "대학 강의의 일반 국민 접근성 제고를 통한 평생학습 기회 확대"
+
+msgid "Ministry of Education"
+msgstr "교육부"
+
+msgid "NILE"
+msgstr "국가평생교육진흥원"
+
+msgid "Lifelong Learning Account"
+msgstr "평생학습계좌제"
+
+msgid "Lifelong Learning Portal"
+msgstr "늘배움"
+
+msgid "ACE : Advancement of College Education"
+msgstr "학부교육 선도대학 육성사업"
+
+msgid "ACE implements University’s ideology, visions, and talents for creating and spreading the best model of leading undergraduate education with the objective of 'a well-taught University'. Also, this project supports universities’ overall improvement for curriculum development, operational efforts, and educational support system"
+msgstr "학부교육 선도대학 육성사업(ACE)은 ‘잘 가르치는 대학’ 육성을 목표로 대학의 건학이념, 비전 및 인재상 등을 구현하는 선도적 학부교육 우수 모델 창출․확산을 위해, 대학의 교육과정 개발 및 운영 혁신 노력 및 교육지원 시스템의 총체적 개선을 지원하는 사업입니다."
+
+msgid "K-MOOC participating Universities"
+msgstr "K-MOOC 참여대학"
+
+msgid "Gachon University, Kunyang University, Dongguk University, Dongshin University, Mokwon University, Sangmyung University (Seoul), Seoul City University, Chungang University, Chungnam University, Handong University, Hallym University"
+msgstr "가천대학교, 건양대학교, 동국대학교, 동신대학교, 목원대학교, 상명대학교(서울), 서울시립대학교, 중앙대학교, 충남대학교, 한동대학교, 한림대학교"
+
+msgid "Reference: ACE homepare (http://eduup.kcue.or.kr)"
+msgstr "참고 : 학부교육 선도대학 육성사업 홈페이지 (http://eduup.kcue.or.kr)"
+
+msgid "CK (Creative Korea)"
+msgstr "대학 특성화 사업 (CK : Creative Korea)"
+
+msgid "CK is a project to support the establishment for the improvement of the characterization through the structural reform of the university in order to revitalize the national and local creative economy and cultivate creative talents."
+msgstr "대학 특성화 사업(CK : Creative Korea)은 국가․지역 창조경제 활성화 및 창의적 인재양성을 위하여 대학의 구조개혁을 통한 체질 개선 및 특성화 기반 구축을 지원하는 사업입니다."
+
+msgid "Konyang University, Kumho University, Dankook University, Busan Foreign Language University, Sahmyook University, Sangmyung University (Cheonan)"
+msgstr "건양대학교, 공주대학교, 금오공과대학교, 단국대학교, 부산외국어대학교, 삼육대학교, 상명대학교(천안)"
+
+msgid "Reference: CK homepage (http://www.ckgc.co.kr)"
+msgstr "참고 : 대학 특성화 사업 총괄협의회 홈페이지 (http://www.ckgc.co.kr)"
+
+msgid "CORE (initiative for College of humanities' Research and Education)"
+msgstr "대학 인문역량 강화사업"
+
+msgid "CORE is a project to support Universities’ autonomous human capacity and its innovation, aiming at strengthening the competence and the status of humanities as a basic discipline that responds to social demand for sustainable national development."
+msgstr "대학 인문역량 강화사업(CORE : initiative for COllege of humanities' Research and Education)은 지속 가능한 국가 발전을 위하여 사회수요에 부응하는 기초학문으로서 인문학의 역량 및 위상 강화를 목표로 대학의 자율적 인문역량 강화․혁신을 지원하는 사업입니다."
+
+msgid "Kyungpook National University, Seoul National University, Sungkyunkwan University, Hanyang University"
+msgstr "경북대학교, 서울대학교, 성균관대학교, 한양대학교"
+
+msgid "Reference: National Research Foundation of Korea homepage  (http://core-portal.org/html/main/main.php)"
+msgstr "참고 : CORE 홈페이지 (http://core-portal.org/html/main/main.php)"
+
+msgid "KYUNGNAM UNIVERSITY"
+msgstr "경남대학교"
+
+msgid "KYUNGHEE UNIVERSITY"
+msgstr "경희대학교"
+
+msgid "KOREA UNIVERSITY"
+msgstr "고려대학교"
+
+msgid "DAEGU UNIVERSITY"
+msgstr "대구대학교"
+
+msgid "PUSAN NATIONAL UNIVERSITY"
+msgstr "부산대학교"
+
+msgid "SANGMYUNG UNIVERSITY"
+msgstr "상명대학교"
+
+msgid "SEOUL NATIONAL UNIVERSITY"
+msgstr "서울대학교"
+
+msgid "SUNGKYUNKWAN UNIVERSITY"
+msgstr "성균관대학교"
+
+msgid "SUNGSHIN UNIVERSITY"
+msgstr "성신여자대학교"
+
+msgid "SEJONG UNIVERSITY"
+msgstr "세종대학교"
+
+msgid "SOOKMYUNG WOMEN'S UNIVERSITY"
+msgstr "숙명여자대학교"
+
+msgid "YONSEI UNIVERSITY"
+msgstr "연세대학교"
+
+msgid "YOUNGNAM UNIVERSITY"
+msgstr "영남대학교"
+
+msgid "UNIVERSITY OF ULSAN"
+msgstr "울산대학교"
+
+msgid "EWHA WOMANS UNIVERSITY"
+msgstr "이화여자대학교"
+
+msgid "INHA UNIVERSITY"
+msgstr "인하대학교"
+
+msgid "CHONBUK NATIONAL UNIVERSITY"
+msgstr "전북대학교"
+
+msgid "POSTECH"
+msgstr "포항공과대학교"
+
+msgid "KAIST"
+msgstr "한국과학기술원"
+
+msgid "HANYANG UNIVERSITY"
+msgstr "한양대학교"
+
+msgid "KYUNGSUNG UNIVERSITY"
+msgstr "경성대학교"
+
+msgid "KOCW"
+msgstr "KOCW"
+
+msgid "DANKOOK UNIVERSITY"
+msgstr "단국대학교"
+
+msgid "SOGANG UNIVERSITY"
+msgstr "서강대학교"
+
+msgid "(Essential)"
+msgstr "(필수)"
+
+msgid "(option)"
+msgstr "(선택)"
+
+#: 분야
+msgid "hum"
+msgstr "인문"
+
+msgid "social"
+msgstr "사회"
+
+msgid "edu"
+msgstr "교육"
+
+msgid "eng"
+msgstr "공학"
+
+msgid "nat"
+msgstr "자연"
+
+msgid "med"
+msgstr "의약"
+
+msgid "art"
+msgstr "예체능"
+
+msgid "intd"
+msgstr "융·복합"
+
+msgid "major"
+msgstr "분야"
+
+
+#: comm_faqrequest.html
+msgid "The inquiry will be sent to the K-MOOC staff members by e-mail."
+msgstr "문의하기는 K-MOOC운영자에게 메일로 전송이 됩니다."
+
+msgid "If you would like an answer, please enter your e-mail address correctly."
+msgstr "답변을 원하시는 경우 본인의 메일 주소를 정확히 입력해주 주시기 바랍니다."
+
+msgid "Please choose your inquiry."
+msgstr "문의 내용 종류 선택"
+
+msgid "About membership"
+msgstr "회원가입 관련"
+
+msgid "About sign-in and account"
+msgstr "로그인 및 계정 관련"
+
+msgid "About K-MOOC"
+msgstr "K-MOOC 사이트 이용 관련"
+
+msgid "About course registration"
+msgstr "강좌 수강 관련"
+
+msgid "About technical problems"
+msgstr "기술적인 문제 관련"
+
+msgid "About mobile problems"
+msgstr "모바일앱 관련"
+
+msgid "Send email"
+msgstr "이메일 보내기"
+
+msgid "Memo"
+msgstr "내용"
+
+msgid "This is valid edX certification number."
+msgstr "유효한 K-MOOC이수증 인증번호 입니다."
+
+msgid "This is not valid edX certification number."
+msgstr "유효한 K-MOOC이수증 인증번호가 아닙니다."
+
+msgid "Certificate Sample"
+msgstr "이수증 샘플"
+
+msgid "Enter your verification number your certificate"
+msgstr "이수증 번호를 입력하세요"
+
+#: cms/templetes/index.html
+msgid ""
+"The Content Archive is used to randomize homework problems (manual links required) "
+"to show specific problems to learners, or to re-use learning activities "
+"that have been created once in many courses"
+msgstr ""
+"콘텐츠보관함은 여러 문제 중 랜덤으로 특정 문제를 학습자에게 보여주는 랜덤숙제 기능(매뉴얼 링크 필요)이나"
+" 한 번 만든 학습활동을 여러 강좌에서 재사용하기 위해 사용합니다"
+
+msgid ""
+"※ Therefore, anyone can create a content archive seperately from the right to create a course, "
+"and if you want to share it with other members, you have to specify permissions for each content archive."
+msgstr ""
+"※ 따라서 콘텐츠보관함은 강좌 생성권한과는 별도로 누구나 만들 수 있으며, 이를 다른 구성원과 "
+"공유하고자 한다면 콘텐츠보관함 별로 권한을 지정해주어야 합니다."
+
+msgid "Classification"
+msgstr "강좌 전공"
+
+msgid "Period of Studing"
+msgstr "학습기간"
+
+msgid "Linguistics"
+msgstr "한국학 여부"
+
+msgid "Effort time must be number"
+msgstr "주간 학습권장시간은 숫자이여야 합니다."
+
+msgid "View certificates.(Not finished Poll)"
+msgstr "이수증 보기(설문 미완료)"
+
+msgid "Email to respond"
+msgstr "응답 받을 이메일"
+
+msgid "Please select an email"
+msgstr "이메일을 선택하세요"
+
+msgid "Contact us by email"
+msgstr "이메일로 문의하기"
+
+msgid ""
+"Before you sign in, you need to activate your account. We have sent you an "
+"email message with instructions for activating your account."
+msgstr "로그인 전에 계정을 활성화해야 합니다. 계정 활성화를 위한 이메일 가입하신 이메일 주소로 보냈으니 확인 부탁드립니다."
+
+msgid "About enrollment/cancel"
+msgstr "수강신청/취소 관련"
+
+msgid "About grade/certificates"
+msgstr "성적/이수증 관련"
+
+msgid "You need to register to enrollment."
+msgstr "수강신청을 위해서는 로그인이 필요합니다. 확인을 누르시면 로그인 페이지로 이동합니다"
+
+msgid "If you have any questions regarding specific course content, please post your question on the bulletin <strong>board of the course.</strong>"
+msgstr "특정 강좌 내용과 관련된 질문의 경우, 해당 강좌 내 <strong>게시판</strong>에 질문을 올려주시기 바랍니다."
+
+msgid "If you do not find the answer to your question in the list, please contact us via <strong>'Contact us by email'</strong>."
+msgstr "리스트에서 질문에 대한 답을 찾기 어려우시다면 <strong>‘메일로 문의하기’</strong>를 통해 문의하여 주시기 바랍니다."
+
+msgid "Account Activated"
+msgstr "계정이 활성화되었습니다."
+
+###  ORA 관련 영문
+msgid "Your Response"
+msgstr "답변"
+
+msgid "You can save your progress and return to complete your response at any time."
+msgstr "진행 상황을 저장하고 언제든지 돌아가서 응답을 완료 할 수 있습니다."
+
+msgid "After you submit your response, you cannot edit it"
+msgstr "답을 제출 한 후에는 답을 편집 할 수 없습니다"
+
+msgid "This assignment has several steps. In the first step, you'll provide a response to the question. The other steps appear below the Your Response field."
+msgstr "본 과제에는 여러 단계가 있습니다. 첫 번째 단계에서는 질문에 대한 답변을 제공합니다. 다른 단계는 귀하의 답변 아래에 나타납니다."
+
+msgid "This assignment has several steps. In the first step, you'll provide a response to the question. The other steps appear below the %(start_tag)sYour Response%(end_tag)s field."
+msgstr "본 과제에는 몇 가지 단계가 있습니다. 첫 번째 단계로, 질문에 대한 응답을 제출하세요. 그후 다른 단계들이 %(start_tag)s나의 응답%(end_tag)s 영역 아래에 나타날 것입니다. "
+
+msgid "Enter your response to the question above."
+msgstr "위 질문에 대한 귀하의 답변을 입력하십시오."
+
+msgid "You may continue to work on your response until you submit it."
+msgstr "제출할 때까지 답을 계속 작성할 수 있습니다."
+
+msgid "Save your progress"
+msgstr "진행중인 작업을 저장합니다"
+
+msgid "This response has not been saved."
+msgstr "답이 저장되지 않았습니다"
+
+msgid "Submit your response and move to the next step"
+msgstr "답변을 제출하고 다음 단계로 이동합니다."
+
+msgid "Your Grade"
+msgstr "귀하의 점수는"
+
+msgid "Not Started"
+msgstr "시작되지 않았습니다."
+
+msgid "You have not started this problem yet."
+msgstr "이 문제에 대해서 아직 시작하지 않으셨습니다."
+
+msgid "Learn to Assess Responses"
+msgstr "답변 평가 방법 학습"
+
+msgid "Learning to Assess Responses"
+msgstr "답변 평가 방법 학습"
+
+msgid "Assess Peers"
+msgstr "상호평가"
+
+msgid "Assess Your Response"
+msgstr "자신의 답변 평가"
+
+msgid "Not Available"
+msgstr "이용할 수 없습니다."
+
+msgid "Manage Individual Learners"
+msgstr "개별 학습자 관리하기"
+
+msgid "View Assignment Statistics"
+msgstr "과제 통계 조회"
+
+msgid "Grade Available Responses"
+msgstr "답변 채점하기"
+
+msgid "Prompts. Replace the sample text with your own text. For more information, see the ORA documentation."
+msgstr "문제와 예문을 바꾸세요. 이에 관해 도움말이 필요하면 ORA 도움말을 참고하세요."
+
+msgid "You cannot delete a prompt after the assignment has been released."
+msgstr "과제가 이미 게시된 후에는 프롬프트를 삭제할 수 없습니다."
+
+msgid "Add Prompt"
+msgstr "문제 추가"
+
+msgid ""
+"Rubrics are made up of criteria, which usually contain one or more options. "
+"Each option has a point value. This template contains two sample criteria and their options. "
+"Replace the sample text with your own text. For more information, see the ORA documentation."
+msgstr ""
+"루브릭은 평가 항목으로 구성되어 있으며, 1개 이상의 평가 기준을 포함하고 있습니다. 각 평가기준은 1점으로 점수값이 매겨져 있습니다. "
+"이 템플릿은 두 가지 평가 항목과 각각의 평가 기준 예시를 포함하고 있습니다. 예시 텍스트를 새로 작성하셔도 좋습니다. "
+"더 자세한 정보는, ORA 도움말을 참고하세요."
+
+msgid "Criterion"
+msgstr "평가 항목"
+
+msgid "Criterion Name"
+msgstr "평가 항목"
+
+msgid "Criterion Prompt"
+msgstr "평가 항목 프롬프트"
+
+msgid "You cannot delete a criterion after the assignment has been released."
+msgstr "과제가 공지되고 난 후에는 평가 항목을 삭제할 수 없습니다."
+
+msgid "Option"
+msgstr "평가 기준"
+
+msgid "Option Name"
+msgstr "평가 기준 이름"
+
+msgid "Option Points"
+msgstr "평가 기준 포인트"
+
+msgid "Option Explanation"
+msgstr "평가 기준 설명"
+
+msgid "Add Option"
+msgstr "평가 기준 추가"
+
+msgid "Feedback for This Criterion"
+msgstr "평가 항목에 대한 피드백"
+
+msgid "Select one of the options above. This describes whether or not the learner will have to provide criterion feedback."
+msgstr "위 옵션 중 한가지를 선택하세요. 이 옵션이 학습자가 기준에 대한 피드백을 입력해야 하는지 나타냅니다."
+
+msgid "Add Criterion"
+msgstr "평가 항목 추가"
+
+msgid "Feedback for This Response"
+msgstr "이 응답에 대한 피드백"
+
+msgid "Feedback Instructions"
+msgstr "피드백 지시사항"
+
+msgid "Encourage learners to provide feedback on the response they have graded. You can replace the sample text with your own."
+msgstr "학습자가 채점을 완료한 답변에 대해 피드백을 입력하도록 권장하세요. 예제 텍스트를 대체하여 입력하면 됩니다."
+
+msgid "Default Feedback Text"
+msgstr "기본 피드백 텍스트"
+
+msgid "Enter feedback text that learners will see before they enter their own feedback. Use this text to show learners a good example peer assessment."
+msgstr "학습자가 직접 피드백을 입력하기 전에 보게 될 피드백 텍스트를 입력하세요. 이 텍스트를 통해 학습자에게 좋은 상호 평가 예제를 보여주세요."
+
+msgid "This name appears when you hover over the unit in the course ribbon at the top of the page."
+msgstr "이 페이지의 상단에 있는 강좌 리본에 있는 학습활동 위로 마우스를 가져가면 이름이 나타납니다."
+
+msgid "Response Start Date"
+msgstr "답변 시작일"
+
+msgid "Response Start Time"
+msgstr "답변 시작 시간"
+
+msgid "The date and time when learners can begin submitting responses."
+msgstr "학습자가 답변 제출을 시작할 수 있는 날짜 및 시간입니다."
+
+msgid "Response Due Date"
+msgstr "답변 마감일"
+
+msgid "Response Due Time"
+msgstr "답변 마감 시간"
+
+msgid "The date and time when learners can no longer submit responses."
+msgstr "학습자가 더이상 답변을 제출할 수 없는 날짜 및 시간입니다."
+
+msgid "Allow File Upload"
+msgstr "파일 업로드 허용하기"
+
+msgid ""
+"Specify whether learners can submit a file along with their text response. "
+"Select Image to allow JPG, GIF, or PNG files. Select PDF or Image to allow PDF files and images. "
+"Select Custom File Types to allow files with extensions that you specify below. (Use this option with caution.)"
+msgstr ""
+"학습자가 텍스트 답변과 함께 파일을 첨부할 수 있는지 설정하세요. 이미지를 선택해 JPG, GIF 및 PNG 파일 첨부를 허용할 수 있습니다. "
+"또, PDF나 이미지를 선택해 PDF 파일 및 이미지 첨부를 허용할 수 있습니다. "
+"사용자 정의 파일 형식을 선택하면 설정한 확장자를 가진 파일의 첨부를 허용할 수 있습니다. (이 옵션을 사용할 땐 주의해야 합니다.)"
+
+msgid "Allow LaTeX Responses"
+msgstr "LaTeX 답변 허용하기"
+
+msgid "Specify whether learners can write LaTeX formatted strings"
+msgstr "학습자가 LaTeX 형식 스트링을 사용할 수 있는지 설정하세요."
+
+msgid "Top Responses"
+msgstr "우수 답변"
+
+msgid ""
+"Specify the number of top scoring responses to display. Valid numbers are 0 to 99. "
+"If the number is 0, the Top Responses section does not appear to learners."
+msgstr "공개할 우수 응답의 수를 지정하세요. 0에서 99까지의 수가 유효합니다. 0을 입력할 경우, 우수 응답이 공개되지 않습니다."
+
+msgid ""
+"In this assignment, you can include learner training, peer assessment, self assessment, and staff assessment steps. "
+"Select the steps that you want below, and then drag them into the order you want. "
+"If you include a learner training step, it must precede all other steps. "
+"If you include a staff assessment step, it must be the final step. "
+"After you release an ORA assignment, you cannot change the type and number of assessment steps."
+msgstr ""
+"이 과제에서 학습자 안내, 상호 평가, 자기 평가, 예제 기반 평가 및 운영팀 평가 단계를 추가할 수 있습니다. "
+"아래에서 추가할 단계를 선택하고 원하는 순서에 맞춰 드래그하세요. 예제 기반 평가 단계를 추가한다면 다른 모든 단계 앞에 위치해야 합니다. "
+"학습자 안내 단계를 추가하면 반드시 상호 및 자기 평가 단계 앞에 위치해야 합니다. 운영팀 평가 단계의 경우 마지막 단계여야 합니다. "
+"개방형 상호 평가 과제를 공개한 뒤 평가 단계 종류 및 숫자를 수정할 수 없습니다."
+
+msgid "Step: Learner Training"
+msgstr "단계: 학습자 안내"
+
+msgid ""
+"Enter one or more sample responses that you've created, and then specify the options that you would choose for each criterion in your rubric. "
+"Note that you must add your rubric to the Rubric tab before you can complete this step."
+msgstr ""
+"예시 답변을 하나 이상 입력하고, 귀하의 루브릭의 각 평가 항목에서 사용할 평가 기준을 지정합니다. 주의하셔야 할 것은, 이 단계를 완료하기 전에 루브릭 탭에 귀하의 루브릭을 추가해야 합니다."
+
+msgid "Scored Response"
+msgstr "채점된 응답"
+
+msgid "Response Score"
+msgstr "응답 점수"
+
+msgid "Add Sample Response"
+msgstr "예시 응답 추가하기"
+
+msgid "Step: Peer Assessment"
+msgstr "단계 : 상호 평가"
+
+msgid "Specify the following values for the peer assessment step."
+msgstr "상호 평가 단계에 대한 다음 값을 지정합니다."
+
+msgid "Must Grade"
+msgstr "채점해야할 수"
+
+msgid "Specify the number of peer assessments that each learner must complete. Valid numbers are 0 to 99."
+msgstr "각 학습자가 해야 할 상호 평가의 수를 지정하세요. 0에서 99까지의 수가 유효합니다. "
+
+msgid "Graded By"
+msgstr "채점받아야할 수"
+
+msgid "Specify the number of learners that each response must be assessed by. Valid numbers are 0 to 99."
+msgstr "각 응답에 대해 평가받아야 할 학습자의 수를 설정하세요. 0에서 99까지의 수가 유효합니다."
+
+msgid "Start Time"
+msgstr "시작 시간"
+
+msgid "Enter the date and time when learners can begin assessing peer responses."
+msgstr "학습자가 상호 평가를 수행할 수 있는 날짜와 시간을 입력하세요."
+
+msgid "Due Time"
+msgstr "마감 시간"
+
+msgid "Enter the date and time when all peer assessments must be complete."
+msgstr "상호 평가를 마쳐야 하는 날짜와 시간을 입력하세요."
+
+msgid "Step: Self Assessment"
+msgstr "단계 :  자기평가"
+
+msgid "Specify start and due dates for the self assessment step."
+msgstr "직접 평가 단계의 시작일과 쿠폰 만기일을 명시하세요."
+
+msgid "Step: Staff Assessment"
+msgstr "단계: 운영팀 평가"
+
+msgid "Staff members assess learners' responses using the rubric for the assignment."
+msgstr "운영팀은 과제 루브릭을 활용해 학습자의 답변을 평가할 수 있습니다."
+
+msgid "Enter the date and time when learners can begin assessing their responses."
+msgstr "학습자가 자기 답변 평가를 시작할 수 있는 날짜와 시간을 입력하세요."
+
+msgid "Enter the date and time when all self assessments must be complete."
+msgstr "모든 직접 평가들이 완료되어야 할 날짜와 시간을 입력하세요."
+
+msgid "Enter an individual learner's username or email"
+msgstr "개별 학습자 사용자 이름이나 이메일 입력하기"
+
+msgid "Response for: %(student_username)s"
+msgstr "%(student_username)s 에 대한 답변"
+
+msgid "This response has been saved but not submitted."
+msgstr "응답이 저장되었으나 제출되지는 않았습니다."
+
+msgid ""
+"You have completed your steps in the assignment, but some assessments still need to be done on your response. "
+"When the assessments of your response are complete, you will see feedback from everyone who assessed your response, "
+"and you will receive your final grade."
+msgstr ""
+"과제에서 모든 단계를 마쳤지만 제출한 답변에 대해 아직 평가가 완료되지 않았을 수 있습니다. "
+"답변에 대한 평가가 완료되면 평가에 참여한 학습자의 피드백을 볼 수 있고 최종 성적을 부여받게 됩니다."
+
+msgid "Give this learner a grade using the problem's rubric."
+msgstr "문제 루브릭을 활용해 이 학습자에게 성적을 부여하세요."
+
+msgid "The learner's response to the question above"
+msgstr "위의 질문에 대한 학습자의 반응"
+
+msgid "%(ungraded)s Available and %(in_progress)s Checked Out"
+msgstr "%(ungraded)s 가 가능하며 %(in_progress)s 가 확인되었습니다"
+
+msgid "Waiting for a Staff Grade"
+msgstr "운영팀 성적 대기중"
+
+msgid ""
+"Check back later to see if a course staff member has assessed your response. "
+"You will receive your grade after the assessment is complete."
+msgstr ""
+"강좌 운영자가 답변을 평가했는지 나중에 다시 확인하세요. 평가가 완료된 후 최종 성적이 부여됩니다."
+
+msgid "Waiting for Assessments"
+msgstr "평가 대기중"
+
+msgid "Submit assessment"
+msgstr "평가 제출"
+
+msgid "Submit assessment and continue grading"
+msgstr "평가를 제출하고 계속 채점합니다"
+
+msgid "We could not submit your assessment"
+msgstr "평가를 제출할 수 없습니다."
+
+msgid "Submit your assessment"
+msgstr "평가 제출하기"
+
+msgid "Submit Assessment Grade Override"
+msgstr "수정된 평가 성적 제출하기"
+
+msgid "Staff Grade"
+msgstr "운영팀 성적"
+
+msgid "You must submit a response before you can perform a peer assessment."
+msgstr "상호 평가 전에 답변을 제출해야 합니다."
+
+msgid "Your peer assessment could not be submitted."
+msgstr "귀하의 평가가 제출되지 않았습니다."
+
+msgid "Submit your assessment and review another response"
+msgstr "평가를 제출하고 다른 답변을 확인하세요"
+
+msgid "Submit your assessment and move to next step"
+msgstr "평가를 제출하고 다음 단계로 넘어가세요"
+
+msgid "Submit your assessment and move to response #{response_number}"
+msgstr "평가를 제출하고 #{response_number} 답변으로 넘어가세요"
+
+msgid "You must submit a response before you can perform a self-assessment."
+msgstr "자기 평가를 하기 전에 응답을 제출해야 합니다."
+
+msgid "Your self assessment could not be submitted."
+msgstr "자기 평가를 제출할 수 없습니다."
+
+msgid ""
+"The learner submission has been removed from peer assessment. "
+"The learner receives a grade of zero unless you delete the learner's state for the problem to allow them to resubmit a response."
+msgstr ""
+"학습자가 제출한 답변이 상호 평가에서 제외되었습니다. "
+"학습자 상태를 수정해 답변을 재제출할 수 있도록 하지 않으면 이 학습자는 0점을 획득하게 됩니다."
+
+msgid "Your staff assessment could not be submitted."
+msgstr "운영팀 평가를 제출할 수 없었습니다."
+
+msgid "Submit feedback on peer assessments"
+msgstr "상호 평가에 대한 피드백 제출하기"
+
+msgid ""
+"You have completed this assignment. "
+"Your final grade will be available when the assessments of your response are complete."
+msgstr ""
+"귀하는이 과제를 완료했습니다."
+"최종 성적은 제출한 답변에 대한 평가가 완료되면 부여됩니다."
+
+msgid "%(points_possible)s 중 %(points_earned)s"
+msgstr "%(points_earned)s out of %(points_possible)s"
+
+msgid "You have completed this assignment. Review your grade and your assessment details."
+msgstr "귀하는이 과제를 완료했습니다. 성적 및 평가 세부 사항을 검토하십시오."
+
+msgid "Assessments of Your Response"
+msgstr "귀하의 응답에 대한 평가"
+
+msgid "%(assessment_title)s - %(points)s point"
+msgstr "%(assessment_title)s - %(points)s 점"
+
+msgid "points"
+msgstr "포인트"
+
+msgid "Points"
+msgstr "점"
+
+msgid "%(num_points)s points"
+msgstr "%(num_points)s 점"
+
+msgid "Final grade: %(points_earned)s out of %(points_possible)s"
+msgstr "최종 성적: %(points_possible)s 중 %(points_earned)s"
+
+msgid "%(assessment_label)s - %(points)s point"
+msgstr "%(assessment_label)s - %(points)s 점"
+
+msgid "Points Possible"
+msgstr "가능한 점수"
+
+msgid "Staff Comments"
+msgstr "운영팀 의견"
+
+msgid "Peer Comments"
+msgstr "상호 의견"
+
+msgid "Example-Based Comments"
+msgstr "예제 기반 의견"
+
+msgid "Your Comments"
+msgstr "본인 의견"
+
+msgid "Additional comments on your response"
+msgstr "귀하의 응답에 대한 추가 의견"
+
+msgid "Some comments I received were inappropriate."
+msgstr "내가 받은 어떤 코멘트들은 적절하지 않았습니다. "
+
+msgid "Provide feedback on the grade or comments that you received from your peers."
+msgstr "상호 평가에서 받은 성적이나 의견에 대한 피드백을 입력하세요."
+
+msgid "Comments: %(comments)s"
+msgstr "코멘트: %(comments)s"
+
+msgid "No other learner responses are available for grading at this time."
+msgstr "현재 채점이 가능한 학습자 답변이 없습니다."
+
+msgid "Problem Step"
+msgstr "문제 단계"
+
+msgid "Learner Progress"
+msgstr "학습자 성과"
+
+msgid "Response total"
+msgstr "전체 답변"
+
+msgid "Active Learners in Step"
+msgstr "이 단계에서 활동중인 학습자들"
+
+
+msgid "Dates"
+msgstr "날짜"
+
+msgid "Release Date"
+msgstr "공개 날짜"
+
+msgid "You can save your progress and return to complete your response at any time before the due date"
+msgstr "현재 상태를 저장 후, 마감일 전까지 언제든 답변을 완성할 수 있습니다."
+
+
+
+#-------------------------------------------------------------------------------------------------------
+
+msgid "SKP.SNUk"
+msgstr "서울대, 한국과학기술원, 포항공대"
+
+msgid "SKP.KAISTk"
+msgstr "서울대, 한국과학기술원, 포항공대"
+
+msgid "SKP.POSTECHk"
+msgstr "서울대, 한국과학기술원, 포항공대"
+
+msgid "SKP_SNUk"
+msgstr "서울대, 한국과학기술원, 포항공대"
+
+msgid "SKP_KAISTk"
+msgstr "서울대, 한국과학기술원, 포항공대"
+
+msgid "SKP_POSTECHk"
+msgstr "서울대, 한국과학기술원, 포항공대"
+
+msgid ""
+"Learners learn to assess responses by scoring pre-assessed sample responses that you provide. "
+"Learners move to the next step when the scores they give match your scores. "
+"Note that if you add this step, you must also add a peer assessment step. "
+"This step must come before the peer assessment step."
+msgstr ""
+"학습자는 이미 평가가 완료된 예제 답변에 점수를 주면서 답변을 평가하는 법에 대해 배우게 됩니다. "
+"학습자가 부여한 성적이 입력된 성적과 일치하면 다음 단계로 넘어가게 됩니다. "
+"이 단계를 추가하면 반드시 상호 평가 단계를 추가해야 합니다. "
+"이 단계는 상호 평가 단계 이전에 위치하게 됩니다."
+
+msgid "Learners assess their own responses using the rubric for the assignment."
+msgstr "학습자는 과제 루브릭을 활용해 자기 답변을 평가하게 됩니다."
+
+msgid "Learners assess a specified number of other learners' responses using the rubric for the assignment."
+msgstr "학습자는 과제 루브릭을 활용하여 다른 학습자의 답변 중 일부를 평가합니다."
+
+msgid "Register (member classification)"
+msgstr "회원가입 (회원구분)"
+
+msgid "Course Home"
+msgstr "강좌 홈"
+
+msgid "Effort time must have value"
+msgstr "권장 학습 시간은 필수 입력입니다."
+
+msgid "course info"
+msgstr "강좌 정보"
+
+msgid "review"
+msgstr "리뷰"
+
+msgid "write"
+msgstr "글쓰기"
+
+msgid "MEMO"
+msgstr "쪽지"
+
+msgid "Series Course"
+msgstr "시리즈 강좌"
+
+msgid "Course Introduction"
+msgstr "강좌 소개"
+
+msgid "Course List"
+msgstr "대상 강좌 목록"
+
+msgid "Series ID"
+msgstr "시리즈 ID"
+
+msgid "start"
+msgstr "개강일"
+
+msgid "move"
+msgstr "이동"
+
+msgid "Series Education Certificate"
+msgstr "시리즈 교육 확인증"
+
+msgid "is_course_lock"
+msgstr "강좌잠금 여부"
+
+msgid "audit_yn"
+msgstr "청강허용 여부"
+
+msgid "Maximum score"
+msgstr "최고 점"
+
+msgid "Your score is"
+msgstr "점수: "
+
+msgid "Instructor comment"
+msgstr "교수자 코멘트: "
+
+msgid "K-MOOC Staff Graded Assignment"
+msgstr "교수자 채점 과제(클릭)"
+
+msgid "Maximum grade score given to assignment by staff."
+msgstr "입력 가능한 최대 점수"
+
+msgid ""
+"Defines the number of points each problem is worth. "
+"If the value is not set, the problem is worth the sum of the "
+"option point values."
+msgstr "각 문제의 가치가있는 점수의 수를 정의합니다. 값을 설정하지 않으면 문제는 옵션 포인트 값의 합계가됩니다."
+
+msgid "K-MOOC Notification"
+msgstr "K-MOOC 알림"
+
+#: cms/templates/widgets/header.html
+msgid "CDN Uploads"
+msgstr "동영상 업로드"
+
+
+#이수증 설문조사
+msgid "The contents of this course were well designed, organized and appropriate."
+msgstr "강좌내용 구성은 체계적이고 이해하기 쉽게 구성되어 있다."
+
+msgid "The instructor presented content in an organized manner."
+msgstr "교수자는 이해하기 쉽게 강의 내용을 전달하였다."
+
+msgid "The instructor or TA responded effectively to my questions."
+msgstr "담당 교수나 조교 등 운영팀은 질문이나 문의사항에 신속하고 적절하게 대응하였다."
+
+msgid "The course as a whole was excellent."
+msgstr "강좌는 전반적으로 만족스러웠다."
+
+msgid "the purpose of using K-MOOC certificates"
+msgstr "K-MOOC 이수증 발급 목적"
+
+msgid "Earn for self-satisfaction"
+msgstr "자기만족을 위한 취득"
+
+msgid "Submit to colleges for earning credit toward academic degree"
+msgstr "학점취득을 위한 대학 제출"
+
+msgid "Submit to companies for required employee training"
+msgstr "교육훈련 시간 인정을 위한 직장 제출"
+
+msgid "Improve candidacy for a new job"
+msgstr "취업준비"
+
+msgid "other"
+msgstr "기타"
+
+msgid "strongly disagree"
+msgstr "전혀 그렇지 않다"
+
+msgid "strongly agree"
+msgstr "매우 그렇다"
+
+msgid "If you submit your satisfaction, you can view your certificate."
+msgstr "만족도를 제출하시면, 이수증을 확인하실 수 있습니다."
+
+msgid "Congratulations to earn a certificate! Please enter your satisfaction regarding this course."
+msgstr "이수를 축하드립니다! 보다 더 좋은 강좌제공을 위해 본 강좌에 대한 만족도를 입력해주세요."
+
+msgid "Satisfaction Survey"
+msgstr "만족도 조사"
+
+msgid "Total recognized learning hours must have number"
+msgstr "학습인정시간에는 숫자만 입력 가능합니다"
+
+
