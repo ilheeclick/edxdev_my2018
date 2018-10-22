@@ -1,0 +1,50 @@
+<%!
+  import json
+  from django.utils.translation import ugettext as _
+  from microsite_configuration import microsite
+%>
+<%inherit file="../main.html" />
+
+<%namespace name='static' file='../static_content.html'/>
+<%block name="pagetitle">${_("UOUk")}</%block>
+
+<section class="container full home" id="main">
+    <!-- [s]  -->
+    <div class="univ-list-infotop"><img src="/static/images/univ_intro/univ_top_UOUk.png" alt=""></div>
+
+    <section class="container univ">
+        <h2>${_("UNIVERSITY OF ULSAN")}</h2>
+        <div class="univ-info">
+            <div class="sns-box">
+                <!--
+                 <a target="_blank" href="#"><img src="/static/images/common/footer_icon01.png" alt="youtube" class="univSns"/></a>
+                 -->
+                 <a target="_blank" href="https://www.facebook.com/universityofulsan"><img src="/static/images/common/footer_icon02.png" alt="facebook 링크 공유하기" class="univSns"/></a>
+            </div>
+            ${_(
+                "<p>Established in 1970, the University of Ulsan(UOU) has grown to be the epicenter of education, research, and industry-academia cooperation in Asia with a purpose of producing future leaders.<br/>"
+                "Our globally accredited engineering program and state-of-the-art medical program are among the best in Korea.<br/><br/>"
+                "Through strategic industry-academia cooperation with multi-national corporations such as Hyundai Heavy Industries, Hyundai Motors, SK Energy and S-oil and global exchange programs with 180 academic institutions in 40 different countries, the University is setting the standard in fostering future world-class leaders with global excellence in various disciplines.<br/><br/>"
+                "The Times Higher Education has ranked the University of Ulsan 10th in Korea and 52nd in Asia. The University is committed to contributing to the development of world higher education in the 21st century having the local community as a vital partner.</p>"
+            )}
+        </div>
+
+        <section class="courses-container">
+            <section class="courses${'' if course_discovery_enabled else ' no-course-discovery'}">
+                <ul class="courses-listing">
+                %if courses and len(courses) > 0:
+                    %for course in courses:
+                    <li class="courses-listing-item">
+                        <%include file="../course.html" args="course=course" />
+                    </li>
+                    %endfor
+                %else:
+                    <div class="noCourse">※ ${_("There are currently no courses available.")}</div>
+                %endif
+                </ul>
+            </section>
+        </section>
+    </section>
+
+    <!-- [e]  -->
+</section>

@@ -1,0 +1,49 @@
+<%!
+  import json
+  from django.utils.translation import ugettext as _
+  from microsite_configuration import microsite
+%>
+<%inherit file="../main.html" />
+
+<%namespace name='static' file='../static_content.html'/>
+<%block name="pagetitle">${_("POSTECHk")}</%block>
+
+<section class="container full home" id="main">
+    <!-- [s]  -->
+    <div class="univ-list-infotop"><img src="/static/images/univ_intro/univ_top_postech.png" alt=""></div>
+
+    <section class="container univ">
+        <h2>${_("POSTECH")}</h2>
+        <div class="univ-info">
+            <div class="sns-box">
+                <!--
+                 <a target="_blank" href="https://www.youtube.com/channel/UCWwYvRzlP6AkzQS-Ftw5wsA"><img src="/static/images/common/footer_icon01.png" alt="youtube" class="univSns"/></a>
+                 <a target="_blank" href="https://www.facebook.com/inhanuri"><img src="/static/images/common/footer_icon02.png" alt="facebook" class="univSns"/></a>
+                 -->
+            </div>
+            ${_(
+                "<p>Pohang University of Science and Technology was founded with the purpose of contributing to the nation and humanity by conducting in-depth science and engineering research on the profound theories and wide range of applications essential to the advancement of Korea and the world, training a select pool of talented students to become future global leaders with both knowledge and honorable character through high-quality education, and translating research outcomes into real-world applications realized through close collaboration with industry, academia, and research institutions.</p>"
+                "<p>In order to fulfill this purpose, Pohang University of Science and Technology not only focuses on advanced research in diverse fields of basic science and engineering by cooperating closely with world-leading universities, but also strives to develop itself as a global hub for research related to the materials sector.</p>"
+                "<p>Pohang University of Science and Technology strives to become a world-class university by emphasizing well-rounded as well as specialized education to produce intellectuals with integrity, creativity, and challenging spirit, and by expanding the scope of industry-academia collaboration to improve human welfare.</p>"
+            )}
+        </div>
+
+        <section class="courses-container">
+            <section class="courses${'' if course_discovery_enabled else ' no-course-discovery'}">
+                <ul class="courses-listing">
+                %if courses and len(courses) > 0:
+                    %for course in courses:
+                    <li class="courses-listing-item">
+                        <%include file="../course.html" args="course=course" />
+                    </li>
+                    %endfor
+                %else:
+                    <div class="noCourse">※ ${_("There are currently no courses available.")}</div>
+                %endif
+                </ul>
+            </section>
+        </section>
+    </section>
+
+    <!-- [e]  -->
+</section>

@@ -1,0 +1,49 @@
+<%!
+  import json
+  from django.utils.translation import ugettext as _
+  from microsite_configuration import microsite
+%>
+<%inherit file="../main.html" />
+
+<%namespace name='static' file='../static_content.html'/>
+<%block name="pagetitle">${_("SSUk")}</%block>
+
+<section class="container full home" id="main">
+    <!-- [s]  -->
+    <div class="univ-list-infotop"><img src="/static/images/univ_intro/univ_top_SSUk.png" alt=""></div>
+
+    <section class="container univ">
+        <h2>${_("SUNGSHIN UNIVERSITY")}</h2>
+        <div class="univ-info">
+            <div class="sns-box">
+                <!--
+                 <a target="_blank" href="#"><img src="/static/images/common/footer_icon01.png" alt="youtube" class="univSns"/></a>
+                 <a target="_blank" href="#"><img src="/static/images/common/footer_icon02.png" alt="facebook" class="univSns"/></a>
+                 -->
+            </div>
+            ${_(
+                "<p>Sungshin Women's University, with the motto of 'Sincere, Intelligent, and Independent Women' has vowed to educate 'creative Sungshin people' who can contribute to their mother country and local community.<br/><br/>"
+                "Sungshin Women's University is continued to focus its education specifically specialized in 'culture' and 'health and welfare'. With 'Sungshin Vision 2025: Dream, Happiness, and Bright Sungshin', Sungshin Women's University strives hard to realize the following three goals: 1) Nurturing a talneted people leading future ICT service and software industry, 2) Innovating school service embracing students' need, 3) Creating added value of Sungshin University contributing to the industries and local communities.<br/><br/>"
+                "Sungshin Women's University would like to become a leading university in art and cultural studies, health and welfare studies in K-MOOC program, and further to create a culture that anyone can study anything at anywhere.</p>"
+            )}
+        </div>
+
+        <section class="courses-container">
+            <section class="courses${'' if course_discovery_enabled else ' no-course-discovery'}">
+                <ul class="courses-listing">
+                %if courses and len(courses) > 0:
+                    %for course in courses:
+                    <li class="courses-listing-item">
+                        <%include file="../course.html" args="course=course" />
+                    </li>
+                    %endfor
+                %else:
+                    <div class="noCourse">※ ${_("There are currently no courses available.")}</div>
+                %endif
+                </ul>
+            </section>
+        </section>
+    </section>
+
+    <!-- [e]  -->
+</section>

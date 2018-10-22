@@ -8641,7 +8641,7 @@ msgstr ""
 
 #: lms/envs/common.py
 msgid "Your Platform Name Here"
-msgstr ""
+msgstr "K-MOOC"
 
 #: lms/envs/common.py
 msgid "Your Platform Description Here"

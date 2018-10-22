@@ -1,0 +1,50 @@
+<%!
+  import json
+  from django.utils.translation import ugettext as _
+  from microsite_configuration import microsite
+%>
+<%inherit file="../main.html" />
+
+<%namespace name='static' file='../static_content.html'/>
+<%block name="pagetitle">${_("PNUk")}</%block>
+
+<section class="container full home" id="main">
+    <!-- [s]  -->
+    <div class="univ-list-infotop"><img src="/static/images/univ_intro/univ_top_pusan.png" alt=""></div>
+
+    <section class="container univ">
+        <h2>${_("PUSAN NATIONAL UNIVERSITY")}</h2>
+        <div class="univ-info">
+            <div class="sns-box">
+                <!--
+                 <a target="_blank" href="https://www.youtube.com/channel/UCCTK876rgNAUE8PKRryZhhQ"><img src="/static/images/common/footer_icon01.png" alt="youtube" class="univSns"/></a>
+                 -->
+                 <a target="_blank" href="https://www.facebook.com/PusanNationalUni"><img src="/static/images/common/footer_icon02.png" alt="facebook 링크 공유하기" class="univSns"/></a>
+            </div>
+            ${_(
+                "<p>Pusan National University is the nation's best knowledge community, and has emerged as a university that serves the local community and the country by pursuing only truth and freedom amid the ups and downs of history.</p>"
+                "<p>Until now, PNU has served as a think tank that maps out the future of society, and a birthplace of practical knowledge. PNU has fostered the creative talents that the country and society need through open education, rather than remaining an ivory tower isolated from society. Through K-MOOC, we will provide the public with free high-quality video lectures online to promote continuing education for the community based on a spirit of philanthropy.</p>"
+                "<p>We will make untiring efforts to build a creative university, which will develop the imagination and creativity of students as sources of competitiveness. We will never stop working to be a prestigious global university that believes in open communication with its members.</p>"
+                "<p>-Pusan National University-</p>"
+            )}
+        </div>
+
+        <section class="courses-container">
+            <section class="courses${'' if course_discovery_enabled else ' no-course-discovery'}">
+                <ul class="courses-listing">
+                %if courses and len(courses) > 0:
+                    %for course in courses:
+                    <li class="courses-listing-item">
+                        <%include file="../course.html" args="course=course" />
+                    </li>
+                    %endfor
+                %else:
+                    <div class="noCourse">※ ${_("There are currently no courses available.")}</div>
+                %endif
+                </ul>
+            </section>
+        </section>
+    </section>
+
+    <!-- [e]  -->
+</section>
