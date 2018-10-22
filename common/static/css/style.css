@@ -79,7 +79,7 @@
 .content-wrapper {
     max-width: 100%;
     padding:0;background:transparent;
-    margin-top:110px;
+    /*margin-top:110px;*/
 	/*z-index: 100;*/
     position: relative;
 }
