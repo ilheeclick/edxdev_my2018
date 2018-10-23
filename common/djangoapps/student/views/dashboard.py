@@ -615,7 +615,36 @@ def student_dashboard(request):
     # Display activation message
     activate_account_message = ''
     print '22222'
+
+    if 'private_info_use_yn' in request.session and 'event_join_yn' in request.session:
+        private_info_use_yn = request.session['private_info_use_yn']
+        event_join_yn = request.session['event_join_yn']
+
+        try:
+            print '44444'
+            with connections['default'].cursor() as cur:
+                query = """
+                    INSERT
+                      INTO registration_flag_history(user_id, private_info_use_yn, event_join_yn)
+                    VALUES ('{user_id}', '{private_info_use_yn}', '{event_join_yn}');
+                """.format(
+                    user_id=user.id,
+                    private_info_use_yn=private_info_use_yn,
+                    event_join_yn=event_join_yn
+                )
+
+                print 'query:', query
+                cur.execute(query)
+
+            del request.session['private_info_use_yn']
+            del request.session['event_join_yn']
+
+        except Exception as e:
+            print 'registration_flag_history error.'
+            print e
+
     if not user.is_active:
+        print '33333'
         activate_account_message = Text(_(
             "Check your {email_start}{email}{email_end} inbox for an account activation link from {platform_name}. "
             "If you need help, contact {link_start}{platform_name} Support{link_end}."
@@ -630,33 +659,8 @@ def student_dashboard(request):
             link_end=HTML("</a>"),
         )
 
-        print '33333'
-        if 'private_info_use_yn' in request.session and 'event_join_yn' in request.session:
-            private_info_use_yn = request.session['private_info_use_yn']
-            event_join_yn = request.session['event_join_yn']
 
-            try:
-                print '44444'
-                with connections['default'].cursor() as cur:
-                    query = """
-                        INSERT
-                          INTO registration_flag_history(user_id, private_info_use_yn, event_join_yn)
-                        VALUES ('{user_id}', '{private_info_use_yn}', '{event_join_yn}');
-                    """.format(
-                        user_id=user.id,
-                        private_info_use_yn=private_info_use_yn,
-                        event_join_yn=event_join_yn
-                    )
 
-                    print 'query:', query
-                    cur.execute(query)
-
-                del request.session['private_info_use_yn']
-                del request.session['event_join_yn']
-
-            except Exception as e:
-                print 'registration_flag_history error.'
-                print e
 
     enterprise_message = get_dashboard_consent_notification(request, user, course_enrollments)
 
