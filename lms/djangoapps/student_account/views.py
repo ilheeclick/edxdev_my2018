@@ -116,10 +116,13 @@ def agree_done(request):
         request.session['private_info_use_yn'] = request.POST['private_info_use_yn']
         request.session['event_join_yn'] = request.POST['event_join_yn']
 
+        print "request.session['private_info_use_yn']",request.session['private_info_use_yn']
+        print "request.session['event_join_yn']",request.session['event_join_yn']
     else:
         data['agreeYN'] = request.POST['agreeYN']
 
     print 'data = ', data
+    print 'ddaattaa = ',json.dumps(data)
 
     return HttpResponse(json.dumps(data))
 
@@ -233,6 +236,38 @@ def login_and_registration_form(request, initial_mode="login"):
     """
     # Determine the URL to redirect to following login/registration/third_party_auth
     redirect_to = get_next_url_for_login_page(request)
+    provider_info = _third_party_auth_context(request, redirect_to)
+
+    # print 'currentProvider:', provider_info['currentProvider']
+    # add kocw logic
+
+    # 로그인중이거나 oauth2 인증이 되어있으면 화면전환을 건너뜀
+    if initial_mode == "login" or provider_info['currentProvider']:
+        # print 'login_and_registration_form type 1'
+        pass
+    elif 'errorMessage' in provider_info and provider_info['errorMessage'] is not None:
+        # print 'login_and_registration_form type 2'
+        pass
+    elif 'division' in request.session and 'agreeYN' in request.session and 'auth' in request.session:
+        # print 'login_and_registration_form type 3'
+        division = request.session['division']
+        # del request.session['division']
+        # del request.session['agreeYN']
+        # del request.session['auth']
+    elif 'division' in request.session and 'agreeYN' in request.session:
+        # print 'login_and_registration_form type 4'
+        division = request.session['division']
+        if request.session['division'] == 'N':
+            return render_to_response('student_account/registration_gubn.html')
+        # del request.session['division']
+        # del request.session['agreeYN']
+
+    else:
+        print 'login_and_registration_form type 5'
+        return render_to_response('student_account/registration_gubn.html')
+
+    if 'division' in request.session:
+        division = request.session.get('division')
     # If we're already logged in, redirect to the dashboard
     if request.user.is_authenticated:
         return redirect(redirect_to)
