@@ -1644,7 +1644,8 @@ font-style: normal; font-family:"malgun gothic";
 }
 .content
 {
-height:2000px;
+
+max-height:2000px;
  /*just to get the page to scroll*/
 }
 
