@@ -1,0 +1,48 @@
+<%!
+  import json
+  from django.utils.translation import ugettext as _
+  from microsite_configuration import microsite
+%>
+<%inherit file="../main.html" />
+
+<%namespace name='static' file='../static_content.html'/>
+<%block name="pagetitle">${_("SMUk")}</%block>
+
+<section class="container full home" id="main">
+    <!-- [s]  -->
+    <div class="univ-list-infotop"><img src="/static/images/univ_intro/univ_top_SMUk.png" alt=""></div>
+
+    <section class="container univ">
+        <h2>${_("SANGMYUNG UNIVERSITY")}</h2>
+        <div class="univ-info">
+            <div class="sns-box">
+                <!--
+                 <a target="_blank" href="https://www.youtube.com/channel/UCMSzjNHLZNNUUA-Z8OrXY9Q"><img src="/static/images/common/footer_icon01.png" alt="youtube" class="univSns"/></a>
+                 <a target="_blank" href="https://www.facebook.com/sungkyunkwanuniversity1398"><img src="/static/images/common/footer_icon02.png" alt="facebook" class="univSns"/></a>
+                 -->
+            </div>
+            ${_(
+                "<p>Sangmyung University was established in 1937, based on the philosophy of national education conceived by Dr. Bae Sangmyung. With the educational ideology of truth, justice, and love, in its 80 years of leaping upward in continuous development, Sangmyung University has strived to fulfill the university mission of talent cultivation and scientific research.<br/><br/>"
+                "The main trends of the 21st century are the informatization of society and globalization. In this time of rapid development and progress, Sangmyung University is actively adapting to changes in society and is fostering creative and internationally-minded individuals who will move on to become the leaders of the future.</p>"
+            )}
+        </div>
+
+        <section class="courses-container">
+            <section class="courses${'' if course_discovery_enabled else ' no-course-discovery'}">
+                <ul class="courses-listing">
+                %if courses and len(courses) > 0:
+                    %for course in courses:
+                    <li class="courses-listing-item">
+                        <%include file="../course.html" args="course=course" />
+                    </li>
+                    %endfor
+                %else:
+                    <div class="noCourse">※ ${_("There are currently no courses available.")}</div>
+                %endif
+                </ul>
+            </section>
+        </section>
+    </section>
+
+    <!-- [e]  -->
+</section>

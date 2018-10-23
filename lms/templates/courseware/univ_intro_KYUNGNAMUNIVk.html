@@ -1,0 +1,52 @@
+<%!
+  import json
+  from django.utils.translation import ugettext as _
+  from microsite_configuration import microsite
+%>
+<%inherit file="../main.html" />
+
+<%namespace name='static' file='../static_content.html'/>
+<%block name="pagetitle">${_("KYUNGNAMUNIVk")}</%block>
+
+<section class="container full home" id="main">
+    <!-- [s]  -->
+    <div class="univ-list-infotop"><img src="/static/images/univ_intro/univ_top_KYUNGNAMUNIVk.png" alt=""></div>
+
+    <section class="container univ">
+        <h2>${_("KYUNGNAM UNIVERSITY")}</h2>
+        <div class="univ-info">
+            <div class="sns-box">
+                 <a target="_blank" href="https://www.youtube.com/channel/UC_f_O-7cTAtb3pYWIF61DAg"><img src="/static/images/common/footer_icon01.png" alt="youtube 링크 공유하기" class="univSns"/></a>
+                 <a target="_blank" href="https://www.facebook.com/kyungnam1946/?fref=hovercard"><img src="/static/images/common/footer_icon02.png" alt="facebook 링크 공유하기" class="univSns"/></a>
+            </div>
+            ${_(
+                "<p>Kyungnam University was founded to practice its educational philosophy in 1946. Its educational mission is to cultivate 'progressive experts, leaders of regional development, and global citizens with cultural identity.'<br/><br/>"
+                "Today, more than 120,000 graduates are active for performing this mission in Korea and overseas.<br/><br/>"
+                "Kyungnam University, as a career-oriented educational institute, is exerting all its strengths to train competent students for 21st century."
+                "As a prestigious private academic institute for the Korean Peninsula's peace and reunification, it is now doing its best efforts for specializing the sectors of the nation's defense, environment, ocean, and urbanization industries.<br/><br/>"
+                "Through incessant challenges and bold investments, Kyungnam University will stride for local supreme private institution and becoming global hub in the education and research.<br/><br/>"
+                "Kyungnam University will also never stop challenging itself for innovation until it becomes the best educational institution in the world.<br/><br/>"
+                "We invite you to experience these challenges and innovations. Enjoy our diverse programs in Kyungnam University!<br/><br/>"
+                "President Park, Jae-Kyu </p>"
+            )}
+        </div>
+
+        <section class="courses-container">
+            <section class="courses${'' if course_discovery_enabled else ' no-course-discovery'}">
+                <ul class="courses-listing">
+                %if courses and len(courses) > 0:
+                    %for course in courses:
+                    <li class="courses-listing-item">
+                        <%include file="../course.html" args="course=course" />
+                    </li>
+                    %endfor
+                %else:
+                    <div class="noCourse">※ ${_("There are currently no courses available.")}</div>
+                %endif
+                </ul>
+            </section>
+        </section>
+    </section>
+
+    <!-- [e]  -->
+</section>

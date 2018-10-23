@@ -1,0 +1,49 @@
+<%!
+  import json
+  from django.utils.translation import ugettext as _
+  from microsite_configuration import microsite
+%>
+<%inherit file="../main.html" />
+
+<%namespace name='static' file='../static_content.html'/>
+<%block name="pagetitle">${_("YSUk")}</%block>
+
+<section class="container full home" id="main">
+    <!-- [s]  -->
+    <div class="univ-list-infotop"><img src="/static/images/univ_intro/univ_top_yonsei.png" alt=""></div>
+
+    <section class="container univ">
+        <h2>${_("YONSEI UNIVERSITY")}</h2>
+        <div class="univ-info">
+            <div class="sns-box">
+                 <a target="_blank" href="https://www.youtube.com/user/ysuniversity"><img src="/static/images/common/footer_icon01.png" alt="youtube 링크 공유하기" class="univSns"/></a>
+                 <a target="_blank" href="https://www.facebook.com/ysuniversity"><img src="/static/images/common/footer_icon02.png" alt="facebook 링크 공유하기" class="univSns"/></a>
+            </div>
+            ${_(
+                "<p><b>YONSEI, Leading the Way to the Future</b></p>"
+                "<p>The oldest university in Korea, Yonsei was established in 1885 by Christian missionaries. Our mission is to educate future leaders who will contribute to humanity in the spirit of truth and freedom. Yonsei graduates typify this proud spirit in leadership positions throughout the world.</p>"
+                "<p>Yonsei ranked top 20th private universities worldwide in Times Higher Education Reputation Rankings, It was also rated the best private university in Asia.</p>"
+                "<p>In 2014, for the first time in domestic universities, Yonsei University joined Coursera and FutureLearn at once which are world's largest global MOOC platforms. Also in 2015, Yonsei University has participated in Korean online open course (K-MOOC) and provided the best lectures to the public,</p>"
+                "<p>Yonsei's frontier spirit and heart of devotion will continue to work miracles and the next 100 years will witness Yonsei grow into a world-class university.</p>"
+            )}
+        </div>
+
+        <section class="courses-container">
+            <section class="courses${'' if course_discovery_enabled else ' no-course-discovery'}">
+                <ul class="courses-listing">
+                %if courses and len(courses) > 0:
+                    %for course in courses:
+                    <li class="courses-listing-item">
+                        <%include file="../course.html" args="course=course" />
+                    </li>
+                    %endfor
+                %else:
+                    <div class="noCourse">※ ${_("There are currently no courses available.")}</div>
+                %endif
+                </ul>
+            </section>
+        </section>
+    </section>
+
+    <!-- [e]  -->
+</section>

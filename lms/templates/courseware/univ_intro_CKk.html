@@ -1,0 +1,50 @@
+<%!
+  import json
+  from django.utils.translation import ugettext as _
+  from microsite_configuration import microsite
+%>
+<%inherit file="../main.html" />
+
+<%namespace name='static' file='../static_content.html'/>
+<%block name="pagetitle">${_("CKk")}</%block>
+
+<section class="container full home" id="main">
+    <!-- [s]  -->
+    <div class="univ-list-infotop"><img src="/static/images/univ_intro/univ_top_kocw.png" alt=""></div>
+
+    <section class="container univ" id="main">
+        <h2>${_("CK (Creative Korea)")}</h2>
+        <div class="univ-info">
+            <!--<div class="sns-box">
+                 <a target="_blank" href="https://www.youtube.com/user/playHanyangUniv"><img src="/static/images/common/footer_icon01.png" alt="youtube" class="univSns"/></a>
+                 <a target="_blank" href="https://www.facebook.com/HanyangUniv"><img src="/static/images/common/footer_icon02.png" alt="facebook" class="univSns"/></a>
+            </div>-->
+
+            <p>${_("CK is a project to support the establishment for the improvement of the characterization through the structural reform of the university in order to revitalize the national and local creative economy and cultivate creative talents.")}</p>
+
+            <br><br>
+            <p>[${_("K-MOOC participating Universities")}]</p>
+            <p>${_("Konyang University, Kumho University, Dankook University, Busan Foreign Language University, Sahmyook University, Sangmyung University (Cheonan)")}</p>
+            <br>
+            <p>※ <a target="_blank" href="http://www.ckgc.co.kr"> ${_("Reference: CK homepage (http://www.ckgc.co.kr)")}</a></p>
+        </div>
+
+        <section class="courses-container">
+            <section class="courses${'' if course_discovery_enabled else ' no-course-discovery'}">
+                <ul class="courses-listing">
+                %if courses and len(courses) > 0:
+                    %for course in courses:
+                    <li class="courses-listing-item">
+                        <%include file="../course.html" args="course=course" />
+                    </li>
+                    %endfor
+                %else:
+                    <div class="noCourse">※ ${_("There are currently no courses available.")}</div>
+                %endif
+                </ul>
+            </section>
+        </section>
+    </section>
+
+    <!-- [e]  -->
+</section>

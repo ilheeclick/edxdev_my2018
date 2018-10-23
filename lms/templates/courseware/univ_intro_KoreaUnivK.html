@@ -1,0 +1,46 @@
+<%!
+  import json
+  from django.utils.translation import ugettext as _
+  from microsite_configuration import microsite
+%>
+<%inherit file="../main.html" />
+
+<%namespace name='static' file='../static_content.html'/>
+<%block name="pagetitle">${_("KoreaUnivK")}</%block>
+
+<section class="container full home" id="main">
+    <!-- [s]  -->
+    <div class="univ-list-infotop"><img src="/static/images/univ_intro/univ_top_korea.png" alt=""></div>
+
+    <section class="container univ">
+        <h2>${_("KOREA UNIVERSITY")}</h2>
+        <div class="univ-info">
+            <div class="sns-box">
+                 <a target="_blank" href="https://www.youtube.com/channel/UCa_Bvlw6AavvDun0_YDcAyQ"><img src="/static/images/common/footer_icon01.png" alt="youtube 링크 공유하기" class="univSns"/></a>
+                 <a target="_blank" href="https://www.facebook.com/kuctl"><img src="/static/images/common/footer_icon02.png" alt="facebook 링크 공유하기" class="univSns"/></a>
+            </div>
+            ${_(
+                "<p>Korea University (KU) is embarking on a fresh start through 'pioneering intellectuals.' KU must not produce weak or timid thinkers, who passively watch their future approach with anxiety and frustration. Established as the first advanced private educational institution in 1905, before the impending Japanese occupation era, KU was a trailblazer in the modernization of our nation. 'national salvation through education,' KU spearheaded the cultivation of future leaders by offering new and practical studies in law and economy.  Educated with the values of liberty, justice and truth, our predecessors laid a strong foundation for the democratization and industrialization of Korea.</p>"
+                "<p>President of Korea University, Jaeho Yeom</p>"
+            )}
+        </div>
+
+        <section class="courses-container">
+            <section class="courses${'' if course_discovery_enabled else ' no-course-discovery'}">
+                <ul class="courses-listing">
+                %if courses and len(courses) > 0:
+                    %for course in courses:
+                    <li class="courses-listing-item">
+                        <%include file="../course.html" args="course=course" />
+                    </li>
+                    %endfor
+                %else:
+                    <div class="noCourse">※ ${_("There are currently no courses available.")}</div>
+                %endif
+                </ul>
+            </section>
+        </section>
+    </section>
+
+    <!-- [e]  -->
+</section>
