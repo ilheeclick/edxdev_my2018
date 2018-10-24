@@ -547,7 +547,6 @@ def student_dashboard(request):
         The dashboard response.
 
     """
-    print '11111'
     user = request.user
     if not UserProfile.objects.filter(user=user).exists():
         return redirect(reverse('account_settings'))
@@ -620,7 +619,7 @@ def student_dashboard(request):
     activate_account_message = ''
 
     print 'is_active', user.is_active
-    user.is_active =False
+
     if not user.is_active:
 
         activate_account_message = Text(_(
@@ -636,6 +635,7 @@ def student_dashboard(request):
             ),
             link_end=HTML("</a>"),
         )
+
         if 'private_info_use_yn' in request.session and 'event_join_yn' in request.session:
             private_info_use_yn = request.session['private_info_use_yn']
             event_join_yn = request.session['event_join_yn']
