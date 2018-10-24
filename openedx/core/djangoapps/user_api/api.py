@@ -186,8 +186,8 @@ class RegistrationFormFactory(object):
         "title",
         "mailing_address",
         "goals",
-        "honor_code",
-        "terms_of_service",
+        # "honor_code",
+        # "terms_of_service",
         "profession",
         "specialty",
     ]
@@ -856,7 +856,8 @@ class RegistrationFormFactory(object):
             label=label,
             field_type=field_type,
             default=False,
-            required=required,
+            # required=required,
+            required=False,
             error_messages={
                 "required": error_msg
             },
