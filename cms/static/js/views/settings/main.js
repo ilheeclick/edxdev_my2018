@@ -251,28 +251,28 @@ define(['js/views/validation', 'codemirror', 'underscore', 'jquery', 'jquery.ui'
 
             // 뒷단 작업 필요
 
-            // modi_course_level: function (e){
-            //     this.model.set('course_level', $('#selectfixid').val());
-            //     $('.action-primary').click(function() {
-            //         var addinfo_course_id = 'course-v1:' + $('#course-organization').val() + '+' + $('#course-number').val() + '+' + $('#course-name').val();
-            //         var addinfo_user_id = $('#addinfo_user_id').text();
-            //         var course_level = $('#selectfixid').val();
-            //
-            //         console.log('?????????????')
-            //         console.log(addinfo_course_id)
-            //         console.log(addinfo_user_id)
-            //         console.log(course_level)
-            //         console.log('?????????????')
-            //
-            //         $.post("/modi_course_level", {
-            //             csrfmiddlewaretoken: $.cookie('csrftoken'),
-            //             addinfo_course_id: addinfo_course_id,
-            //             addinfo_user_id: addinfo_user_id,
-            //             course_level: course_level,
-            //             method: 'addinfo',
-            //         });
-            //     });
-            // },
+            modi_course_level: function (e){
+                this.model.set('course_level', $('#selectfixid').val());
+                $('.action-primary').click(function() {
+                    var addinfo_course_id = 'course-v1:' + $('#course-organization').val() + '+' + $('#course-number').val() + '+' + $('#course-name').val();
+                    var addinfo_user_id = $('#addinfo_user_id').text();
+                    var course_level = $('#selectfixid').val();
+
+                    console.log('?????????????')
+                    console.log(addinfo_course_id)
+                    console.log(addinfo_user_id)
+                    console.log(course_level)
+                    console.log('?????????????')
+
+                    $.post("/modi_course_level", {
+                        csrfmiddlewaretoken: $.cookie('csrftoken'),
+                        addinfo_course_id: addinfo_course_id,
+                        addinfo_user_id: addinfo_user_id,
+                        course_level: course_level,
+                        method: 'addinfo',
+                    });
+                });
+            },
             // modi_teacher_name: function (e) {
             //     this.model.set('modi_teacher_name', 'modi_teacher_name');
             //     $('.action-primary').click(function() {
@@ -515,6 +515,8 @@ define(['js/views/validation', 'codemirror', 'underscore', 'jquery', 'jquery.ui'
                 about_sidebar_html: 'course-about-sidebar-html',
                 short_description: 'course-short-description',
                 intro_video: 'course-introduction-video',
+                //강좌 난이도
+                course_level: 'selectfixid',
                 effort: 'course-effort',
                 course_image_asset_path: 'course-image-url',
                 banner_image_asset_path: 'banner-image-url',

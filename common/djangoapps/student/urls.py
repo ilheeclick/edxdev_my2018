@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 URLs for student app
 """
@@ -12,6 +13,11 @@ urlpatterns = [
     url(r'^logout$', views.LogoutView.as_view(), name='logout'),
 
     # TODO: standardize login
+
+    # 강좌 난이도
+    url(r'^modi_course_level',
+        views.modi_course_level,
+        name='modi_course_level'),
 
     # login endpoint used by cms.
     url(r'^login_post$', views.login_user, name='login_post'),

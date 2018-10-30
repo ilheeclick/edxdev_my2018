@@ -55,6 +55,13 @@ from student.models import (
 from util.milestones_helpers import get_pre_requisite_courses_not_completed
 from xmodule.modulestore.django import modulestore
 
+import json
+import sys
+import MySQLdb as mdb
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
+
+reload(sys)
 log = logging.getLogger("edx.student")
 
 
@@ -848,3 +855,71 @@ def student_dashboard(request):
     response = render_to_response('dashboard.html', context)
     set_user_info_cookie(response, request)
     return response
+
+
+@csrf_exempt
+def modi_course_level(request):
+    if request.method == 'POST':
+        if request.POST['method'] == 'addinfo':
+            print 'modi_course_level!!!!!!'
+            addinfo_user_id = request.POST.get('addinfo_user_id')
+            addinfo_course_id = request.POST.get('addinfo_course_id')
+            course_level = request.POST.get('course_level')
+
+            print 'modi_course_level index ========='
+            print addinfo_user_id
+            print addinfo_course_id
+            print course_level
+            print 'modi_course_level index ========='
+
+            sys.setdefaultencoding('utf-8')
+            con = mdb.connect(settings.DATABASES.get('default').get('HOST'),
+                              settings.DATABASES.get('default').get('USER'),
+                              settings.DATABASES.get('default').get('PASSWORD'),
+                              settings.DATABASES.get('default').get('NAME'),
+                              charset='utf8')
+            cur = con.cursor()
+            query = """
+                    SELECT count(*)
+                      FROM course_overview_addinfo
+                     WHERE course_id = '{0}';
+            """.format(addinfo_course_id)
+            cur.execute(query)
+            count = cur.fetchall()
+            ctn = count[0][0]
+            cur.close()
+
+            if (ctn == 1):
+                cur = con.cursor()
+                query = """
+                    UPDATE course_overview_addinfo
+                       SET delete_yn = 'N', modify_id = '{0}', modify_date = now(), course_level = '{1}'
+                     WHERE course_id = '{2}';
+                """.format(addinfo_user_id, course_level, addinfo_course_id)
+                cur.execute(query)
+                cur.execute('commit')
+                cur.close()
+                data = json.dumps('success')
+            elif (ctn == 0):
+                cur = con.cursor()
+                query = """
+                        INSERT INTO course_overview_addinfo(course_id,
+                                    create_type,
+                                    create_year,
+                                    course_no,
+                                    course_level,
+                                    delete_yn,
+                                    regist_id,
+                                    regist_date,
+                                    modify_id,
+                                    modify_date)
+                              VALUES('{0}','001',YEAR(now()),'1','{1}','N','{2}',now(),'{3}',now());
+                """.format(addinfo_course_id, course_level, addinfo_user_id, addinfo_user_id)
+                cur.execute(query)
+                cur.execute('commit')
+                cur.close()
+                data = json.dumps('success')
+            return HttpResponse(data, 'application/json')
+        return HttpResponse('success', 'application/json')
+
+
