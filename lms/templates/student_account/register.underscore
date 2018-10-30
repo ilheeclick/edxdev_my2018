@@ -67,3 +67,35 @@
     	<% if ( context.registerFormSubmitButtonText ) { %><%- context.registerFormSubmitButtonText %><% } else { %><%- gettext("Create Account") %><% } %>
     </button>
 </form>
+<script>
+$(document).ready(function(){
+        var provideer_text = $(".register-form p.message-copy").text();
+        if(provideer_text.indexOf("naver") != -1){
+            $(".password-password").hide();
+            var pwd = randomPassword();
+            $("#register-password").val(pwd);
+            $("#register-password2").val(pwd);
+        }
+});
+
+function randomPassword() {
+    var ran = "ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz!@#$%^&*()=+";
+    var str_len = 5;
+    var pwd = '';
+    for (var i=0; i<str_len; i++) {
+        var rnum = Math.floor(Math.random() * ran.length);
+        pwd += ran.substring(rnum,rnum+1);
+    }
+    var ran_int = "0123456789";
+    for (var i=0; i<str_len; i++) {
+        var rnum = Math.floor(Math.random() * ran_int.length);
+        pwd += ran_int.substring(rnum,rnum+1);
+    }
+    var ran_pwd = "!@#$%^&*()=+";
+    for (var i=0; i<3; i++) {
+        var rnum = Math.floor(Math.random() * ran_pwd.length);
+        pwd += ran_pwd.substring(rnum,rnum+1);
+    }
+    return pwd;
+}
+</script>

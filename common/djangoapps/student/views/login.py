@@ -381,6 +381,7 @@ def send_reactivation_email_for_user(user):
     subject = render_to_string('emails/activation_email_subject.txt', context)
     subject = ''.join(subject.splitlines())
     message = render_to_string('emails/activation_email.txt', context)
+
     from_address = configuration_helpers.get_value('email_from_address', settings.DEFAULT_FROM_EMAIL)
     from_address = configuration_helpers.get_value('ACTIVATION_EMAIL_FROM_ADDRESS', from_address)
 

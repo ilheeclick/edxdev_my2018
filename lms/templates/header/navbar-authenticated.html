@@ -84,7 +84,7 @@ from openedx.core.djangoapps.site_configuration import helpers as configuration_
         <a class="tab-nav-link" href="/about">${_("About Us")}</a>
       </div>
       <div class="mobile-nav-item hidden-mobile nav-item nav-tab">
-        <a class="${'active ' if reverse('dashboard') == request.path else ''}tab-nav-link" href="${reverse('dashboard')}">
+        <a class="${'active ' if reverse('dashboard') == request.path else ''}tab-nav-link" href="${reverse('courses')}">
           ${_("Courses")}
         </a>
       </div>
@@ -124,7 +124,7 @@ from openedx.core.djangoapps.site_configuration import helpers as configuration_
         <a class="tab-nav-link" href="/about">${_("About Us")}</a>
       </div>
     <div class="mobile-nav-item hidden-mobile nav-item nav-tab">
-        <a class="${'active ' if reverse('dashboard') == request.path else ''}tab-nav-link" href="${reverse('dashboard')}">
+        <a class="${'active ' if reverse('dashboard') == request.path else ''}tab-nav-link" href="${reverse('courses')}">
           ${_("Courses")}
         </a>
       </div>

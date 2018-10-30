@@ -23,6 +23,35 @@
             // traces though.
             newrelic.addPageAction('xfinished');
         }
+        function agreementPop(){
+            var pop = window.open("/agreement","agreement","width=1260,height=768,left=50,top=50,scrollbars=yes,realzable=yes");
+            if(pop)
+                pop.focus();
+        }
+
+        function privacyPop(){
+            var pop = window.open("/Privacy-Policy","privacy","width=1260,height=768,left=55,top=55,scrollbars=yes,realzable=yes");
+            if(pop)
+                pop.focus();
+        }
+
+        $(document).ready(function(){
+            var d = new Date();
+            var year = d.getFullYear();
+
+            %if division != 'Y':
+                $("#register-year_of_birth").find("option").each(function(){
+                    if($(this).val() != "" && eval(year - $(this).val()) > 14)
+                        $(this).remove();
+                });
+
+            %else:
+                $("#register-year_of_birth").find("option").each(function(){
+                    if($(this).val() != "" && eval(year - $(this).val()) < 14)
+                        $(this).remove();
+                });
+            %endif
+        });
     </%static:require_module>
     % if configuration_helpers.get_value('DISPLAY_TOS_IN_MODAL_ON_REGISTRATION_PAGE', False):
     <script type="text/javascript" src="${static.url('js/student_account/tos_modal.js')}"></script>
@@ -36,6 +65,38 @@
         </script>
     % endfor
 </%block>
+<script>
+    $(document).ready(function(){
+        console.log("이 페이지 ${data['initial_mode']}");
+        console.log("${data['initial_mode']}")
+        setTimeout(country_korea,1000); // 1초 후 start를 재귀호출한다.
+        setInterval(function() {
+            if( $('#register-password').val() == $('#register-password2').val()){
+                $('.register-button').attr('disabled', false);
+            }
+            else {
+                $('.register-button').attr('disabled', true);
+            }
+        }, 500)
+    });
+
+    function country_korea(){
+        if($.trim($("label[for='register-country']").text())=='국가'){
+            $("option[value='KR']").text('대한민국');
+        }
+    }
+
+    %if data['initial_mode'] == 'login':
+        console.log('login page');
+    %else:
+        var checkUnload = true;
+        $(window).on("beforeunload", function(){
+            $( ".js-register").bind( "click" );
+            if(checkUnload) return "이 페이지를 벗어나면 작성된 내용은 저장되지 않습니다.";
+        })
+    %endif
+</script>
+
 <div class="section-bkg-wrapper">
     <main id="main" aria-label="Content" tabindex="-1">
         <div id="content-container" class="login-register-content">

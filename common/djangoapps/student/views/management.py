@@ -232,11 +232,13 @@ def register_user(request, extra_context=None):
     if context.get("extauth_domain", '').startswith(
             openedx.core.djangoapps.external_auth.views.SHIBBOLETH_DOMAIN_PREFIX
     ):
+        print 'here is register-shib'
         return render_to_response('register-shib.html', context)
 
     # If third-party auth is enabled, prepopulate the form with data from the
     # selected provider.
     if third_party_auth.is_enabled() and pipeline.running(request):
+        print 'here is third_party_auth'
         running_pipeline = pipeline.get(request)
         current_provider = provider.Registry.get_from_pipeline(running_pipeline)
         if current_provider is not None:
@@ -244,7 +246,7 @@ def register_user(request, extra_context=None):
             overrides['running_pipeline'] = running_pipeline
             overrides['selected_provider'] = current_provider.name
             context.update(overrides)
-
+    print 'here is register'
     return render_to_response('register.html', context)
 
 

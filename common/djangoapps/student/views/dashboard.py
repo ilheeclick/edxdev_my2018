@@ -619,7 +619,12 @@ def student_dashboard(request):
     activate_account_message = ''
 
     print 'is_active', user.is_active
-
+    # message = ""
+    # if not user.is_active:
+    #     message = render_to_string(
+    #         'registration/activate_account_notice.html',
+    #         {'email': user.email, 'platform_name': platform_name}
+    #     )
     if not user.is_active:
 
         activate_account_message = Text(_(
