@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Views related to operations on course objects
 """
@@ -1062,6 +1063,18 @@ def settings_handler(request, course_key_string):
 
             difficult_degree_list = course_difficult_degree(request, course_key_string)
 
+            # 교수자명
+            with connections['default'].cursor() as cur:
+                query = '''
+                     SELECT IFNULL(teacher_name, '')
+                      FROM course_overview_addinfo
+                     WHERE course_id = '{0}';
+                '''.format(course_key)
+                cur.execute(query)
+                teacher_sel = cur.fetchall()
+
+            teacher_name = teacher_sel[0][0] if len(teacher_sel) != 0 else ''
+
             settings_context = {
                 'context_course': course_module,
                 'course_locator': course_key,
@@ -1084,6 +1097,7 @@ def settings_handler(request, course_key_string):
                 'is_entrance_exams_enabled': is_entrance_exams_enabled(),
                 'enable_extended_course_details': enable_extended_course_details,
                 'difficult_degree_list': difficult_degree_list,
+                'teacher_name': teacher_name,
             }
             if is_prerequisite_courses_enabled():
                 courses, in_process_course_actions = get_courses_accessible_to_user(request)

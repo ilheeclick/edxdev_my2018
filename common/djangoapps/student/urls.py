@@ -15,9 +15,9 @@ urlpatterns = [
     # TODO: standardize login
 
     # 강좌 난이도
-    url(r'^modi_course_level',
-        views.modi_course_level,
-        name='modi_course_level'),
+    url(r'^modi_course_level', views.modi_course_level, name='modi_course_level'),
+    # 교수자 추가/수정
+    url(r'^modi_teacher_name', views.modi_teacher_name, name='modi_teacher_name'),
 
     # login endpoint used by cms.
     url(r'^login_post$', views.login_user, name='login_post'),

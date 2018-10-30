@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Dashboard view and supporting methods
 """
@@ -58,10 +59,12 @@ from xmodule.modulestore.django import modulestore
 import json
 import sys
 import MySQLdb as mdb
+from django.db import connections
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 
 reload(sys)
+sys.setdefaultencoding('utf-8')
 log = logging.getLogger("edx.student")
 
 
@@ -922,4 +925,53 @@ def modi_course_level(request):
             return HttpResponse(data, 'application/json')
         return HttpResponse('success', 'application/json')
 
+
+@csrf_exempt
+def modi_teacher_name(request):
+    if request.method == 'POST':
+        if request.POST['method'] == 'addinfo':
+            addinfo_user_id = request.POST.get('addinfo_user_id')
+            addinfo_course_id = request.POST.get('addinfo_course_id')
+            teacher_name = request.POST.get('teacher_name')
+
+            with connections['default'].cursor() as cur:
+                query = """
+                        SELECT count(*)
+                          FROM course_overview_addinfo
+                         WHERE course_id = '{0}';
+                """.format(addinfo_course_id)
+                cur.execute(query)
+                count = cur.fetchall()
+                ctn = count[0][0]
+
+            if ctn == 1:
+                with connections['default'].cursor() as cur:
+                    query = """
+                        UPDATE course_overview_addinfo
+                           SET delete_yn = 'N', modify_id = '{0}', modify_date = now(), teacher_name = '{1}'
+                         WHERE course_id = '{2}';
+                    """.format(addinfo_user_id, teacher_name, addinfo_course_id)
+                    cur.execute(query)
+                    data = json.dumps('success')
+            elif ctn == 0:
+                with connections['default'].cursor() as cur:
+                    query = """
+                            INSERT INTO course_overview_addinfo(course_id,
+                                        create_type,
+                                        create_year,
+                                        course_no,
+                                        teacher_name,
+                                        delete_yn,
+                                        regist_id,
+                                        regist_date,
+                                        modify_id,
+                                        modify_date
+                                       )
+                                  VALUES('{0}','001',YEAR(now()),'1','{1}','N','{2}',now(),'{3}',now());
+                    """.format(addinfo_course_id, teacher_name, addinfo_user_id, addinfo_user_id)
+                    cur.execute(query)
+                    data = json.dumps('success')
+            return HttpResponse(data, 'application/json')
+
+        return HttpResponse('success', 'application/json')
 
