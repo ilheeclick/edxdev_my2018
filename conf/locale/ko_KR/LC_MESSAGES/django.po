@@ -4748,6 +4748,22 @@ msgstr "Powered by Open edX"
 msgid "Blog"
 msgstr "블로그"
 
+msgid "Terms of Use"
+msgstr "이용약관"
+
+msgid "Privacy Statement"
+msgstr "개인정보처리방침"
+
+msgid "Copyright Policy"
+msgstr "저작권 보호 정책"
+
+#: lms/templates/navigation.html
+msgid "About Us"
+msgstr "K-MOOC란?"
+
+msgid "Participating Institutions"
+msgstr "참여기관"
+
 #: lms/djangoapps/branding/api.py cms/templates/widgets/sock_links.html
 #: themes/edx.org/cms/templates/widgets/sock.html
 #: themes/stanford-style/lms/templates/static_templates/about.html
@@ -12020,7 +12036,7 @@ msgstr "기관별 강좌 번호"
 #: lms/templates/navigation/bootstrap/navbar-authenticated.html
 #: themes/edx.org/lms/templates/header/navbar-authenticated.html
 msgid "Courses"
-msgstr "강좌"
+msgstr "강좌찾기"
 
 #: cms/templates/login.html themes/red-theme/cms/templates/login.html
 msgid "Sign In to {studio_name}"
@@ -19471,6 +19487,9 @@ msgstr ""
 msgid "FAQ"
 msgstr "자주하는 질문"
 
+msgid "Related sites"
+msgstr "관련사이트"
+
 #: lms/templates/static_templates/jobs.html
 #: themes/red-theme/lms/templates/footer.html
 msgid "Jobs"
@@ -24714,17 +24733,17 @@ msgid ""
 "and your courses are sent to this address."
 msgstr "로그인에 사용되는 이메일 주소입니다. {platform_name}와 수강중인 강좌에서 이 이메일 주소로 메일을 발송합니다. "
 
- #: lms/templates/header/navbar-authenticated.html
+#: lms/templates/header/navbar-authenticated.html
 msgid "Community"
 msgstr "커뮤니티"
 
- #: lms/templates/header/navbar-authenticated.html
-msgid "Participating Institutions"
-msgstr "참여기관"
+#: lms/templates/header/navbar-authenticated.html
+#msgid "Participating Institutions"
+#msgstr "참여기관"
 
 #: lms/templates/header/navbar-authenticated.html
-msgid "About Us"
-msgstr "K-MOOC란?"
+#msgid "About Us"
+#msgstr "K-MOOC란?"
 
 # templates/student_account/agree.html
 
@@ -26088,4 +26107,23 @@ msgstr "만족도 조사"
 msgid "Total recognized learning hours must have number"
 msgstr "학습인정시간에는 숫자만 입력 가능합니다"
 
+#---------------------------------------------------
 
+# footer.html
+msgid "2557, NAMBUSUNHWAN-RO, SEOCHO-GU, SEOUL, KOREA. "
+msgstr "(06734)서울특별시 서초구 남부순환로 2557 (서초동)"
+
+msgid "14, Cheonggyecheon-ro, Jung-gu, Seoul, Republic of Korea (04520)"
+msgstr "(04520) 서울특별시 중구 청계천로 14 (무교동 77)"
+
+#: footer > theme-footer.html
+msgid "Certificate Id Check"
+msgstr "이수증 검증"
+
+#: footer > theme-footer.html
+msgid "OPEN API"
+msgstr "오픈 API"
+
+#: lms/templates/footer.html
+msgid "HelpU"
+msgstr "원격도우미"
