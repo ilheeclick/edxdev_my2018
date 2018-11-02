@@ -93,6 +93,7 @@ from openedx.core.djangoapps.site_configuration import helpers as configuration_
           ${_("Participating Institutions")}
         </a>
       </div>
+    % if LANGUAGE_CODE != 'en':
     <li class=" mobile-nav-item hidden-mobile nav-item nav-tab nav-item-dropdown item nav-global-04"><a href="#" class="comm_a" data-hover-label='${_("Community")}'><span class="effect_label">${_("Community")}</span></a>
         <ul class="dropdown-menu" style="width: 200px;">
             <li id="menu1"><a href="/comm_list/N" >공지사항</a></li>
@@ -101,6 +102,7 @@ from openedx.core.djangoapps.site_configuration import helpers as configuration_
             <li id="menu4"><a href="/comm_tabs/kmooc_f/">FAQ</a></li>
         </ul>
     </li>
+    %endif
       <!--
       % if show_program_listing:
         <div class="mobile-nav-item hidden-mobile nav-item nav-tab">
@@ -135,14 +137,16 @@ from openedx.core.djangoapps.site_configuration import helpers as configuration_
           ${_("Participating Institutions")}
         </a>
     </div>
+    % if LANGUAGE_CODE != 'en':
     <li class=" mobile-nav-item hidden-mobile nav-item nav-tab nav-item-dropdown item nav-global-04"><a href="#" class="comm_a" data-hover-label='${_("Community")}'><span class="effect_label">${_("Community")}</span></a>
         <ul class="dropdown-menu" style="width: 200px;">
             <li id="menu1"><a href="/comm_list/N" >공지사항</a></li>
-            <li id="menu2"><a href="/comm_list/K">K-MOOC 뉴스</a></li
+            <li id="menu2"><a href="/comm_list/K">K-MOOC 뉴스</a></li>
             <li id="menu3"><a href="/comm_list/R">자료실</a></li>
             <li id="menu4"><a href="/comm_tabs/kmooc_f/">FAQ</a></li>
         </ul>
     </li>
+    %endif
         <!--
         <div class="mobile-nav-item hidden-mobile nav-item nav-tab">
         <a class="tab-nav-link" href="${marketing_link('COURSES')}">${_('Discover New')}</a>

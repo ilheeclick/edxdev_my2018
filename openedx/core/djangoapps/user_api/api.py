@@ -391,6 +391,10 @@ class RegistrationFormFactory(object):
         # meant to hold the user's public username.
         username_label = _(u"Public Username")
 
+        # Translators: This example username is used as a placeholder in
+        # a field on the registration form meant to hold the user's username.
+        username_placeholder = _(u"JaneDoe")
+
         username_instructions = _(
             # Translators: These instructions appear on the registration form, immediately
             # below a field meant to hold the user's public username.
@@ -401,6 +405,7 @@ class RegistrationFormFactory(object):
             "username",
             label=username_label,
             instructions=username_instructions,
+            placeholder=username_placeholder,
             restrictions={
                 "min_length": accounts.USERNAME_MIN_LENGTH,
                 "max_length": accounts.USERNAME_MAX_LENGTH,

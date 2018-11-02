@@ -24,7 +24,7 @@ from student.models import UserProfile
 
   <div class="form-actions form-third-party-auth">
 
-  % for enabled in provider.Registry.displayed_for_login():
+  % for enabled in provider.Registry.accepting_logins():
     ## Translators: provider_name is the name of an external, third-party user authentication service (like Google or LinkedIn).
     <button type="submit" class="button button-primary button-${enabled.provider_id} register-${enabled.provider_id}" onclick="thirdPartySignin(event, '${pipeline_urls[enabled.provider_id]}');">
       % if enabled.icon_class:
@@ -78,6 +78,7 @@ from student.models import UserProfile
     <li class="field required text" id="field-email">
       <label for="email">${_('E-mail')}</label>
       <input class="" id="email" type="email" name="email" value="${email}" placeholder="${_('example: username@domain.com')}" required aria-required="true" />
+      <span class="tip tip-input" id="email-tip">${_("Please use your most frequently used e-mails to activate your account, log in, and change your password.")}</span>
     </li>
 
     <li class="field required text" id="field-name">
@@ -122,6 +123,7 @@ from student.models import UserProfile
     <li class="field required text" id="field-email">
       <label for="email">${_("E-mail")}</label>
       <input class="" id="email" type="email" name="email" value="" placeholder="${_('example: username@domain.com')}" />
+      <span class="tip tip-input" id="email-tip">${_("Please use your most frequently used e-mails to activate your account, log in, and change your password.")}</span>
     </li>
 
     % endif
@@ -201,7 +203,7 @@ from student.models import UserProfile
       <div class="field ${settings.REGISTRATION_EXTRA_FIELDS['year_of_birth']} select" id="field-yob">
         <label for="yob">${_("Year of Birth")}</label>
         <select id="yob" name="year_of_birth" ${'required aria-required="true"' if settings.REGISTRATION_EXTRA_FIELDS['year_of_birth'] == 'required' else ''}>
-          <option value="888">--</option>
+          <option value="">--</option>
           %for year in UserProfile.VALID_YEARS:
           <option value="${year}">${year}</option>
           %endfor
@@ -261,7 +263,6 @@ from student.models import UserProfile
       % endif
     </li>
   </ol>
-
 </div>
 
 <div class="form-actions">
