@@ -1,8 +1,36 @@
+<% var nice_check = $('#nice_check').text() %>
+<% var user_name = $('#user_name').text() %>
+
+<%if(id === 'name' && nice_check === 'yes') { %>
 <div class="u-field-value field">
+    <div style="font-weight: bold; float:right; font-size:80%;"> <img src="/static/images/correct-icon.png" style="width: 15px; height: 15px; margin-right:2px; margin-bottom:4px;">"<%- $('#user_name').text() %>" <%- complete %></div>
     <label class="u-field-title field-label" for="field-input-<%- id %>"><%- title %></label>
-    <input class="field-input input-text" placeholder="<%- placeholder %>" type="text" id="field-input-<%- id %>" title="Input field for <%- id %>" aria-describedby="u-field-message-help-<%- id %>" name="input" value="<%- value %>" />
+    <input class="field-input input-text" placeholder="<%- placeholder %>" type="text" id="field-input-<%- id %>" title="Input field for     <%- id %>" aria-describedby="u-field-message-help-<%- id %>" name="input" value="<%- value %>" />
 </div>
 <span class="u-field-message" id="u-field-message-<%- id %>">
     <span class="u-field-message-notification" aria-live="polite"></span>
     <span class="u-field-message-help" id="u-field-message-help-<%- id %>"><%= HtmlUtils.ensureHtml(message) %></span>
 </span>
+<% } else if (id === 'name') { %>
+    <div class="u-field u-field-button u-field-password">
+        <div class="u-field-value field">
+            <label class="u-field-title field-label" for="field-input-<%- id %>"><%- title %></label>
+            <input class="field-input input-text" type="text" id="fid-input-<%- id %>" title="Input field for <%- id %>" aria-describedby="u-field-message-help-<%- id %>" name="input" value="<%- value %>" style="width: 55%;" />
+            <button class="u-field-link u-field-link-title-password " id="nicecheck" aria-describedby="u-field-message-help-password" style="width: 43%; float: right;"><%- sign %></button>
+        </div>
+        <span class="u-field-message" id="u-field-message-<%- id %>">
+            <span class="u-field-message-notification" aria-live="polite"></span>
+            <span class="u-field-message-help" id="u-field-message-help-<%- id %>"><%= HtmlUtils.ensureHtml(message) %></span>
+        </span>
+    </div>
+<% } else { %>
+    <div class="u-field-value field">
+        <label class="u-field-title field-label" for="field-input-<%- id %>"><%- title %></label>
+        <input class="field-input input-text" type="text" id="field-input-<%- id %>" title="Input field for <%- id %>" aria-describedby="u-field-message-help-<%- id %>" name="input" value="<%- value %>" />
+    </div>
+    <span class="u-field-message" id="u-field-message-<%- id %>">
+        <span class="u-field-message-notification" aria-live="polite"></span>
+        <span class="u-field-message-help" id="u-field-message-help-<%- id %>"><%= HtmlUtils.ensureHtml(message) %></span>
+    </span>
+<% } %>
+

@@ -85,6 +85,8 @@
             fullNameFieldData = {
                 model: userAccountModel,
                 title: gettext('Full Name'),
+                sign: gettext('Authentication'),
+                complete: gettext('Authenticationed'),
                 valueAttribute: 'name',
                 helpMessage: gettext('The name that is used for ID verification and that appears on your certificates.'),  // eslint-disable-line max-len,
                 persistChanges: true
@@ -141,7 +143,20 @@
                                 )
                             })
                         },
-                        fullnameFieldView,
+                        {
+                            view: new AccountSettingsFieldViews.TextFieldView({
+                                model: userAccountModel,
+                                title: gettext('Full Name'),
+                                sign: gettext('Authentication'),
+                                complete: gettext('Authenticationed'),
+                                valueAttribute: 'name',
+                                helpMessage: gettext(
+                                    'The name is specified in the certification. When you do real name verification process, it is indicated that the real name is verified in the receipt.. Other users will never see your real name.' /* jshint ignore:line */
+                                ),
+                                persistChanges: true
+                            })
+                        },
+//                        fullnameFieldView,
                         emailFieldView,
                         {
                             view: new AccountSettingsFieldViews.PasswordFieldView({
