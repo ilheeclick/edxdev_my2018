@@ -72,12 +72,13 @@
     % for template_name in ["account", "access", "form_field", "login", "register", "institution_login", "institution_register", "password_reset", "hinted_login"]:
         <script type="text/template" id="${template_name}-tpl">
             <%static:include path="student_account/${template_name}.underscore" />
+
         </script>
     % endfor
 </%block>
 <script>
     $(document).ready(function(){
-        console.log("이 페이지 ${data['initial_mode']}");
+        console.log("이 페이지 = ${data['initial_mode']}");
         console.log("${data['initial_mode']}")
         setTimeout(country_korea,1000); // 1초 후 start를 재귀호출한다.
         setInterval(function() {
@@ -106,7 +107,7 @@
         })
     %endif
 </script>
-
+<input type="hidden" id="is_regist" value="false"/>
 <div class="section-bkg-wrapper">
     <main id="main" aria-label="Content" tabindex="-1">
         <div id="content-container" class="login-register-content">

@@ -316,7 +316,7 @@ class RegistrationFormFactory(object):
         # Translators: This label appears above a field on the registration form
         # meant to hold the user's email address.
         email_label = _(u"Email")
-
+        email_placeholder = _(u"username@domain.com")
         # Translators: These instructions appear on the registration form, immediately
         # below a field meant to hold the user's email address.
         email_instructions = _(u"This is what you will use to login.")
@@ -325,6 +325,7 @@ class RegistrationFormFactory(object):
             "email",
             field_type="email",
             label=email_label,
+            placeholder=email_placeholder,
             instructions=email_instructions,
             restrictions={
                 "min_length": accounts.EMAIL_MIN_LENGTH,
@@ -343,13 +344,14 @@ class RegistrationFormFactory(object):
         # Translators: This label appears above a field on the registration form
         # meant to confirm the user's email address.
         email_label = _(u"Confirm Email")
-
+        email_placeholder = _(u"username@domain.com")
         error_msg = accounts.REQUIRED_FIELD_CONFIRM_EMAIL_MSG
 
         form_desc.add_field(
             "confirm_email",
             label=email_label,
             required=required,
+            placeholder=email_placeholder,
             error_messages={
                 "required": error_msg
             }
@@ -365,7 +367,7 @@ class RegistrationFormFactory(object):
         # Translators: This label appears above a field on the registration form
         # meant to hold the user's full name.
         name_label = _(u"Full Name")
-
+        name_placeholder = _(u"Jane Doe")
         # Translators: These instructions appear on the registration form, immediately
         # below a field meant to hold the user's full name.
         name_instructions = _(u"This name will be used on any certificates that you earn.")
@@ -374,6 +376,7 @@ class RegistrationFormFactory(object):
             "name",
             label=name_label,
             instructions=name_instructions,
+            placeholder=name_placeholder,
             restrictions={
                 "max_length": accounts.NAME_MAX_LENGTH,
             },

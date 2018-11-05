@@ -657,7 +657,9 @@ def create_account_with_params(request, params):
         not do_external_auth or
         not eamap.external_domain.startswith(openedx.core.djangoapps.external_auth.views.SHIBBOLETH_DOMAIN_PREFIX)
     )
-
+    print 'create_account_with_params Test =========='
+    print params
+    print 'create_account_with_params Test =========='
     form = AccountCreationForm(
         data=params,
         extra_fields=extra_fields,
@@ -666,6 +668,8 @@ def create_account_with_params(request, params):
         tos_required=tos_required,
     )
     custom_form = get_registration_extension_form(data=params)
+    print '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+    print params['is_regist'] == 'false'
 
     third_party_provider = None
     running_pipeline = None
