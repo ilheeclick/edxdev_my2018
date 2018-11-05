@@ -770,6 +770,9 @@ class RegistrationFormFactory(object):
         country_label = _(u"Country or Region of Residence")
 
         error_msg = accounts.REQUIRED_FIELD_COUNTRY_MSG
+        countries_list = list(countries)
+        countries_list.insert(0, (u'KR', u'South Korea'))
+        print " countries_list",countries_list
 
         # If we set a country code, make sure it's uppercase for the sake of the form.
         # pylint: disable=protected-access
@@ -780,18 +783,18 @@ class RegistrationFormFactory(object):
             # below a field meant to hold the user's country.
             u"The country or region where you live."
         )
-        if default_country:
-            form_desc.override_field_properties(
-                'country',
-                default=default_country.upper()
-            )
+        # if default_country:
+        #     form_desc.override_field_properties(
+        #         'country',
+        #         default=default_country.upper()
+        #     )
 
         form_desc.add_field(
             "country",
             label=country_label,
             instructions=country_instructions,
             field_type="select",
-            options=list(countries),
+            options=countries_list,
             include_default_option=True,
             required=required,
             error_messages={
