@@ -427,6 +427,14 @@ class RegistrationFormFactory(object):
         # meant to hold the user's password.
         password_label = _(u"Password")
 
+
+        password_instructions = _(
+            # Translators: These instructions appear on the registration form, immediately
+            # below a field meant to hold the user's public username.
+            u"The password that will identify you in your courses - "
+            u"{bold_start}(cannot be changed later){bold_end}"
+        ).format(bold_start=u'<strong>', bold_end=u'</strong>')
+
         restrictions = {
             "min_length": password_min_length(),
             "max_length": password_max_length(),
@@ -441,7 +449,8 @@ class RegistrationFormFactory(object):
             "password",
             label=password_label,
             field_type="password",
-            instructions=password_instructions(),
+            #instructions=password_instructions(),
+            instructions=password_instructions,
             restrictions=restrictions,
             required=required
         )

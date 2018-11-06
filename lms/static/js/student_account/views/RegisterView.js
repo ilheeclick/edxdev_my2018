@@ -307,7 +307,7 @@
 
                 renderRequiredMessage: function($el) {
                     this.doOnInputLabel($el, function($label) {
-                        $label.removeClass('hidden').text(gettext('(required)'));
+                        //$label.removeClass('hidden').text(gettext('(required)'));
                     });
                 },
 
