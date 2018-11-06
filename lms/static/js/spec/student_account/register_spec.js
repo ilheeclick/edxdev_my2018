@@ -399,7 +399,7 @@
                 // Form button should be disabled on success.
                     expect(view.$submitButton).toHaveAttr('disabled');
                 });
-
+                //회원가입 에러창 띄우는 부분
                 it('live validates registration form fields', function() {
                     var requiredValidationFields = [$email, $confirmEmail, $username, $password],
                         i,
