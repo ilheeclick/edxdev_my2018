@@ -338,7 +338,8 @@
                 },
 
                 getIcon: function($el) {
-                    return $('#' + $el.attr('id') + '-validation-icon');
+                    //return $('#' + $el.attr('id') + '-validation-icon');
+                    return $('#' + $el.attr('id'));
                 },
 
                 getErrorTip: function($el) {

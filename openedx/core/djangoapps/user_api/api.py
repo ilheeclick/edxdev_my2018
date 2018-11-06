@@ -315,7 +315,7 @@ class RegistrationFormFactory(object):
         """
         # Translators: This label appears above a field on the registration form
         # meant to hold the user's email address.
-        email_label = _(u"Email")
+        email_label = _(u"Email")+' *'
         email_placeholder = _(u"username@domain.com")
         # Translators: These instructions appear on the registration form, immediately
         # below a field meant to hold the user's email address.
@@ -343,7 +343,7 @@ class RegistrationFormFactory(object):
         """
         # Translators: This label appears above a field on the registration form
         # meant to confirm the user's email address.
-        email_label = _(u"Confirm Email")
+        email_label = _(u"Confirm Email")+' *'
         email_placeholder = _(u"username@domain.com")
         error_msg = accounts.REQUIRED_FIELD_CONFIRM_EMAIL_MSG
 
@@ -366,7 +366,7 @@ class RegistrationFormFactory(object):
         """
         # Translators: This label appears above a field on the registration form
         # meant to hold the user's full name.
-        name_label = _(u"Full Name")
+        name_label = _(u"Full Name")+' *'
         name_placeholder = _(u"Jane Doe")
         # Translators: These instructions appear on the registration form, immediately
         # below a field meant to hold the user's full name.
@@ -392,7 +392,7 @@ class RegistrationFormFactory(object):
         """
         # Translators: This label appears above a field on the registration form
         # meant to hold the user's public username.
-        username_label = _(u"Public Username")
+        username_label = _(u"Public Username")+' *'
 
         # Translators: This example username is used as a placeholder in
         # a field on the registration form meant to hold the user's username.
@@ -425,7 +425,7 @@ class RegistrationFormFactory(object):
         """
         # Translators: This label appears above a field on the registration form
         # meant to hold the user's password.
-        password_label = _(u"Password")
+        password_label = _(u"Password")+' *'
 
 
         password_instructions = _(
@@ -490,7 +490,7 @@ class RegistrationFormFactory(object):
         """
         # Translators: This label appears above a dropdown menu on the registration
         # form used to select the user's gender.
-        gender_label = _(u"Gender")
+        gender_label = _(u"Gender")+' *'
 
         # The labels are marked for translation in UserProfile model definition.
         options = [(name, _(label)) for name, label in UserProfile.GENDER_CHOICES]  # pylint: disable=translation-of-non-string
@@ -512,7 +512,7 @@ class RegistrationFormFactory(object):
         """
         # Translators: This label appears above a dropdown menu on the registration
         # form used to select the user's year of birth.
-        yob_label = _(u"Year of birth")
+        yob_label = _(u"Year of birth")+' *'
 
         options = [(unicode(year), unicode(year)) for year in UserProfile.VALID_YEARS]
         form_desc.add_field(
