@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Views related to operations on course objects
 """
@@ -93,6 +94,8 @@ from xmodule.tabs import CourseTab, CourseTabList, InvalidTabsException
 from .component import ADVANCED_COMPONENT_TYPES
 from .item import create_xblock_info
 from .library import LIBRARIES_ENABLED, get_library_creator_status
+
+import MySQLdb as mdb
 
 log = logging.getLogger(__name__)
 
@@ -855,7 +858,71 @@ def create_new_course(user, org, number, run, fields):
     store_for_new_course = modulestore().default_modulestore.get_modulestore_type()
     new_course = create_new_course_in_store(store_for_new_course, user, org, number, run, fields)
     add_organization_course(org_data, new_course.id)
-    return new_course
+    try:
+        print 'new_course.id ====> ', new_course.id
+        # 이수증 생성을 위한 course_mode 등록
+
+        with connections['default'].cursor() as cur:
+            query = """
+                INSERT INTO course_modes_coursemode(course_id,
+                                                    mode_slug,
+                                                    mode_display_name,
+                                                    min_price,
+                                                    currency,
+                                                    suggested_prices,
+                                                    expiration_datetime_is_explicit)
+                     VALUES ('{0}',
+                             'honor',
+                             '{0}',
+                             0,
+                             'usd',
+                             '',
+                             FALSE);
+            """.format(new_course.id)
+            print '_create_new_course.query :', query
+
+            cur.execute(query)
+
+        course_id = new_course.id
+        user_id = request.user.id
+        middle_classfy = fields['middle_classfy']
+        classfy = fields['classfy']
+        course_number = new_course.number
+
+        with connections['default'].cursor() as cur:
+            query = """
+                INSERT INTO course_overview_addinfo(course_id,
+                                                    create_year,
+                                                    course_no,
+                                                    regist_id,
+                                                    regist_date,
+                                                    modify_id,
+                                                    middle_classfy,
+                                                    classfy)
+                     VALUES ('{course_id}',
+                             date_format(now(), '%Y'),
+                             (SELECT count(*)
+                                  FROM course_overviews_courseoverview
+                                 WHERE   display_number_with_default = '{course_number}'
+                                      AND org = '{org}'),
+                             '{user_id}',
+                             now(),
+                             '{user_id}',
+                             '{middle_classfy}',
+                             '{classfy}');
+            """.format(course_id=course_id, user_id=user_id, middle_classfy=middle_classfy, classfy=classfy, course_number=course_number, org=org)
+
+            cur.execute(query)
+
+            print 'course_overview_addinfo insert --------- ', query
+    except Exception as e:
+        print e
+
+    #return new_course
+    return JsonResponse({
+        'url': reverse_course_url('course_handler', new_course.id),
+        'course_key': unicode(new_course.id),
+    })
 
 
 def create_new_course_in_store(store, user, org, number, run, fields):
