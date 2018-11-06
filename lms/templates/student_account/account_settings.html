@@ -67,6 +67,8 @@ console.log('***[doc]class_name: AccountSettingsFactory***');
         extendedProfileFields = ${ extended_profile_fields | n, dump_js_escaped_json },
         displayAccountDeletion = ${ enable_account_deletion | n, dump_js_escaped_json};
 
+    fieldsData.year_of_birth.option='';
+
     AccountSettingsFactory(
         fieldsData,
         ordersHistoryData,
@@ -87,6 +89,7 @@ console.log('***[doc]class_name: AccountSettingsFactory***');
         extendedProfileFields,
         displayAccountDeletion
     );
+
 console.log('***[doc]data: name: fieldsData***');
 console.log('***[doc]data:', fieldsData);
 console.log('***lms/templates/student_account/account_settings.html-->processing end***');

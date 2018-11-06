@@ -428,6 +428,9 @@
                 error: showLoadingError
             });
 
+
+//console.log('accountSettingsView:', accountSettingsView);
+
             return {
                 userAccountModel: userAccountModel,
                 userPreferencesModel: userPreferencesModel,

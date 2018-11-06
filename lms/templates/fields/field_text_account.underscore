@@ -5,7 +5,7 @@
 <div class="u-field-value field">
     <div style="font-weight: bold; float:right; font-size:80%;"> <img src="/static/images/correct-icon.png" style="width: 15px; height: 15px; margin-right:2px; margin-bottom:4px;">"<%- $('#user_name').text() %>" <%- complete %></div>
     <label class="u-field-title field-label" for="field-input-<%- id %>"><%- title %></label>
-    <input class="field-input input-text" placeholder="<%- placeholder %>" type="text" id="field-input-<%- id %>" title="Input field for     <%- id %>" aria-describedby="u-field-message-help-<%- id %>" name="input" value="<%- value %>" />
+    <input class="field-input input-text" placeholder="<%- placeholder %>" type="text" id="field-input-<%- id %>" title="Input field for     <%- id %>" aria-describedby="u-field-message-help-<%- id %>" name="input" readonly value="<%- value %>" />
 </div>
 <span class="u-field-message" id="u-field-message-<%- id %>">
     <span class="u-field-message-notification" aria-live="polite"></span>

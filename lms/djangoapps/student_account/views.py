@@ -952,7 +952,11 @@ def account_settings_context(request):
 
     user = request.user
 
-    year_of_birth_options = [(unicode(year), unicode(year)) for year in UserProfile.VALID_YEARS]
+    if nice_check == 'yes':
+        year_of_birth_options = [(unicode(user_birthday), unicode(user_birthday))]
+    else:
+        year_of_birth_options = [(unicode(year), unicode(year)) for year in UserProfile.VALID_YEARS]
+
     try:
         user_orders = get_user_orders(user)
     except:  # pylint: disable=bare-except
