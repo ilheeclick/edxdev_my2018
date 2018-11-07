@@ -86,6 +86,7 @@ urlpatterns = [
         contentstore.views.course_info_update_handler, name='course_info_update_handler'
         ),
     url(r'^home/?$', contentstore.views.course_listing, name='home'),
+    url(r'^level_Verifi/?$', contentstore.views.level_Verifi, name='level_Verifi'),
     url(r'^course/{}/search_reindex?$'.format(settings.COURSE_KEY_PATTERN),
         contentstore.views.course_search_index_handler,
         name='course_search_index_handler'

@@ -100,7 +100,7 @@ from django.db import connections
 
 log = logging.getLogger(__name__)
 
-__all__ = ['course_info_handler', 'course_handler', 'course_listing',
+__all__ = ['course_info_handler', 'course_handler', 'course_listing','level_Verifi',
            'course_info_update_handler', 'course_search_index_handler',
            'course_rerun_handler',
            'settings_handler',
@@ -202,6 +202,28 @@ def _course_notifications_json_get(course_action_state_id):
     }
     return JsonResponse(action_state_info)
 
+def level_Verifi(request):
+    sys.setdefaultencoding('utf-8')
+    con = mdb.connect(settings.DATABASES.get('default').get('HOST'),
+                      settings.DATABASES.get('default').get('USER'),
+                      settings.DATABASES.get('default').get('PASSWORD'),
+                      settings.DATABASES.get('default').get('NAME'),
+                      charset='utf8')
+    cur = con.cursor()
+    level_1 = request.GET.get('level_1')
+    level_2 = request.GET.get('level_2')
+
+    query = """
+        SELECT count(*)
+          FROM course_overviews_courseoverview
+         WHERE org = '{0}' AND display_number_with_default = '{1}';
+    """.format(level_1, level_2)
+    cur.execute(query)
+    check_index = cur.fetchall()
+    cur.close()
+
+    data = json.dumps(check_index[0][0])
+    return HttpResponse(data, 'applications/json')
 
 def _dismiss_notification(request, course_action_state_id):  # pylint: disable=unused-argument
     """
