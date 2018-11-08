@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 """
 Middleware to auto-expire inactive sessions after N seconds, which is configurable in
 settings.
@@ -34,6 +35,7 @@ class SessionInactivityTimeout(object):
         if 'ISREMEMBER' in request.session:
             timeout_in_seconds = 604800 #7일
             #timeout_in_seconds = 2592000 #30일
+            print "session_timed_out"
 
         # Do we have this feature enabled?
         if timeout_in_seconds:
