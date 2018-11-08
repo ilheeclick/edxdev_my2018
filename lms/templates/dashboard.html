@@ -101,12 +101,15 @@ from student.models import CourseEnrollment
     %endif
 
     %if enterprise_message:
+
         <div class="dashboard-banner">
             ${ enterprise_message | n, decode.utf8 }
         </div>
     %endif
 
     %if account_activation_messages:
+
+
       <div class="activation-message-container">
         % for account_activation_message in account_activation_messages:
           <div class="account-activation ${account_activation_message.tags}" role="alert" aria-label="Account Activation Message" tabindex="-1">
@@ -116,6 +119,15 @@ from student.models import CourseEnrollment
           </div>
         % endfor
       </div>
+    %endif
+    %if activate_account_message:
+      <script>
+        console.log("activate_account_message")
+        setTimeout(function () {
+            alert('${_("Since we sent an email to activate your account, please log back in to your site via your account activation email.. Click OK button to log out automatically.")}');
+            document.location.href = "/logout";
+        }, 500);
+      </script>
     %endif
 
 </div>

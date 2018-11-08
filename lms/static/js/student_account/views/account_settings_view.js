@@ -30,24 +30,25 @@
                     tabindex: -1,
                     selected: false,
                     expanded: false
-                },
-                {
-                    name: 'ordersTabSections',
-                    id: 'orders-tab',
-                    label: gettext('Order History'),
-                    tabindex: -1,
-                    selected: false,
-                    expanded: false
                 }
+//                ,{
+//                    name: 'ordersTabSections',
+//                    id: 'orders-tab',
+//                    label: gettext('Order History'),
+//                    tabindex: -1,
+//                    selected: false,
+//                    expanded: false
+//                }
             ],
             events: {
                 'click .account-nav-link': 'switchTab',
+                'click #nicecheck': 'nicecheck',
                 'keydown .account-nav-link': 'keydownHandler'
             },
 
             initialize: function(options) {
                 this.options = options;
-                _.bindAll(this, 'render', 'switchTab', 'setActiveTab', 'showLoadingError');
+                _.bindAll(this, 'render', 'switchTab', 'renderFields', 'setActiveTab', 'showLoadingError');
             },
 
             render: function() {
@@ -61,6 +62,14 @@
                     view.renderSection(view.options.tabSections[tabName], tabName, tab.label);
                 });
                 return this;
+            },
+
+            nicecheck: function(e) {
+                if(confirm(gettext("Once you have verified your name, you can not cancel it. Do you want to proceed?"))){
+                    window.open('', 'popupNICE', 'width=450, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no');
+                    document.form2.target = "popupNICE";
+                    document.form2.submit();
+                }
             },
 
             switchTab: function(e) {
@@ -104,6 +113,33 @@
                 });
 
                 accountSectionView.render();
+            },
+
+            renderFields: function () {
+                var view = this;
+                view.$('.ui-loading-indicator').addClass('is-hidden');
+
+                _.each(view.$('.account-settings-section-body'), function (sectionEl, index) {
+                    _.each(view.options.tabSections[view.activeTab][index].fields, function (field) {
+                        if (field.view.enabled) {
+                            $(sectionEl).append(field.view.render().el);
+                        }
+                    });
+
+                    if(view.$('.account-settings-section-body').size() == 2 && index == 0){
+                        var html = "";
+                        html += "<div class='u-field u-field-button u-field-password'>";
+                        html += "    <div class='u-field-value field'>";
+                        html += "        <span class='u-field-title field-label'>회원탈퇴</span>";
+                        html += "        <a href='/remove_account_view'><button class='u-field-link u-field-link-title-password ' id='secession-btn' aria-describedby='u-field-message-help-password'>회원탈퇴하기</button></a>";
+                        html += "    </div>";
+                        html += "</div>";
+
+                        $(sectionEl).append(html);
+                    }
+                });
+
+                return this;
             },
 
             showLoadingError: function() {

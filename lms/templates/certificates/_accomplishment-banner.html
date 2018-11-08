@@ -8,10 +8,10 @@ from openedx.core.djangolib.js_utils import js_escaped_string
   <%static:js group='certificates_wv'/>
   <script type="text/javascript">
       $(document).ready(function() {
-          FaceBook.init({"facebook_app_id": '${facebook_app_id | n, js_escaped_string}'});
+          //FaceBook.init({"facebook_app_id": '${facebook_app_id | n, js_escaped_string}'});
           $.ajaxSetup({
               headers: {
-                  'X-CSRFToken': $.cookie('csrftoken')
+                  //'X-CSRFToken': $.cookie('csrftoken')
               },
               dataType: 'json'
           });
@@ -41,7 +41,7 @@ from openedx.core.djangolib.js_utils import js_escaped_string
 <div class="wrapper-banner wrapper-banner-user">
     <section class="banner banner-user">
         <div class="message message-block message-notice">
-            <h2 class="message-title hd-5 emphasized">${accomplishment_banner_opening}</h2>
+            <h2 class="message-title hd-5 emphasized">${accomplishment_banner_opening}Maeng _accomplishment-banner.html x 번째</h2>
             <div class="wrapper-copy-and-actions">
                 <p class="message-copy copy copy-base emphasized">${accomplishment_banner_congrats}</p>
                 <div class="message-actions">
@@ -75,18 +75,30 @@ from openedx.core.djangolib.js_utils import js_escaped_string
                         <span class="action-label">${_("Add to LinkedIn Profile")}</span>
                     </button>
                     %endif
+                    % if not preview_mode:
+                        <button class="action action-print btn-inverse btn-small" id="action-print-view">
+                            <span class="icon fa fa-print" aria-hidden="true"></span>
+                            ${_("Print Certificate")}
+                        </button>
+                        % if nice_check_flag == 0:
+                            <button class="action action-print btn-inverse btn-small Test_btn" id="action-check-view">
+                                본인인증하기
+                            </button>
+                        %endif
 
-                    %if badge:
-                    <button class="action action-share-mozillaopenbadges btn btn-overlay btn-small">
-                        <img class="icon icon-mozillaopenbadges" src="/static/certificates/images/ico-mozillaopenbadges.png" alt="Mozilla Open Badges Backpack">
-                        ${_("Add to Mozilla Backpack")}
-                    </button>
+                        %if badge:
+                        <button class="action action-share-mozillaopenbadges btn btn-overlay btn-small">
+                            <img class="icon icon-mozillaopenbadges" src="/static/certificates/images/ico-mozillaopenbadges.png" alt="Mozilla Open Badges Backpack">
+                            ${_("Add to Mozilla Backpack")}
+                        </button>
+                        %endif
                     %endif
 
-                    <button class="action action-print btn-inverse btn-small" id="action-print-view">
-                        <span class="icon fa fa-print" aria-hidden="true"></span>
-                        ${_("Print Certificate")}
-                    </button>
+
+                    <form id="form2" name="form2" method="post" action="https://nice.checkplus.co.kr/CheckPlusSafeModel/checkplus.cb">
+                        <input type="hidden" name="m" value="checkplusSerivce">
+                        <input type="hidden" name="EncodeData" value="${enc_data}">
+                    </form>
                 </div>
             </div>
         </div>

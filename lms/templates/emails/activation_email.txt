@@ -21,3 +21,6 @@ ${_("This email message was automatically sent by {lms_url} because someone atte
 "account on {platform_name} using this email address.").format(
   lms_url=lms_url, platform_name=platform_name
 )}
+
+
+
