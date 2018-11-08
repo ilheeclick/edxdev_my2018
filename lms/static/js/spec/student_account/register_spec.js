@@ -257,16 +257,25 @@
                 };
 
                 var fillData = function() {
-                    $email.val(USER_DATA.email);
-                    $confirmEmail.val(USER_DATA.email);
-                    $name.val(USER_DATA.name);
-                    $username.val(USER_DATA.username);
-                    $password.val(USER_DATA.password);
-                    $levelOfEducation.val(USER_DATA.level_of_education);
-                    $gender.val(USER_DATA.gender);
-                    $yearOfBirth.val(USER_DATA.year_of_birth);
-                    $mailingAddress.val(USER_DATA.mailing_address);
-                    $goals.val(USER_DATA.goals);
+                    // $email.val(USER_DATA.email);
+                    // $confirmEmail.val(USER_DATA.email);
+                    // $name.val(USER_DATA.name);
+                    // $username.val(USER_DATA.username);
+                    // $password.val(USER_DATA.password);
+                    // $levelOfEducation.val(USER_DATA.level_of_education);
+                    // $gender.val(USER_DATA.gender);
+                    // $yearOfBirth.val(USER_DATA.year_of_birth);
+                    // $mailingAddress.val(USER_DATA.mailing_address);
+                    // $goals.val(USER_DATA.goals);
+                    $('#register-email').val(USER_DATA.email);
+                    $('#register-name').val(USER_DATA.name);
+                    $('#register-username').val(USER_DATA.username);
+                    $('#register-password').val(USER_DATA.password);
+                    $('#register-level_of_education').val(USER_DATA.level_of_education);
+                    $('#register-gender').val(USER_DATA.gender);
+                    $('#register-year_of_birth').val(USER_DATA.year_of_birth);
+                    $('#register-mailing_address').val(USER_DATA.mailing_address);
+                    $('#register-goals').val(USER_DATA.goals);
                 // Check the honor code checkbox
                     $honorCode.prop('checked', USER_DATA.honor_code);
                 };
@@ -390,7 +399,7 @@
                 // Form button should be disabled on success.
                     expect(view.$submitButton).toHaveAttr('disabled');
                 });
-
+                //회원가입 에러창 띄우는 부분
                 it('live validates registration form fields', function() {
                     var requiredValidationFields = [$email, $confirmEmail, $username, $password],
                         i,

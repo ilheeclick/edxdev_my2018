@@ -36,7 +36,9 @@ from pytz import UTC
 from rest_framework import status
 from six import text_type
 from web_fragments.fragment import Fragment
-
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
+from util.json_request import JsonResponse
+from django.db import connections
 import shoppingcart
 import survey.views
 from lms.djangoapps.certificates import api as certs_api

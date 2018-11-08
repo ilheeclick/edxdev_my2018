@@ -74,6 +74,37 @@
                 <a href="<%- supplementalLink %>" target="_blank"><%- supplementalText %></a>
             </div>
         <% } %>
+    <% } else if ( type === 'password' ) { %>
+
+        <input id="<%= form %>-<%= name %>"
+           type="<%= type %>"
+           name="<%= name %>"
+           placeholder="<%- gettext('Password input') %>"
+           class="input-block <% if ( type === 'checkbox' ) { %>checkbox<% } %>"
+            <% if ( type !== 'password' ) { %> aria-describedby="<%= form %>-<%= name %>-desc" <% } %>
+            <% if ( restrictions.min_length ) { %> minlength="<%= restrictions.min_length %>"<% } %>
+            <% if ( restrictions.max_length ) { %> maxlength="<%= restrictions.max_length %>"<% } %>
+            <% if ( required ) { %> aria-required="true" required<% } %>
+            <% if ( typeof errorMessages !== 'undefined' ) {
+                _.each(errorMessages, function( msg, type ) {%>
+                    data-errormsg-<%= type %>="<%= msg %>"
+            <%  });
+            } %>
+            <% if ( placeholder ) { %> placeholder="<%= placeholder %>"<% } %>
+            value="<%- defaultValue %>"
+            title="<%= name %>"
+        />
+        <% if( form === 'register' ) {%>
+        <input title="<%= name %>2" id="<%= form %>-<%= name %>2"
+           type="<%= type %>"
+           name="<%= name %>2"
+           class="input-block"
+           placeholder="<%- gettext('Password check') %>"
+        />
+        <% if ( instructions ) { %> <span class="tip tip-input" id="<%= form %>-<%= name %>-desc"><%= instructions %></span><% } %>
+        <%}%>
+
+
     <% } else if (type === 'plaintext' ) { %>
             <span class="plaintext-field"><%= HtmlUtils.HTML(label) %></span>
             <input id="<%- form %>-<%- name %>"

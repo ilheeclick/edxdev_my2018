@@ -71,7 +71,7 @@ from openedx.core.djangoapps.lang_pref.api import header_language_selector_is_en
 
 % if header_language_selector_is_enabled():
     <% languages = released_languages() %>
-    % if len(languages) > 1:
+    % if len(languages) > 100:
         <form action="/i18n/setlang/" method="post" class="settings-language-form" id="language-settings-form">
             <input type="hidden" id="csrf_token" name="csrfmiddlewaretoken" value="${csrf_token}">
             % if user.is_authenticated:

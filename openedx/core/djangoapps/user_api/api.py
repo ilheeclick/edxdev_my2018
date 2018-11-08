@@ -315,8 +315,8 @@ class RegistrationFormFactory(object):
         """
         # Translators: This label appears above a field on the registration form
         # meant to hold the user's email address.
-        email_label = _(u"Email")
-
+        email_label = _(u"Email")+' *'
+        email_placeholder = _(u"username@domain.com")
         # Translators: These instructions appear on the registration form, immediately
         # below a field meant to hold the user's email address.
         email_instructions = _(u"This is what you will use to login.")
@@ -325,6 +325,7 @@ class RegistrationFormFactory(object):
             "email",
             field_type="email",
             label=email_label,
+            placeholder=email_placeholder,
             instructions=email_instructions,
             restrictions={
                 "min_length": accounts.EMAIL_MIN_LENGTH,
@@ -342,14 +343,15 @@ class RegistrationFormFactory(object):
         """
         # Translators: This label appears above a field on the registration form
         # meant to confirm the user's email address.
-        email_label = _(u"Confirm Email")
-
+        email_label = _(u"Confirm Email")+' *'
+        email_placeholder = _(u"username@domain.com")
         error_msg = accounts.REQUIRED_FIELD_CONFIRM_EMAIL_MSG
 
         form_desc.add_field(
             "confirm_email",
             label=email_label,
             required=required,
+            placeholder=email_placeholder,
             error_messages={
                 "required": error_msg
             }
@@ -364,8 +366,8 @@ class RegistrationFormFactory(object):
         """
         # Translators: This label appears above a field on the registration form
         # meant to hold the user's full name.
-        name_label = _(u"Full Name")
-
+        name_label = _(u"Full Name")+' *'
+        name_placeholder = _(u"Jane Doe")
         # Translators: These instructions appear on the registration form, immediately
         # below a field meant to hold the user's full name.
         name_instructions = _(u"This name will be used on any certificates that you earn.")
@@ -374,6 +376,7 @@ class RegistrationFormFactory(object):
             "name",
             label=name_label,
             instructions=name_instructions,
+            placeholder=name_placeholder,
             restrictions={
                 "max_length": accounts.NAME_MAX_LENGTH,
             },
@@ -389,7 +392,11 @@ class RegistrationFormFactory(object):
         """
         # Translators: This label appears above a field on the registration form
         # meant to hold the user's public username.
-        username_label = _(u"Public Username")
+        username_label = _(u"Public Username")+' *'
+
+        # Translators: This example username is used as a placeholder in
+        # a field on the registration form meant to hold the user's username.
+        username_placeholder = _(u"JaneDoe")
 
         username_instructions = _(
             # Translators: These instructions appear on the registration form, immediately
@@ -401,6 +408,7 @@ class RegistrationFormFactory(object):
             "username",
             label=username_label,
             instructions=username_instructions,
+            placeholder=username_placeholder,
             restrictions={
                 "min_length": accounts.USERNAME_MIN_LENGTH,
                 "max_length": accounts.USERNAME_MAX_LENGTH,
@@ -417,7 +425,15 @@ class RegistrationFormFactory(object):
         """
         # Translators: This label appears above a field on the registration form
         # meant to hold the user's password.
-        password_label = _(u"Password")
+        password_label = _(u"Password")+' *'
+
+
+        password_instructions = _(
+            # Translators: These instructions appear on the registration form, immediately
+            # below a field meant to hold the user's public username.
+            u"The password that will identify you in your courses - "
+            u"{bold_start}(cannot be changed later){bold_end}"
+        ).format(bold_start=u'<strong>', bold_end=u'</strong>')
 
         restrictions = {
             "min_length": password_min_length(),
@@ -433,7 +449,8 @@ class RegistrationFormFactory(object):
             "password",
             label=password_label,
             field_type="password",
-            instructions=password_instructions(),
+            #instructions=password_instructions(),
+            instructions=password_instructions,
             restrictions=restrictions,
             required=required
         )
@@ -473,7 +490,7 @@ class RegistrationFormFactory(object):
         """
         # Translators: This label appears above a dropdown menu on the registration
         # form used to select the user's gender.
-        gender_label = _(u"Gender")
+        gender_label = _(u"Gender")+' *'
 
         # The labels are marked for translation in UserProfile model definition.
         options = [(name, _(label)) for name, label in UserProfile.GENDER_CHOICES]  # pylint: disable=translation-of-non-string
@@ -495,7 +512,7 @@ class RegistrationFormFactory(object):
         """
         # Translators: This label appears above a dropdown menu on the registration
         # form used to select the user's year of birth.
-        yob_label = _(u"Year of birth")
+        yob_label = _(u"Year of birth")+' *'
 
         options = [(unicode(year), unicode(year)) for year in UserProfile.VALID_YEARS]
         form_desc.add_field(
@@ -762,6 +779,9 @@ class RegistrationFormFactory(object):
         country_label = _(u"Country or Region of Residence")
 
         error_msg = accounts.REQUIRED_FIELD_COUNTRY_MSG
+        countries_list = list(countries)
+        countries_list.insert(0, (u'KR', u'South Korea'))
+        print " countries_list",countries_list
 
         # If we set a country code, make sure it's uppercase for the sake of the form.
         # pylint: disable=protected-access
@@ -772,18 +792,18 @@ class RegistrationFormFactory(object):
             # below a field meant to hold the user's country.
             u"The country or region where you live."
         )
-        if default_country:
-            form_desc.override_field_properties(
-                'country',
-                default=default_country.upper()
-            )
+        # if default_country:
+        #     form_desc.override_field_properties(
+        #         'country',
+        #         default=default_country.upper()
+        #     )
 
         form_desc.add_field(
             "country",
             label=country_label,
             instructions=country_instructions,
             field_type="select",
-            options=list(countries),
+            options=countries_list,
             include_default_option=True,
             required=required,
             error_messages={

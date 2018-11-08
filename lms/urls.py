@@ -52,12 +52,16 @@ from static_template_view import views as static_template_view_views
 from staticbook import views as staticbook_views
 from student import views as student_views
 from student_account import views as student_account_views
+
+
 from track import views as track_views
 from util import views as util_views
 
 # community
 # from community.views import views as community_views
 from lms.djangoapps.community import views as community
+#lms/djangoapps/courseware/courses.py
+from courseware import courses as courses
 
 if settings.DEBUG or settings.FEATURES.get('ENABLE_DJANGO_ADMIN_SITE'):
     django_autodiscover()
@@ -102,6 +106,9 @@ urlpatterns = [
     url(r'^comm_k_news$', community.comm_k_news, name='comm_k_news'),
     url(r'^comm_k_news_view/(?P<board_id>.*?)/$', community.comm_k_news_view, name='comm_k_news_view'),
     url(r'^comm_list_json$', community.comm_list_json, name='comm_list_json'),
+
+    # course_list
+    url(r'^course_search_list$', courses.course_search_list, name='course_list'),
 
     url(r'', include('student.urls')),
     # TODO: Move lms specific student views out of common code
@@ -566,7 +573,12 @@ urlpatterns += [
         ),
         include(COURSE_URLS)
     ),
-
+    # url(
+    #     r'^course/{}/search_reindex?$'.format(
+    #         settings.COURSE_KEY_PATTERN),
+    #     'course_search_index_handler',
+    #     name='course_search_index_handler'
+    # ),
     # Discussions Management
     url(
         r'^courses/{}/discussions/settings$'.format(
@@ -1129,3 +1141,8 @@ if settings.FEATURES.get('ENABLE_API_DOCS'):
     ]
 
 urlpatterns.extend(plugin_urls.get_patterns(plugin_constants.ProjectType.LMS))
+
+# markany
+urlpatterns += (
+    url(r'^maeps/', include('maeps.urls')),
+)

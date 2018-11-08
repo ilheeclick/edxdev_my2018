@@ -30,15 +30,6 @@
                     tabindex: -1,
                     selected: false,
                     expanded: false
-                }
-//                ,{
-//                    name: 'ordersTabSections',
-//                    id: 'orders-tab',
-//                    label: gettext('Order History'),
-//                    tabindex: -1,
-//                    selected: false,
-//                    expanded: false
-//                }
             ],
             events: {
                 'click .account-nav-link': 'switchTab',

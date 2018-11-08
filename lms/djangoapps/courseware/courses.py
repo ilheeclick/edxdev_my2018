@@ -41,6 +41,10 @@ from xmodule.modulestore.django import modulestore
 from xmodule.modulestore.exceptions import ItemNotFoundError
 from xmodule.x_module import STUDENT_VIEW
 
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
+from util.json_request import JsonResponse
+from django.db import connections
+
 log = logging.getLogger(__name__)
 
 
@@ -117,6 +121,28 @@ def get_course_overview_with_access(user, action, course_key, check_if_enrolled=
     check_course_access(course_overview, user, action, check_if_enrolled)
     return course_overview
 
+@csrf_exempt
+def course_search_list(request):
+    if request.is_ajax():
+        print "search_list -- courseware.py"
+        with connections['default'].cursor() as cur:
+            query = '''
+                SELECT DISTINCT display_name
+                  FROM course_overviews_courseoverview
+                  WHERE catalog_visibility = 'both'
+                   AND enrollment_start IS NOT NULL
+                   AND start < '2030-01-01'
+                 ORDER BY display_name;
+            '''
+            cur.execute(query)
+            course_tup = cur.fetchall()
+            course_list = list()
+            for course in course_tup:
+                course_list.append(course[0])
+            print "-----courseware------",course_list
+
+            return JsonResponse({'course_search_list': course_list})
+    pass
 
 def check_course_access(course, user, action, check_if_enrolled=False, check_survey_complete=True):
     """

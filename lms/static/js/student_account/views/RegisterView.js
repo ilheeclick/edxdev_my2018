@@ -175,72 +175,72 @@
                         inputTipSelectors = ['tip error', 'tip tip-input'],
                         inputTipSelectorsHidden = ['tip error hidden', 'tip tip-input hidden'],
                         onInputFocus = function() {
-                            // Apply on focus styles to input
-                            $(this).find('label').addClass('focus-in')
-                                .removeClass('focus-out');
-
-                            // Show each input tip
-                            $(this).children().each(function() {
-                                if (inputTipSelectorsHidden.indexOf($(this).attr('class')) >= 0) {
-                                    $(this).removeClass('hidden');
-                                }
-                            });
+                            // // Apply on focus styles to input
+                            // $(this).find('label').addClass('focus-in')
+                            //     .removeClass('focus-out');
+                            //
+                            // // Show each input tip
+                            // $(this).children().each(function() {
+                            //     if (inputTipSelectorsHidden.indexOf($(this).attr('class')) >= 0) {
+                            //         $(this).removeClass('hidden');
+                            //     }
+                            // });
                         },
                         onInputFocusOut = function() {
                             // If input has no text apply focus out styles
-                            if ($(this).find(inputSelectors).val().length === 0) {
-                                $(this).find('label').addClass('focus-out')
-                                    .removeClass('focus-in');
-                            }
-
-                            // Hide each input tip
-                            $(this).children().each(function() {
-                                if (inputTipSelectors.indexOf($(this).attr('class')) >= 0) {
-                                    $(this).addClass('hidden');
-                                }
-                            });
+                            // if ($(this).find(inputSelectors).val().length === 0) {
+                            //     $(this).find('label').addClass('focus-out')
+                            //         .removeClass('focus-in');
+                            // }
+                            //
+                            // // Hide each input tip
+                            // $(this).children().each(function() {
+                            //     if (inputTipSelectors.indexOf($(this).attr('class')) >= 0) {
+                            //         $(this).addClass('hidden');
+                            //     }
+                            // });
                         },
                         handleInputBehavior = function(input) {
                             // Initially put label in input
-                            if (input.find(inputSelectors).val().length === 0) {
-                                input.find('label').addClass('focus-out')
-                                    .removeClass('focus-in');
-                            }
-
-                            // Initially hide each input tip
-                            input.children().each(function() {
-                                if (inputTipSelectors.indexOf($(this).attr('class')) >= 0) {
-                                    $(this).addClass('hidden');
-                                }
-                            });
-
-                            input.focusin(onInputFocus);
-                            input.focusout(onInputFocusOut);
+                            // if (input.find(inputSelectors).val().length === 0) {
+                            //     input.find('label').addClass('focus-out')
+                            //         .removeClass('focus-in');
+                            // }
+                            //
+                            // // Initially hide each input tip
+                            // input.children().each(function() {
+                            //     if (inputTipSelectors.indexOf($(this).attr('class')) >= 0) {
+                            //         $(this).addClass('hidden');
+                            //     }
+                            // });
+                            //
+                            // input.focusin(onInputFocus);
+                            // input.focusout(onInputFocusOut);
                         },
                         handleAutocomplete = function() {
-                            $(inputs).each(function() {
-                                var $input = $(this),
-                                    isCheckbox = $input.attr('class').indexOf('checkbox') !== -1;
-
-                                if (!isCheckbox) {
-                                    if ($input.find(inputSelectors).val().length === 0
-                                        && !$input.is(':-webkit-autofill')) {
-                                        $input.find('label').addClass('focus-out')
-                                            .removeClass('focus-in');
-                                    } else {
-                                        $input.find('label').addClass('focus-in')
-                                            .removeClass('focus-out');
-                                    }
-                                }
-                            });
+                            // $(inputs).each(function() {
+                            //     var $input = $(this),
+                            //         isCheckbox = $input.attr('class').indexOf('checkbox') !== -1;
+                            //
+                            //     if (!isCheckbox) {
+                            //         if ($input.find(inputSelectors).val().length === 0
+                            //             && !$input.is(':-webkit-autofill')) {
+                            //             $input.find('label').addClass('focus-out')
+                            //                 .removeClass('focus-in');
+                            //         } else {
+                            //             $input.find('label').addClass('focus-in')
+                            //                 .removeClass('focus-out');
+                            //         }
+                            //     }
+                            // });
                         };
 
                     FormView.prototype.postRender.call(this);
-                    $('.optional-fields').addClass('hidden');
-                    $('#toggle_optional_fields').change(function() {
-                        window.analytics.track('edx.bi.user.register.optional_fields_selected');
-                        $('.optional-fields').toggleClass('hidden');
-                    });
+                    $('.optional-fields').addClass('');
+                    // $('#toggle_optional_fields').change(function() {
+                    //     window.analytics.track('edx.bi.user.register.optional_fields_selected');
+                    //     $('.optional-fields').toggleClass('hidden');
+                    // });
 
                     // We are swapping the order of these elements here because the honor code agreement
                     // is a required checkbox field and the optional fields toggle is a cosmetic
@@ -307,7 +307,7 @@
 
                 renderRequiredMessage: function($el) {
                     this.doOnInputLabel($el, function($label) {
-                        $label.removeClass('hidden').text(gettext('(required)'));
+                        //$label.removeClass('hidden').text(gettext('(required)'));
                     });
                 },
 
@@ -338,7 +338,8 @@
                 },
 
                 getIcon: function($el) {
-                    return $('#' + $el.attr('id') + '-validation-icon');
+                    //return $('#' + $el.attr('id') + '-validation-icon');
+                    return $('#' + $el.attr('id'));
                 },
 
                 getErrorTip: function($el) {

@@ -134,46 +134,66 @@
                 this.trigger('password-help');
             },
 
-            getFormData: function() {
-                var obj = {},
-                    $form = this.$form,
-                    elements = $form[0].elements,
-                    i,
-                    len = elements.length,
-                    $el,
-                    $label,
-                    key = '',
-                    errors = [],
-                    validation = {};
+            getFormData: function(target) {
+                if (target) {
+                        var obj = {},
+                            $form = this.$form,
+                            $el,
+                            $label,
+                            errors = [],
+                            test = {};
+                        $el = $("input[name=" + target + "]");
+                        $label = $form.find('label[for=' + $el.attr('id') + ']');
 
-                for (i = 0; i < len; i++) {
-                    $el = $(elements[i]);
-                    $label = $form.find('label[for=' + $el.attr('id') + ']');
-                    key = $el.attr('name') || false;
+                        if (target) {
+                            test = this.validate($el);
+                            if (test.isValid) {
+                                obj[target] = $el.attr('type') === 'checkbox' ? $el.is(':checked') : $el.val();
+                                $el.removeClass('error');
+                                $label.removeClass('error');
+                            } else {
+                                errors.push(test.message);
+                                $("input").removeClass('error');
+                                $("label").removeClass('error');
+                                $el.addClass('error');
+                                $label.addClass('error');
+                            }
+                        }
 
-                        // Due to a bug in firefox, whitespaces in email type field are not removed.
-                        // TODO: Remove this code once firefox bug is resolved.
-                    if (key === 'email') {
-                        $el.val($el.val().trim());
-                    }
+                    } else {
+                        var obj = {},
+                            $form = this.$form,
+                            elements = $form[0].elements,
+                            i,
+                            len = elements.length,
+                            $el,
+                            $label,
+                            key = '',
+                            errors = [],
+                            test = {};
 
-                    if (key) {
-                        validation = this.validate(elements[i]);
-                        if (validation.isValid) {
-                            obj[key] = $el.attr('type') === 'checkbox' ? $el.is(':checked') : $el.val();
-                            $el.removeClass('error');
-                            $label.removeClass('error');
-                        } else {
-                            errors.push(validation.message);
-                            $el.addClass('error');
-                            $label.addClass('error');
+                        for (i = 0; i < len; i++) {
+
+                            $el = $(elements[i]);
+                            $label = $form.find('label[for=' + $el.attr('id') + ']');
+                            key = $el.attr('name') || false;
+
+                            if (key) {
+                                test = this.validate(elements[i]);
+                                if (test.isValid) {
+                                    obj[key] = $el.attr('type') === 'checkbox' ? $el.is(':checked') : $el.val();
+                                    $el.removeClass('error');
+                                    $label.removeClass('error');
+                                } else {
+                                    errors.push(test.message);
+                                    $el.addClass('error');
+                                    $label.addClass('error');
+                                }
+                            }
                         }
                     }
-                }
-
-                this.errors = _.uniq(errors);
-
-                return obj;
+                    this.errors = _.uniq(errors);
+                    return obj;
             },
 
             saveError: function(error) {
@@ -213,12 +233,29 @@
                 return data;
             },
 
-            submitForm: function(event) {
-                var data = this.getFormData();
-
+            submitForm: function(event,target) {
+                $(window).unbind("beforeunload");
+                $('.submission-error h4').removeClass('hidden');
+                var data = this.getFormData(target);
                 if (!_.isUndefined(event)) {
                     event.preventDefault();
                 }
+                //실시간 검증
+                // target set
+                if(target){
+                    console.log('target setting 1');
+                    data['target'] = target;
+                }else{
+                    console.log('target setting 2');
+                    this.model.set({'target':''});
+                }
+
+                console.log('javascript is_regist value check --- s');
+                console.log($("#is_regist").val());
+                console.log('javascript is_regist value check --- e');
+
+                // set is_regist
+                data['is_regist'] = $("#is_regist").val();
 
                 this.toggleDisableButton(true);
 

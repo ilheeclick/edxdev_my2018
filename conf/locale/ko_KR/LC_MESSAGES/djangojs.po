@@ -5730,7 +5730,7 @@ msgstr "{platform_name}과 강좌 팀으로부터 메시지를 수신받습니�
 #: lms/static/js/student_account/views/account_settings_factory.js
 #: openedx/features/learner_profile/static/learner_profile/js/learner_profile_factory.js
 msgid "Full Name"
-msgstr "실명"
+msgstr "이름"
 
 #: lms/static/js/student_account/views/account_settings_factory.js
 msgid ""

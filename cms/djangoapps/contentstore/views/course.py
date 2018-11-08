@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Views related to operations on course objects
 """
@@ -94,9 +95,12 @@ from .component import ADVANCED_COMPONENT_TYPES
 from .item import create_xblock_info
 from .library import LIBRARIES_ENABLED, get_library_creator_status
 
+import MySQLdb as mdb
+from django.db import connections
+
 log = logging.getLogger(__name__)
 
-__all__ = ['course_info_handler', 'course_handler', 'course_listing',
+__all__ = ['course_info_handler', 'course_handler', 'course_listing','level_Verifi',
            'course_info_update_handler', 'course_search_index_handler',
            'course_rerun_handler',
            'settings_handler',
@@ -198,6 +202,28 @@ def _course_notifications_json_get(course_action_state_id):
     }
     return JsonResponse(action_state_info)
 
+def level_Verifi(request):
+    sys.setdefaultencoding('utf-8')
+    con = mdb.connect(settings.DATABASES.get('default').get('HOST'),
+                      settings.DATABASES.get('default').get('USER'),
+                      settings.DATABASES.get('default').get('PASSWORD'),
+                      settings.DATABASES.get('default').get('NAME'),
+                      charset='utf8')
+    cur = con.cursor()
+    level_1 = request.GET.get('level_1')
+    level_2 = request.GET.get('level_2')
+
+    query = """
+        SELECT count(*)
+          FROM course_overviews_courseoverview
+         WHERE org = '{0}' AND display_number_with_default = '{1}';
+    """.format(level_1, level_2)
+    cur.execute(query)
+    check_index = cur.fetchall()
+    cur.close()
+
+    data = json.dumps(check_index[0][0])
+    return HttpResponse(data, 'applications/json')
 
 def _dismiss_notification(request, course_action_state_id):  # pylint: disable=unused-argument
     """
@@ -796,6 +822,26 @@ def _create_or_rerun_course(request):
         if display_name is not None:
             fields['display_name'] = display_name
 
+        # ##kmooc
+        # classfy = request.json.get('classfy')
+        # fields['classfy'] = classfy
+        # classfysub = request.json.get('classfysub')
+        # fields['classfysub'] = classfysub
+        # middle_classfy = request.json.get('middle_classfy')
+        # fields['middle_classfy'] = middle_classfy
+        # middle_classfysub = request.json.get('middle_classfysub')
+        # fields['middle_classfysub'] = middle_classfysub
+        # linguistics = request.json.get('linguistics')
+        # fields['linguistics'] = linguistics
+        # course_period = request.json.get('course_period')
+        # fields['course_period'] = course_period
+        #
+        # # 한국학 null 방어 코드 ------- #
+        # if linguistics != 'Y':
+        #     linguistics = 'N'
+        # # 한국학 null 방어 코드 ------- #
+
+
         # Set a unique wiki_slug for newly created courses. To maintain active wiki_slugs for
         # existing xml courses this cannot be changed in CourseDescriptor.
         # # TODO get rid of defining wiki slug in this org/course/run specific way and reconcile
@@ -804,23 +850,47 @@ def _create_or_rerun_course(request):
         definition_data = {'wiki_slug': wiki_slug}
         fields.update(definition_data)
 
-        source_course_key = request.json.get('source_course_key')
-        if source_course_key:
-            source_course_key = CourseKey.from_string(source_course_key)
-            destination_course_key = rerun_course(request.user, source_course_key, org, course, run, fields)
-            return JsonResponse({
-                'url': reverse_url('course_handler'),
-                'destination_course_key': unicode(destination_course_key)
-            })
-        else:
+        # ---------기존소스---------
+        # source_course_key = request.json.get('source_course_key')
+        # if source_course_key:
+        #     source_course_key = CourseKey.from_string(source_course_key)
+        #     destination_course_key = rerun_course(request.user, source_course_key, org, course, run, fields)
+        #     return JsonResponse({
+        #         'url': reverse_url('course_handler'),
+        #         'destination_course_key': unicode(destination_course_key)
+        #     })
+        # else:
+        #     try:
+        #         new_course = create_new_course(request.user, org, course, run, fields)
+        #         return JsonResponse({
+        #             'url': reverse_course_url('course_handler', new_course.id),
+        #             'course_key': unicode(new_course.id),
+        #         })
+        #     except ValidationError as ex:
+        #         return JsonResponse({'error': text_type(ex)}, status=400)
+
+        if 'source_course_key' in request.json:
+            # 기존 강좌의 청강 허용여부
             try:
-                new_course = create_new_course(request.user, org, course, run, fields)
-                return JsonResponse({
-                    'url': reverse_course_url('course_handler', new_course.id),
-                    'course_key': unicode(new_course.id),
-                })
-            except ValidationError as ex:
-                return JsonResponse({'error': text_type(ex)}, status=400)
+                with connections['default'].cursor() as cur:
+                    query = '''
+                        SELECT ifnull(audit_yn, 'Y')
+                          FROM course_overview_addinfo
+                         WHERE course_id = '{course_id}';
+                    '''.format(course_id=request.json['source_course_key'])
+                    cur.execute(query)
+                    audit_yn = cur.fetchone() if cur.rowcount else 'Y'
+                    fields.update({'audit_yn': audit_yn[0]})
+
+            except Exception as e:
+                print e
+
+            return rerun_course(request.user, org, course, run, fields)
+        else:
+            #fields.update({'audit_yn': u'Y', 'user_edit': u'N'})
+            return create_new_course(request.user, org, course, run, fields)
+
+
     except DuplicateCourseError:
         return JsonResponse({
             'ErrMsg': _(
@@ -848,6 +918,7 @@ def create_new_course(user, org, number, run, fields):
     Raises:
         DuplicateCourseError: Course run already exists.
     """
+    print 'create_new_course-------debug'
     org_data = get_organization_by_short_name(org)
     if not org_data and organizations_enabled():
         raise ValidationError(_('You must link this course to an organization in order to continue. Organization '
@@ -855,7 +926,72 @@ def create_new_course(user, org, number, run, fields):
     store_for_new_course = modulestore().default_modulestore.get_modulestore_type()
     new_course = create_new_course_in_store(store_for_new_course, user, org, number, run, fields)
     add_organization_course(org_data, new_course.id)
-    return new_course
+    try:
+        print 'new_course.id ====> ', new_course.id
+        # 이수증 생성을 위한 course_mode 등록
+
+        with connections['default'].cursor() as cur:
+            query = """
+                INSERT INTO course_modes_coursemode(course_id,
+                                                    mode_slug,
+                                                    mode_display_name,
+                                                    min_price,
+                                                    currency,
+                                                    suggested_prices,
+                                                    expiration_datetime_is_explicit)
+                     VALUES ('{0}',
+                             'honor',
+                             '{0}',
+                             0,
+                             'usd',
+                             '',
+                             FALSE);
+            """.format(new_course.id)
+            print '_create_new_course.query :', query
+
+            cur.execute(query)
+
+        course_id = new_course.id
+        user_id = user.id
+        #middle_classfy = fields['middle_classfy'] 임시 비활성
+        middle_classfy = 'middle_classfy'
+        classfy = fields['classfy']
+        course_number = new_course.number
+
+        with connections['default'].cursor() as cur:
+            query = """
+                INSERT INTO course_overview_addinfo(course_id,
+                                                    create_year,
+                                                    course_no,
+                                                    regist_id,
+                                                    regist_date,
+                                                    modify_id,
+                                                    middle_classfy,
+                                                    classfy)
+                     VALUES ('{course_id}',
+                             date_format(now(), '%Y'),
+                             (SELECT count(*)
+                                  FROM course_overviews_courseoverview
+                                 WHERE   display_number_with_default = '{course_number}'
+                                      AND org = '{org}'),
+                             '{user_id}',
+                             now(),
+                             '{user_id}',
+                             '{middle_classfy}',
+                             '{classfy}');
+            """.format(course_id=course_id, user_id=user_id, middle_classfy=middle_classfy, classfy=classfy, course_number=course_number, org=org)
+
+            cur.execute(query)
+
+            print 'course_overview_addinfo insert --------- ', query
+    except Exception as e:
+        print "Exception = ",e
+
+    #return new_course
+    return JsonResponse({
+        'url': reverse_course_url('course_handler', new_course.id),
+        'course_key': unicode(new_course.id),
+    })
 
 
 def create_new_course_in_store(store, user, org, number, run, fields):
@@ -866,9 +1002,15 @@ def create_new_course_in_store(store, user, org, number, run, fields):
 
     # Set default language from settings and enable web certs
     fields.update({
-        'language': getattr(settings, 'DEFAULT_COURSE_LANGUAGE', 'en'),
+        'language': getattr(settings, 'DEFAULT_COURSE_LANGUAGE', 'ko'),
         'cert_html_view_enabled': True,
     })
+    print 'store',store
+    print 'user',user
+    print 'org',org
+    print 'number',number
+    print 'run',run
+    print 'fields',fields
 
     with modulestore().default_store(store):
         # Creating the course raises DuplicateCourseError if an existing course with this org/name is found
@@ -885,6 +1027,7 @@ def create_new_course_in_store(store, user, org, number, run, fields):
 
     # Initialize permissions for user in the new course
     initialize_permissions(new_course.id, user)
+
     return new_course
 
 
