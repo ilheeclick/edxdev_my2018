@@ -308,6 +308,7 @@ def _handle_successful_authentication_and_login(user, request):
     try:
         django_login(request, user)
         if request.POST.get('remember') == 'true':
+            request.session['ISREMEMBER'] = True
             request.session.set_expiry(604800)
             log.debug("Setting user session to never expire")
         else:
@@ -433,6 +434,12 @@ def login_user(request):
     """
     AJAX request to log in the user.
     """
+    backend_name = None
+    email = None
+    password = None
+    redirect_url = None
+    response = None
+    running_pipeline = None
     third_party_auth_requested = third_party_auth.is_enabled() and pipeline.running(request)
     trumped_by_first_party_auth = bool(request.POST.get('email')) or bool(request.POST.get('password'))
     was_authenticated_third_party = False

@@ -276,3 +276,8 @@ if settings.FEATURES.get('ENABLE_API_DOCS'):
 
 from openedx.core.djangoapps.plugins import constants as plugin_constants, plugin_urls
 urlpatterns.extend(plugin_urls.get_patterns(plugin_constants.ProjectType.CMS))
+
+# markany
+urlpatterns += (
+    url(r'^maeps/', include('maeps.urls')),
+)
