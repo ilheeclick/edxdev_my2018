@@ -30,6 +30,7 @@
                     tabindex: -1,
                     selected: false,
                     expanded: false
+                }
             ],
             events: {
                 'click .account-nav-link': 'switchTab',
@@ -43,6 +44,7 @@
             },
 
             render: function() {
+//console.log('account_settings_view.js render -------');
                 var tabName,
                     view = this;
                 HtmlUtils.setHtml(this.$el, HtmlUtils.template(accountSettingsTemplate)({
@@ -50,8 +52,10 @@
                 }));
                 _.each(view.accountSettingsTabs, function(tab) {
                     tabName = tab.name;
+//console.log('account_settings_view.js render tabName-------', tabName);
                     view.renderSection(view.options.tabSections[tabName], tabName, tab.label);
                 });
+                this.renderFields();
                 return this;
             },
 
@@ -66,17 +70,24 @@
             switchTab: function(e) {
                 var $currentTab,
                     $accountNavLink = $('.account-nav-link');
-
+//console.log('account_settings_view.js swithcTab -------');
                 if (e) {
                     e.preventDefault();
                     $currentTab = $(e.target);
                     this.activeTab = $currentTab.data('name');
+                    this.renderSection(this.options.tabSections[this.activeTab]);
+                    this.renderFields();
 
                     _.each(this.$('.account-settings-tabpanels'), function(tabPanel) {
                         $(tabPanel).addClass('hidden');
                     });
 
                     $('#' + this.activeTab + '-tabpanel').removeClass('hidden');
+
+                    $(this.navLink).removeClass('active');
+                    $currentTab.addClass('active');
+
+                    $(this.navLink).removeAttr('aria-describedby');
 
                     $accountNavLink.attr('tabindex', -1);
                     $accountNavLink.attr('aria-selected', false);
@@ -86,48 +97,54 @@
                     $currentTab.attr('aria-selected', true);
                     $currentTab.attr('aria-expanded', true);
 
-                    $(this.navLink).removeClass('active');
-                    $currentTab.addClass('active');
                 }
             },
 
             setActiveTab: function() {
+//console.log('account_settings_view.js setActiveTab -------');
                 this.switchTab();
             },
 
             renderSection: function(tabSections, tabName, tabLabel) {
+//console.log('account_settings_view.js renderSection -------');
                 var accountSectionView = new AccountSectionView({
                     tabName: tabName,
                     tabLabel: tabLabel,
                     sections: tabSections,
                     el: '#' + tabName + '-tabpanel'
                 });
-
                 accountSectionView.render();
             },
 
             renderFields: function () {
                 var view = this;
+//console.log('account_settings_view.js renderFields -------');
                 view.$('.ui-loading-indicator').addClass('is-hidden');
 
                 _.each(view.$('.account-settings-section-body'), function (sectionEl, index) {
-                    _.each(view.options.tabSections[view.activeTab][index].fields, function (field) {
-                        if (field.view.enabled) {
-                            $(sectionEl).append(field.view.render().el);
-                        }
-                    });
 
-                    if(view.$('.account-settings-section-body').size() == 2 && index == 0){
-                        var html = "";
-                        html += "<div class='u-field u-field-button u-field-password'>";
-                        html += "    <div class='u-field-value field'>";
-                        html += "        <span class='u-field-title field-label'>회원탈퇴</span>";
-                        html += "        <a href='/remove_account_view'><button class='u-field-link u-field-link-title-password ' id='secession-btn' aria-describedby='u-field-message-help-password'>회원탈퇴하기</button></a>";
-                        html += "    </div>";
-                        html += "</div>";
+//console.log(view.options.tabSections[view.activeTab][index]);
+//console.log(view.$('.account-settings-section-body').size());
+//                    _.each(view.options.tabSections[view.activeTab][index].fields, function (field) {
+//                        if (field.view.enabled) {
+//                            $(sectionEl).append(field.view.render().el);
+//                        }
+//                    });
 
-                        $(sectionEl).append(html);
+                    if(view.$('.account-settings-section-body').size() == 3 && index == 0){
+                        if (view.$('.u-account-remove').size() < 1){
+                            var html = "";
+                            html += "<div class='u-field u-field-button u-field-password u-account-remove'>";
+                            html += "    <div class='u-field-value field'>";
+                            html += "        <span class='u-field-title field-label'>회원탈퇴</span>";
+                            html += "        <a href='/remove_account_view'><button class='u-field-link u-field-link-title-password ' id='secession-btn' aria-describedby='u-field-message-help-password'>회원탈퇴하기</button></a>";
+                            html += "    </div>";
+                            html += "</div>";
+
+                            $(sectionEl).append(html);
+                         }
                     }
+
                 });
 
                 return this;
@@ -138,6 +155,7 @@
             }
         });
 
+//console.log('account_settings_view.js return -------');
         return AccountSettingsView;
     });
 }).call(this, define || RequireJS.define);

@@ -79,6 +79,12 @@ urlpatterns = [
     url(r'^nicecheckplus_error$', student_account_views.nicecheckplus_error, name="nicecheckplus_error"),  # fail url
     # ---------- nice check end ---------- #
 
+    # ---------- remove account start ---------- #
+    url(r'^remove_account_view/$', student_account_views.remove_account_view, name="remove_account_view"),
+    url(r'^remove_account$', student_account_views.remove_account, name="remove_account"),
+    # ---------- remove account end ---------- #
+
+
     #schools
     url(r'^schools/?$', courseware_views.schools, name="schools"),
     url(r'^school/(?P<org>.*?)$', courseware_views.haewoondaex, name="school"),
