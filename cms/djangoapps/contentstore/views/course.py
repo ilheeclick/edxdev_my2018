@@ -836,24 +836,24 @@ def _create_or_rerun_course(request):
         if display_name is not None:
             fields['display_name'] = display_name
 
-        # ##kmooc
-        # classfy = request.json.get('classfy')
-        # fields['classfy'] = classfy
-        # classfysub = request.json.get('classfysub')
-        # fields['classfysub'] = classfysub
-        # middle_classfy = request.json.get('middle_classfy')
-        # fields['middle_classfy'] = middle_classfy
-        # middle_classfysub = request.json.get('middle_classfysub')
-        # fields['middle_classfysub'] = middle_classfysub
-        # linguistics = request.json.get('linguistics')
-        # fields['linguistics'] = linguistics
-        # course_period = request.json.get('course_period')
-        # fields['course_period'] = course_period
-        #
-        # # 한국학 null 방어 코드 ------- #
-        # if linguistics != 'Y':
-        #     linguistics = 'N'
-        # # 한국학 null 방어 코드 ------- #
+        ##kmooc
+        classfy = request.json.get('classfy')
+        fields['classfy'] = classfy
+        classfysub = request.json.get('classfysub')
+        fields['classfysub'] = classfysub
+        middle_classfy = request.json.get('middle_classfy')
+        fields['middle_classfy'] = middle_classfy
+        middle_classfysub = request.json.get('middle_classfysub')
+        fields['middle_classfysub'] = middle_classfysub
+        linguistics = request.json.get('linguistics')
+        fields['linguistics'] = linguistics
+        course_period = request.json.get('course_period')
+        fields['course_period'] = course_period
+
+        # 한국학 null 방어 코드 ------- #
+        if linguistics != 'Y':
+            linguistics = 'N'
+        # 한국학 null 방어 코드 ------- #
 
 
         # Set a unique wiki_slug for newly created courses. To maintain active wiki_slugs for
@@ -966,11 +966,19 @@ def create_new_course(user, org, number, run, fields):
             cur.execute(query)
 
         course_id = new_course.id
+        print 'course_id',course_id
+
         user_id = user.id
-        #middle_classfy = fields['middle_classfy'] 임시 비활성
-        middle_classfy = 'middle_classfy'
-        classfy = fields['classfy']
+        print 'user_id',user_id
+
+        middle_classfy = fields['middle_classfy']
+        print 'middle_classfy',middle_classfy
+
         course_number = new_course.number
+        print 'course_number',course_number
+
+        classfy = fields['classfy']
+        print 'classfy',classfy
 
         with connections['default'].cursor() as cur:
             query = """
