@@ -1449,3 +1449,49 @@ def text_me_the_app(request):
     }
 
     return render_to_response('text-me-the-app.html', context)
+
+def common_course_status(startDt, endDt):
+    # input
+    # case - 1
+    # startDt = 2016-12-19 00:00:00
+    # endDt   = 2017-02-10 23:00:00
+    # nowDt   = 2017-11-10 00:11:28
+
+    # case - 2
+    # startDt = 2016-12-19 00:00:00+00:00
+    # endDt   = 2017-02-10 23:00:00+00:00
+    # nowDt   = 2017-11-10 00:11:28
+
+    # import
+    from datetime import datetime
+    from django.utils.timezone import UTC as UTC2
+
+    startDt = startDt.strftime("%Y-%m-%d-%H-%m-%S")
+    startDt = startDt.split('-')
+    startDt = datetime(int(startDt[0]), int(startDt[1]), int(startDt[2]), int(startDt[3]), int(startDt[4]),
+                       int(startDt[5]))
+
+    if endDt != None or endDt == '':
+        endDt = endDt.strftime("%Y-%m-%d-%H-%m-%S")
+        endDt = endDt.split('-')
+        endDt = datetime(int(endDt[0]), int(endDt[1]), int(endDt[2]), int(endDt[3]), int(endDt[4]), int(endDt[5]))
+
+    # making nowDt
+    nowDt = datetime.now(UTC2()).strftime("%Y-%m-%d-%H-%m-%S")
+    nowDt = nowDt.split('-')
+    nowDt = datetime(int(nowDt[0]), int(nowDt[1]), int(nowDt[2]), int(nowDt[3]), int(nowDt[4]), int(nowDt[5]))
+
+    # logic
+    if startDt is None or startDt == '' or endDt is None or endDt == '':
+        status = 'none'
+    elif nowDt < startDt:
+        status = 'ready'
+    elif startDt <= nowDt <= endDt:
+        status = 'ing'
+    elif endDt < nowDt:
+        status = 'end'
+    else:
+        status = 'none'
+
+    # return status
+    return status

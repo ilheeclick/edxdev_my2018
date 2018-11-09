@@ -691,6 +691,7 @@ def finish_auth(request):  # pylint: disable=unused-argument
 
 
 def account_settings_context(request):
+    print 'account_settings_context!!!'
     """ Context for the account settings page.
 
     Args:
@@ -808,9 +809,10 @@ def account_settings_context(request):
         # Return empty order list as account settings page expect a list and
         # it will be broken if exception raised
         user_orders = []
+
     countries_list = list(countries)
     countries_list.insert(0, (u'KR', u'South Korea'))
-
+    print 'countries_list',countries_list
     context = {
         'user_gender': user_gender,  # context -> nice data
         'user_birthday': user_birthday,  # context -> nice data
@@ -822,7 +824,7 @@ def account_settings_context(request):
         'nav_hidden': True,
         'fields': {
             'country': {
-                'options': list(countries),
+                'options': countries_list,
             }, 'gender': {
                 'options': [(choice[0], _(choice[1])) for choice in UserProfile.GENDER_CHOICES],  # pylint: disable=translation-of-non-string
             }, 'language': {

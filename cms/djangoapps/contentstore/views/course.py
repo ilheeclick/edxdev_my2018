@@ -8,6 +8,7 @@ import logging
 import random
 import re
 import string  # pylint: disable=deprecated-module
+import sys
 
 import django.utils
 import six
@@ -203,7 +204,7 @@ def _course_notifications_json_get(course_action_state_id):
     return JsonResponse(action_state_info)
 
 def level_Verifi(request):
-    sys.setdefaultencoding('utf-8')
+    #sys.setdefaultencoding('utf-8')
     con = mdb.connect(settings.DATABASES.get('default').get('HOST'),
                       settings.DATABASES.get('default').get('USER'),
                       settings.DATABASES.get('default').get('PASSWORD'),
@@ -570,6 +571,18 @@ def course_listing(request):
     active_courses, archived_courses = _process_courses_list(courses_iter, in_process_course_actions, split_archived)
     in_process_course_actions = [format_in_process_course_view(uca) for uca in in_process_course_actions]
 
+    with connections['default'].cursor() as cur:
+        query = """
+            SELECT detail_code, detail_name
+              FROM code_detail
+             WHERE group_code = 003
+             AND USE_YN = 'Y'
+             ORDER BY detail_name;
+        """
+        cur.execute(query)
+        org_index = cur.fetchall()
+        org_list = list(org_index)
+
     return render_to_response(u'index.html', {
         u'courses': active_courses,
         u'archived_courses': archived_courses,
@@ -583,7 +596,8 @@ def course_listing(request):
         u'rerun_creator_status': GlobalStaff().has_user(user),
         u'allow_unicode_course_id': settings.FEATURES.get(u'ALLOW_UNICODE_COURSE_ID', False),
         u'allow_course_reruns': settings.FEATURES.get(u'ALLOW_COURSE_RERUNS', True),
-        u'optimization_enabled': optimization_enabled
+        u'optimization_enabled': optimization_enabled,
+        'org_list': org_list,
     })
 
 
