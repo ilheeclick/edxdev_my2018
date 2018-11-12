@@ -45,6 +45,8 @@ class CourseOverview(TimeStampedModel):
     class Meta(object):
         app_label = 'course_overviews'
 
+    classfy = None
+
     # IMPORTANT: Bump this whenever you modify this model and/or add a migration.
     VERSION = 6
 
