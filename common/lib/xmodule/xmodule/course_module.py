@@ -285,7 +285,7 @@ class CourseFields(object):
         scope=Scope.settings
     )
 
-    # Maeng Ilhee add
+
     classfysub = String(
         help=_("융복합 분류인 경우 중분류를 선택하기 위해 최대 3개 입력 가능"),
         default="all",
