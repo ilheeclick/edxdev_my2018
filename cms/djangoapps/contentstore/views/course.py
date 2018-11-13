@@ -1302,6 +1302,20 @@ def settings_handler(request, course_key_string):
             sidebar_html_enabled = course_experience_waffle().is_enabled(ENABLE_COURSE_ABOUT_SIDEBAR_HTML)
             # self_paced_enabled = SelfPacedConfiguration.current().enabled
 
+            difficult_degree_list = course_difficult_degree(request, course_key_string)
+
+            # 교수자명
+            with connections['default'].cursor() as cur:
+                query = '''
+                     SELECT IFNULL(teacher_name, '')
+                      FROM course_overview_addinfo
+                     WHERE course_id = '{0}';
+                '''.format(course_key)
+                cur.execute(query)
+                teacher_sel = cur.fetchall()
+
+            teacher_name = teacher_sel[0][0] if len(teacher_sel) != 0 else ''
+
             settings_context = {
                 'context_course': course_module,
                 'course_locator': course_key,
@@ -1322,7 +1336,9 @@ def settings_handler(request, course_key_string):
                 'enrollment_end_editable': enrollment_end_editable,
                 'is_prerequisite_courses_enabled': is_prerequisite_courses_enabled(),
                 'is_entrance_exams_enabled': is_entrance_exams_enabled(),
-                'enable_extended_course_details': enable_extended_course_details
+                'enable_extended_course_details': enable_extended_course_details,
+                'difficult_degree_list': difficult_degree_list,
+                'teacher_name': teacher_name,
             }
             if is_prerequisite_courses_enabled():
                 courses, in_process_course_actions = get_courses_accessible_to_user(request)
@@ -1413,6 +1429,26 @@ def settings_handler(request, course_key_string):
                     CourseDetails.update_from_json(course_key, request.json, request.user),
                     encoder=CourseSettingsEncoder
                 )
+
+
+def course_difficult_degree(request, course_key_string):
+    with connections['default'].cursor() as cur:
+        query = '''
+          SELECT
+                detail_code, detail_name, detail_ename
+            FROM code_detail
+           WHERE group_code = '007'
+           AND   use_yn = 'Y'
+           AND   delete_yn = 'N'
+           ORDER BY detail_code asc
+        '''
+        cur.execute(query)
+        rows = cur.fetchall()
+        difficult_degree = {
+            'degree_list': rows
+        }
+        cur.close()
+    return difficult_degree
 
 
 @login_required

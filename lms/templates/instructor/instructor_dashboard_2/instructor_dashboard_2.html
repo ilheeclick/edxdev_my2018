@@ -121,6 +121,7 @@ from openedx.core.djangolib.markup import HTML
               <li class="nav-item"><button type="button" class="btn-link ${ section_data['section_key'] }${' hidden' if is_hidden else ''}" data-section="${ section_data['section_key'] }">${_(dname)}</button></li>
             % endif
           % endfor
+            <li class="nav-item"><button type="button" class="btn-link ${ section_data['section_key'] }${' hidden' if is_hidden else ''}" data-section="peer_asscessment">${_("Plagiarism testing")}</button></li>
         </ul>
 
         ## each section corresponds to a section_data sub-dictionary provided by the view
@@ -133,6 +134,106 @@ from openedx.core.djangolib.markup import HTML
               <%include file="${ section_data['section_key'] }.html" args="section_data=section_data" />
           </section>
           % endfor
+
+
+        <!-- add copykiller -->
+                <section id="peer_asscessment" class="idash-section active-section">
+
+                    <div>
+                    </div>
+
+                    <div class="student-specific-container action-type-container">
+                        <h2 data-is_assessment="${is_assessment}" data-is_assessment_ing="${is_assessment_ing}" data-is_assessment_done="${is_assessment_done}">${_("Plagiarism test implementation")}</h2>
+                        <div class="request-response-error"></div>
+                        <br>
+                        <p>
+                            ${_("The plagiarism test can be performed on the learners' narrative answers among the mutual losing questions.")}
+                        <br/>
+                        <br/>
+                            ${_("Since it is performed by the automatic scheduler once a day, the result is calculated within maximum one day after the execution request.")}
+                        </p>
+                        <br>
+                        % if (is_assessment and is_assessment_ing != True) | is_assessment_done:
+                        <div id="copy_killer">
+                            <input type="button" class="molly-guard" id="aaaaaaaa" name="reset-attempts-all" value="${_('Performing a plagiarism test')}" onclick="run_copykiller();">
+                            <!--
+                            <input id="loading" type="button" value="ddd" style="display: none" disabled>
+                            <input type="button" id="cvs" name="list-anon-ids" value="CSV 파일 다운로드" style="display: none" onclick="location.href='/courses/${course.id}/instructor/copykiller_csv'">
+                            -->
+                        </div>
+                        %elif is_assessment:
+                        <div>
+                            <input type="button" class="molly-guard" id="bbbbbbb" name="reset-attempts-all" value="${_('Performing a plagiarism test')}" disabled="disabled">
+                        </div>
+                        % else:
+                        <div>
+                            <p><b>${_('Performing test target is not exists.')}</b></p>
+                        </div>
+                        %endif:
+                        <hr>
+                    </div>
+
+                    %if is_assessment:
+                    <script type="text/javascript">
+                        function run_copykiller() {
+                            console.log("/courses/${course.id}/instructor/copykiller");
+                            $('#loading').css('display', 'inline');
+                            $('#cvs').css('display', 'none');
+                            $.ajax({
+                                url: "/courses/${course.id}/instructor/copykiller",
+                            }).done(function(data) {
+                                console.log('run_copykiller data: ' + data.result);
+                                if (data.result == 'success') {
+                                    $(".molly-guard").prop('disabled', true);
+                                    $("#copykiller_status").val('${_("Plagiarism test is in progress.")}');
+                                }
+                            });
+                        %if is_assessment_done == True:
+                            $('#loading').css('display', 'none');
+                            $('#cvs').css('display', 'inine');
+                        %endif
+                        }
+                    </script>
+                    %endif
+
+                    <div class="student-grade-container action-type-container">
+                        <h2>${_("Test progress status")}</h2>
+                        <div class="request-response-error"></div>
+                        <label>
+                            %if is_assessment_ing != False and is_assessment_done != True:
+                            <input type="text" id="copykiller_status" name="problem-select-single" size="30" value="${_('Plagiarism test is in progress.')}" disabled>
+                            %elif is_assessment_done == True:
+                            <input type="text" id="copykiller_status" name="problem-select-single" size="30" value="${_('Plagiarism test is completed.')}" disabled>
+                            %else:
+                            <input type="text" id="copykiller_status" name="problem-select-single" size="30" value="${_('There is currently no work in progress.')}" disabled>
+                            %endif
+                        </label>
+                        <hr>
+                    </div>
+
+                    <div class="course-specific-container action-type-container">
+                        <h2>${_("Plagiarism test result")}</h2>
+                        <div class="request-response-error"></div>
+                        <label>
+                            ${_("Outputs the final plagiarism test result as a CSV file.")}
+                        </label>
+                        <br>
+                        <label>
+                            %if is_assessment_done:
+                            <input type="button" id="copykiller_csv_btn" name="list-anon-ids" value="${_('CSV file download')}" onclick="location.href='/courses/${course.id}/instructor/copykiller_csv'">
+                            %else:
+                            <input type="button" id="copykiller_csv_btn" name="list-anon-ids" value="${_('CSV file download')}" disabled>
+                            %endif
+                        </label>
+                    </div>
+
+                </section>
+
+            </section>
+        </div>
+        </section>
+        <!-- add copykiller -->
+
         </section>
         </main>
   </div>
