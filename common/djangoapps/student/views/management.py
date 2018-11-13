@@ -601,7 +601,6 @@ def index(request, extra_context=None, user=AnonymousUser()):
     # popup zone e ----------------------------------------------------
 
     extra_context['popup_index'] = popup_index
-    print "popup-----------", popup_index
     # Insert additional context for use in the template
     context.update(extra_context)
     extra_context['max_pop'] = str(max_pop[0][0])
@@ -1877,7 +1876,7 @@ def common_course_status(startDt, endDt):
 
     # import
     from datetime import datetime
-    from django.utils.timezone import UTC as UTC2
+    from django.utils.timezone import now as UTC2
 
     startDt = startDt.strftime("%Y-%m-%d-%H-%m-%S")
     startDt = startDt.split('-')
