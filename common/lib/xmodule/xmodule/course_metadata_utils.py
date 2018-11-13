@@ -146,10 +146,12 @@ def course_start_datetime_text(start_date, advertised_start, format_string, time
     elif start_date != DEFAULT_START_DATE:
         return _datetime_to_string(start_date, format_string, time_zone, strftime_localized)
     else:
+        print "uge--text"
         _ = ugettext
         # Translators: TBD stands for 'To Be Determined' and is used when a course
         # does not yet have an announced start date.
         return _('TBD')
+
 def may_certify_for_course(
         certificates_display_behavior,
         certificates_show_before_end,

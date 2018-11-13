@@ -1876,7 +1876,7 @@ def common_course_status(startDt, endDt):
 
     # import
     from datetime import datetime
-    from django.utils.timezone import now as UTC2
+    from django.utils.timezone import UTC as UTC2
 
     startDt = startDt.strftime("%Y-%m-%d-%H-%m-%S")
     startDt = startDt.split('-')
