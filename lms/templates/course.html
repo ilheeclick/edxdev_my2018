@@ -24,14 +24,18 @@ from django.core.urlresolvers import reverse
                     <img src="/static/images/univ/logo02_${course.display_org_with_default}.png" alt="logo02_${course.display_org_with_default}.png"  onerror="this.src='/static/images/unanswered-icon.png'">
                     -->
                 </span>
+              % if course.audit_yn == 'Y' and course.status == 'end':
+                <img style="opacity: 0.5;" src="${course.course_image_url}" alt="${course.display_name_with_default} 개강일 ${course.start.strftime("%Y-%m-%d") if course.start else ''} 종강일 ${course.end.strftime("%Y-%m-%d") if course.end else ''} 강좌상태 ${_(course.status)}">
+              % else:
                 <img src="${course.course_image_url}" alt="${course.display_name_with_default} 개강일 ${course.start.strftime("%Y-%m-%d") if course.start else ''} 종강일 ${course.end.strftime("%Y-%m-%d") if course.end else ''} 강좌상태 ${_(course.status)}">
+              %endif
                 <div class="learn-more" aria-hidden="true">${_("LEARN MORE")}</div>
             </div>
         </header>
         <div class="course-info" aria-hidden="true">
             <h2 class="course-name">
                 % if course.audit_yn == 'Y' and course.status == 'end':
-                <span class="course-status over">${_(course.status)}(${_("audit course")})</span>
+                <span class="course-status over" style="opacity: 0.5;">${_(course.status)}(${_("audit course")})</span>
                 % else:
                 <span class="course-status over">${_(course.status)}</span>
                 % endif
