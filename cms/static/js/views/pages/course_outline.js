@@ -78,6 +78,8 @@ define([
                     this.highlightsEnableView.render();
                 }
 
+                $('.button-toggle-expand-collapse').click();
+
                 this.outlineView = new CourseOutlineView({
                     el: this.$('.outline'),
                     model: this.model,

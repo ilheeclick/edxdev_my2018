@@ -194,6 +194,7 @@ urlpatterns = [
 
     url(r'^dashboard/', include('learner_dashboard.urls')),
     url(r'^api/experiments/', include('experiments.urls', namespace='api_experiments')),
+
 ]
 
 # TODO: This needs to move to a separate urls.py once the student_account and
@@ -501,6 +502,8 @@ urlpatterns += [
         courseware_views.progress,
         name='progress',
     ),
+
+
 
     # Takes optional student_id for instructor use--shows profile as that student sees it.
     url(
