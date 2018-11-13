@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Student Views
 """
@@ -106,6 +107,9 @@ from util.bad_request_rate_limiter import BadRequestRateLimiter
 from util.db import outer_atomic
 from util.json_request import JsonResponse
 from util.password_policy_validators import SecurityPolicyError, validate_password
+import MySQLdb as mdb
+from django.db import connections
+import re
 
 log = logging.getLogger("edx.student")
 
@@ -151,18 +155,56 @@ def index(request, extra_context=None, user=AnonymousUser()):
     extra_context is used to allow immediate display of certain modal windows, eg signup,
     as used by external_auth.
     """
+
     if extra_context is None:
         extra_context = {}
 
-    courses = get_courses(user)
+    user = request.user
 
-    if configuration_helpers.get_value(
-            "ENABLE_COURSE_SORTING_BY_START_DATE",
-            settings.FEATURES["ENABLE_COURSE_SORTING_BY_START_DATE"],
-    ):
-        courses = sort_by_start_date(courses)
+    # courses = get_courses(user)
+    # filter test ::: filter_={'start__lte': datetime.datetime.now(), 'org':'edX'}
+
+    f1 = None if user.is_staff else {'enrollment_start__isnull': False, 'start__gt': datetime.datetime.now(),
+                                     'enrollment_start__lte': datetime.datetime.now(),
+                                     'start__lte': datetime.datetime(2029, 12, 31)}
+    log.info(f1)
+    courses1 = get_courses(user, filter_=f1)
+
+    f2 = {'enrollment_start__isnull': False} if user.is_staff else {'enrollment_start__isnull': False,
+                                                                    'start__lte': datetime.datetime.now(),
+                                                                    'enrollment_start__lte': datetime.datetime.now()}
+    log.info(f2)
+    courses2 = get_courses(user, filter_=f2)
+
+    # print 'get course test ------------------------------------------------------- e'
+
+    # if configuration_helpers.get_value(
+    #         "ENABLE_COURSE_SORTING_BY_START_DATE",
+    #         settings.FEATURES["ENABLE_COURSE_SORTING_BY_START_DATE"],
+    # ):
+    #     courses = sort_by_start_date(courses)
+    # else:
+    #     courses = sort_by_announcement(courses)
+
+    # 사용자가 스태프 이면 강좌 목록 제한이 없도록 한다..
+    if user and user.is_staff:
+        pass
     else:
-        courses = sort_by_announcement(courses)
+        if courses1 and len(courses1) > 4:
+            courses1 = courses1[:4]
+
+    if user and user.is_staff:
+        courses = courses1
+    else:
+        courses = courses1 + courses2
+    courses = [c for c in courses if not c.has_ended()]
+    log.info(u'len(courses) ::: %s', len(courses))
+
+    if user and user.is_staff:
+        pass
+    else:
+        # courses = courses[:8]
+        courses = courses
 
     context = {'courses': courses}
 
@@ -175,11 +217,6 @@ def index(request, extra_context=None, user=AnonymousUser()):
     # 1) Change False to True
     context['show_homepage_promo_video'] = configuration_helpers.get_value('show_homepage_promo_video', False)
 
-    # Maximum number of courses to display on the homepage.
-    context['homepage_course_max'] = configuration_helpers.get_value(
-        'HOMEPAGE_COURSE_MAX', settings.HOMEPAGE_COURSE_MAX
-    )
-
     # 2) Add your video's YouTube ID (11 chars, eg "123456789xX"), or specify via site configuration
     # Note: This value should be moved into a configuration setting and plumbed-through to the
     # context via the site configuration workflow, versus living here
@@ -189,11 +226,386 @@ def index(request, extra_context=None, user=AnonymousUser()):
     # allow for theme override of the courses list
     context['courses_list'] = theming_helpers.get_template_path('courses_list.html')
 
+    # allow for theme override of the boards list
+    context['boards_list'] = theming_helpers.get_template_path('boards_list.html')
+
+    con = mdb.connect(settings.DATABASES.get('default').get('HOST'),
+                      settings.DATABASES.get('default').get('USER'),
+                      settings.DATABASES.get('default').get('PASSWORD'),
+                      settings.DATABASES.get('default').get('NAME'),
+                      charset='utf8')
+    total_list = []
+    cur = con.cursor()
+    query = """
+                (  SELECT board_id,
+                     CASE
+                         WHEN head_title = 'noti_n' THEN '[공지]'
+                         WHEN head_title = 'advert_n' THEN '[공고]'
+                         WHEN head_title = 'guide_n' THEN '[안내]'
+                         WHEN head_title = 'event_n' THEN '[이벤트]'
+                         WHEN head_title = 'etc_n' THEN '[기타]'
+                         ELSE ''
+                     END
+                         head_title,
+                         subject,
+                         content,
+                         SUBSTRING(reg_date, 1, 11),
+                         section,
+                         '',
+                         mod_date
+                    FROM tb_board
+                   WHERE section = 'N'
+                   and use_yn = 'Y'
+                ORDER BY mod_date DESC
+                   limit 5)
+            union all
+                (  SELECT board_id,
+                     CASE
+                         WHEN head_title = 'k_news_k' THEN '[K-MOOC소식]'
+                         WHEN head_title = 'report_k' THEN '[보도자료]'
+                         WHEN head_title = 'u_news_k' THEN '[대학뉴스]'
+                         WHEN head_title = 'support_k' THEN '[서포터즈이야기]'
+                         WHEN head_title = 'n_new_k' THEN '[NILE소식]'
+                         WHEN head_title = 'etc_k' THEN '[기타]'
+                         ELSE ''
+                     END
+                         head_title,
+                         subject,
+                         mid(substr(content, instr(content, 'src="') + 5), 1, instr(substr(content, instr(content, 'src="') + 5), '"') - 1 ),
+                         SUBSTRING(reg_date, 1, 11),
+                         section,
+                         '',
+                         mod_date
+                    FROM tb_board
+                   WHERE section = 'K'
+                   and use_yn = 'Y'
+                ORDER BY mod_date DESC
+                    limit 5)
+            union all
+                (  SELECT board_id,
+                     CASE
+                         WHEN head_title = 'publi_r' THEN '[홍보자료]'
+                         WHEN head_title = 'data_r' THEN '[자료집]'
+                         WHEN head_title = 'repo_r' THEN '[보고서]'
+                         WHEN head_title = 'etc_r' THEN '[기타]'
+                         ELSE ''
+                     END
+                         head_title,
+                         subject,
+                         content,
+                         SUBSTRING(reg_date, 1, 11),
+                         section,
+                         '',
+                         mod_date
+                    FROM tb_board
+                   WHERE section = 'R'
+                   and use_yn = 'Y'
+                ORDER BY mod_date DESC
+                   limit 5)
+            union all
+                (  SELECT board_id,
+                     CASE
+                          WHEN head_title = 'kmooc_f' THEN '[K-MOOC]'
+                          WHEN head_title = 'regist_f ' THEN '[회원가입]'
+                          WHEN head_title = 'login_f ' THEN '[로그인/계정]'
+                          WHEN head_title = 'enroll_f ' THEN '[수강신청/취소]'
+                          WHEN head_title = 'course_f ' THEN '[강좌수강]'
+                          WHEN head_title = 'certi_f  ' THEN '[성적/이수증]'
+                          WHEN head_title = 'tech_f ' THEN '[기술적문제]'
+                          WHEN head_title = 'mobile_f ' THEN '[모바일앱]'
+                          ELSE ''
+                       END
+                          head_title,
+                         subject,
+                         content,
+                         SUBSTRING(reg_date, 1, 11),
+                         section,
+                         head_title,
+                         mod_date
+                    FROM tb_board
+                   WHERE section = 'F'
+                     and use_yn = 'Y'
+                ORDER BY mod_date DESC
+                   limit 5)
+            union all
+                (  SELECT board_id,
+                         '' head_title,
+                         subject,
+                         content,
+                         SUBSTRING(reg_date, 1, 11),
+                         section,
+                         head_title,
+                         mod_date
+                    FROM tb_board
+                   WHERE section = 'M'
+                     and use_yn = 'Y'
+                ORDER BY mod_date DESC
+                   limit 5)
+            ORDER BY mod_date DESC;
+        """
+
+    index_list = []
+    cur.execute(query)
+    row = cur.fetchall()
+    for i in row:
+        value_list = []
+        value_list.append(i[0])
+        value_list.append(i[1])
+        value_list.append(i[2])
+        s = i[3]
+        text = re.sub('<[^>]*>', '', s)
+        text = re.sub('&nbsp;', '', text)
+        text = re.sub('/manage/home/static/upload/', '/static/file_upload/', text)
+        text1 = re.sub('/home/project/management/home/static/upload/', '', text)
+        # text1 = re.sub('/manage/home/static/excel/notice_file/', '', text)
+        text = re.sub('/home/project/management/home/static/upload/', '/static/file_upload/', text)
+        # text = re.sub('/manage/home/static/excel/notice_file/', '/static/file_upload/', text)
+        value_list.append(text[0:200])
+        value_list.append(i[4])
+        value_list.append(i[5])
+        value_list.append(i[6])
+        value_list.append(text1)
+        index_list.append(value_list)
+
+    context['index_list'] = index_list
+
+    cur = con.cursor()
+    query = """
+            SELECT popup_id,
+                   template,
+                   popup_type,
+                   title,
+                   contents,
+                   link_url,
+                   link_target,
+                   CASE
+                      WHEN hidden_day = '1' THEN '1일간 열지 않음'
+                      WHEN hidden_day = '7' THEN '7일간 열지 않음'
+                      WHEN hidden_day = '0' THEN '다시 열지 않음'
+                   END
+                   hidden_day,
+                   width,
+                   height,
+                   CASE
+                      WHEN hidden_day = '1' THEN '1'
+                      WHEN hidden_day = '7' THEN '7'
+                      WHEN hidden_day = '0' THEN '999999'
+                   END
+                   hidden_day
+              FROM popup
+             WHERE use_yn = 'Y' and adddate(now(), INTERVAL 9 HOUR) between STR_TO_DATE(concat(start_date, start_time), '%Y%m%d%H%i') and STR_TO_DATE(concat(end_date, end_time), '%Y%m%d%H%i')
+            """
+
+    cur.execute(query)
+    row = cur.fetchall()
+    cur.close()
+    popup_index = ""
+    for index in row:
+        if (index[1] == '0'):
+            if (index[2] == "H"):
+                print('indexH.html')
+                f = open("/edx/app/edxapp/edx-platform/common/static/popup_index/indexH.html", 'r')
+                while True:
+                    line = f.readline()
+                    if not line: break
+                    popup_index += str(line)
+                    popup_index = popup_index.replace("#_id", str(index[0]))
+                    popup_index = popup_index.replace("#_title", str(index[3]))
+                    popup_index = popup_index.replace("#_contents", str(index[4]))
+                    popup_index = popup_index.replace("#_link_url", str(index[5]))
+                    popup_index = popup_index.replace("#_link_target", str(index[6]))
+                    popup_index = popup_index.replace("#_hidden_day", str(index[7]))
+                    popup_index = popup_index.replace("#_width", str(index[8]))
+                    popup_index = popup_index.replace("#_height", str(index[9] - 28))
+                    popup_index = popup_index.replace("#_hidden", str(index[10]))
+                f.close()
+            elif (index[2] == "I"):
+                print('indexI.html')
+                cur = con.cursor()
+                query = """
+                        SELECT popup_id,
+                               title,
+                               contents,
+                               link_url,
+                               CASE
+                                  WHEN link_target = 'B' THEN 'blank'
+                                  WHEN link_target = 'S' THEN 'self'
+                               END
+                               link_target,
+                               CASE
+                                  WHEN hidden_day = '1' THEN '1일간 열지 않음'
+                                  WHEN hidden_day = '7' THEN '7일간 열지 않음'
+                                  WHEN hidden_day = '0' THEN '다시 열지 않음'
+                               END
+                               hidden_day,
+                               popup_type,
+                               attatch_file_name,
+                               width,
+                               height,
+                               CASE
+                                  WHEN hidden_day = '1' THEN '1'
+                                  WHEN hidden_day = '7' THEN '7'
+                                  WHEN hidden_day = '0' THEN '999999'
+                               END
+                               hidden_day,
+                               image_map,
+                               attatch_file_ext
+                          FROM popup
+                          JOIN tb_board_attach ON tb_board_attach.attatch_id = popup.image_file
+                         WHERE popup_id = {0};
+                        """.format(index[0])
+                cur.execute(query)
+                row = cur.fetchall()
+                cur.close()
+                print 'image popup Test ============'
+                print str(index[8])
+                print str(index[9])
+                print str(index[8]) == '0'
+                print str(index[9]) == '0'
+                print 'image popup Test ============'
+                map_list = []
+                for p in row:
+                    image_map = p[10]
+                    im_arr = image_map.split('/')
+                    map_list.append(list(p + (im_arr,)))
+                for index in map_list:
+                    f = open("/edx/app/edxapp/edx-platform/common/static/popup_index/indexI.html", 'r')
+                    while True:
+                        line = f.readline()
+                        if not line: break
+                        popup_index += str(line)
+                        popup_index = popup_index.replace("#_id", str(index[0]))
+                        popup_index = popup_index.replace("#_title", str(index[1]))
+                        popup_index = popup_index.replace("#_contents", str(index[2]))
+                        popup_index = popup_index.replace("#_link_url", str(index[3]))
+                        popup_index = popup_index.replace("#_link_target", str(index[4]))
+                        popup_index = popup_index.replace("#_hidden_day", str(index[5]))
+                        popup_index = popup_index.replace("#_attatch_file_name", str(index[7]))
+                        if str(index[8]) == '0':
+                            popup_index = popup_index.replace("#_img_width", 'min-width:' + str(index[8]) + 'px')
+                        else:
+                            popup_index = popup_index.replace("#_img_width", 'width:' + str(index[8]) + 'px')
+                        if str(index[9]) == '0':
+                            popup_index = popup_index.replace("#_img_height", 'min-height:' + str(index[9]) + 'px')
+                        else:
+                            popup_index = popup_index.replace("#_img_height", 'height:' + str(index[9] - 27) + 'px')
+                        popup_index = popup_index.replace("#_hidden", str(index[10]))
+                        popup_index = popup_index.replace("#_attatch_file_ext", str(index[12]))
+                        if (len(index[11]) == 1):
+                            map_str = """
+                                        <area shape="rect" coords="0,0,{0},{1}" alt="IM" target="_{2}" href="{3}">
+                                        """.format(str(index[8]), str(index[9]), str(index[4]), str(index[3]))
+                            popup_index = popup_index.replace("#_not_exist", map_str)
+                            popup_index = popup_index.replace("#_exist", "")
+                        else:
+                            map_str = ""
+                            for map in index[11]:
+                                map_str += """
+                                        <area shape="rect" coords="{0}" alt="IM" target="_{1}" href="{2}">
+                                        """.format(str(map), str(index[4]), str(index[3]))
+                            popup_index = popup_index.replace("#_not_exist", "")
+                            popup_index = popup_index.replace("#_exist", map_str)
+                    f.close()
+
+
+        elif (index[1] == '1'):
+            f = open("/edx/app/edxapp/edx-platform/common/static/popup_index/index1.html", 'r')
+            while True:
+                line = f.readline()
+                if not line: break
+                popup_index += str(line)
+                popup_index = popup_index.replace("#_id", str(index[0]))
+                popup_index = popup_index.replace("#_title", str(index[3]))
+                popup_index = popup_index.replace("#_contents", str(index[4]))
+                popup_index = popup_index.replace("#_link_url", str(index[5]))
+                popup_index = popup_index.replace("#_link_target", str(index[6]))
+                popup_index = popup_index.replace("#_hidden_day", str(index[7]))
+                popup_index = popup_index.replace("#_width", str(index[8]))
+                popup_index = popup_index.replace("#_height", str(index[9] - 83))
+                popup_index = popup_index.replace("#bg_top", str(int(index[9]) - 125))
+                popup_index = popup_index.replace("#_hidden", str(index[10]))
+            f.close()
+        elif (index[1] == '2'):
+            f = open("/edx/app/edxapp/edx-platform/common/static/popup_index/index2.html", 'r')
+            while True:
+                line = f.readline()
+                if not line: break
+                popup_index += str(line)
+                popup_index = popup_index.replace("#_id", str(index[0]))
+                popup_index = popup_index.replace("#_title", str(index[3]))
+                popup_index = popup_index.replace("#_contents", str(index[4]))
+                popup_index = popup_index.replace("#_link_url", str(index[5]))
+                popup_index = popup_index.replace("#_link_target", str(index[6]))
+                popup_index = popup_index.replace("#_hidden_day", str(index[7]))
+                popup_index = popup_index.replace("#_width", str(index[8]))
+                popup_index = popup_index.replace("#_height", str(index[9] - 131))
+                popup_index = popup_index.replace("#_hidden", str(index[10]))
+            f.close()
+        elif (index[1] == '3'):
+            f = open("/edx/app/edxapp/edx-platform/common/static/popup_index/index3.html", 'r')
+            while True:
+                line = f.readline()
+                if not line: break
+                popup_index += str(line)
+                popup_index = popup_index.replace("#_id", str(index[0]))
+                popup_index = popup_index.replace("#_title", str(index[3]))
+                popup_index = popup_index.replace("#_contents", str(index[4]))
+                popup_index = popup_index.replace("#_link_url", str(index[5]))
+                popup_index = popup_index.replace("#_link_target", str(index[6]))
+                popup_index = popup_index.replace("#_hidden_day", str(index[7]))
+                popup_index = popup_index.replace("#_width", str(index[8]))
+                popup_index = popup_index.replace("#_height", str(index[9] - 149))
+                popup_index = popup_index.replace("#_hidden", str(index[10]))
+            f.close()
+
+    cur = con.cursor()
+    query = """
+            SELECT max(popup_id) FROM popup;
+            """
+    cur.execute(query)
+    max_pop = cur.fetchall()
+    cur.close()
+
+    # popup zone s --------------------------------------------------
+    popupzone_query = """
+              SELECT seq,
+                     title,
+                     ifnull(concat('/static/file_upload/', attatch_file_name, '.', attatch_file_ext), '')
+                        image_file,
+                     link_url,
+                     link_target
+                FROM popupzone a LEFT JOIN tb_board_attach b ON a.image_file = b.attatch_id
+               WHERE     concat(start_date, start_time) <=
+                         date_format(now(), '%Y%m%d%H%i%s')
+                     AND concat(end_date, end_time) >= date_format(now(), '%Y%m%d%H%i%s')
+            ORDER BY end_date ASC, start_date ASC;
+        """
+    cur = con.cursor()
+    cur.execute(popupzone_query)
+    popzone = cur.fetchall()
+
+    popzone_list = list()
+    for zone in popzone:
+        popzone_dict = dict()
+        popzone_dict['title'] = zone[1]
+        image_idx = zone[2].find('/static')
+        if image_idx == -1:
+            popzone_dict['image_file'] = zone[2]
+        else:
+            popzone_dict['image_file'] = zone[2][image_idx:]
+        popzone_dict['link_url'] = zone[3]
+        popzone_dict['link_target'] = zone[4]
+
+        popzone_list.append(popzone_dict)
+
+    # popup zone e ----------------------------------------------------
+
+    extra_context['popup_index'] = popup_index
     # Insert additional context for use in the template
     context.update(extra_context)
-
-    # Add marketable programs to the context.
-    context['programs_list'] = get_programs_with_type(request.site, include_hidden=False)
+    extra_context['max_pop'] = str(max_pop[0][0])
+    extra_context['popzone_list'] = popzone_list
+    context.update(extra_context)
 
     return render_to_response('index.html', context)
 
@@ -1449,3 +1861,49 @@ def text_me_the_app(request):
     }
 
     return render_to_response('text-me-the-app.html', context)
+
+def common_course_status(startDt, endDt):
+    # input
+    # case - 1
+    # startDt = 2016-12-19 00:00:00
+    # endDt   = 2017-02-10 23:00:00
+    # nowDt   = 2017-11-10 00:11:28
+
+    # case - 2
+    # startDt = 2016-12-19 00:00:00+00:00
+    # endDt   = 2017-02-10 23:00:00+00:00
+    # nowDt   = 2017-11-10 00:11:28
+
+    # import
+    from datetime import datetime
+    from django.utils.timezone import UTC as UTC2
+
+    startDt = startDt.strftime("%Y-%m-%d-%H-%m-%S")
+    startDt = startDt.split('-')
+    startDt = datetime(int(startDt[0]), int(startDt[1]), int(startDt[2]), int(startDt[3]), int(startDt[4]),
+                       int(startDt[5]))
+
+    if endDt != None or endDt == '':
+        endDt = endDt.strftime("%Y-%m-%d-%H-%m-%S")
+        endDt = endDt.split('-')
+        endDt = datetime(int(endDt[0]), int(endDt[1]), int(endDt[2]), int(endDt[3]), int(endDt[4]), int(endDt[5]))
+
+    # making nowDt
+    nowDt = datetime.now(UTC2()).strftime("%Y-%m-%d-%H-%m-%S")
+    nowDt = nowDt.split('-')
+    nowDt = datetime(int(nowDt[0]), int(nowDt[1]), int(nowDt[2]), int(nowDt[3]), int(nowDt[4]), int(nowDt[5]))
+
+    # logic
+    if startDt is None or startDt == '' or endDt is None or endDt == '':
+        status = 'none'
+    elif nowDt < startDt:
+        status = 'ready'
+    elif startDt <= nowDt <= endDt:
+        status = 'ing'
+    elif endDt < nowDt:
+        status = 'end'
+    else:
+        status = 'none'
+
+    # return status
+    return status

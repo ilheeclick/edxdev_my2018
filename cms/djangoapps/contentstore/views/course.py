@@ -8,6 +8,7 @@ import logging
 import random
 import re
 import string  # pylint: disable=deprecated-module
+import sys
 
 import django.utils
 import six
@@ -203,7 +204,7 @@ def _course_notifications_json_get(course_action_state_id):
     return JsonResponse(action_state_info)
 
 def level_Verifi(request):
-    sys.setdefaultencoding('utf-8')
+    #sys.setdefaultencoding('utf-8')
     con = mdb.connect(settings.DATABASES.get('default').get('HOST'),
                       settings.DATABASES.get('default').get('USER'),
                       settings.DATABASES.get('default').get('PASSWORD'),
@@ -570,6 +571,18 @@ def course_listing(request):
     active_courses, archived_courses = _process_courses_list(courses_iter, in_process_course_actions, split_archived)
     in_process_course_actions = [format_in_process_course_view(uca) for uca in in_process_course_actions]
 
+    with connections['default'].cursor() as cur:
+        query = """
+            SELECT detail_code, detail_name
+              FROM code_detail
+             WHERE group_code = 003
+             AND USE_YN = 'Y'
+             ORDER BY detail_name;
+        """
+        cur.execute(query)
+        org_index = cur.fetchall()
+        org_list = list(org_index)
+
     return render_to_response(u'index.html', {
         u'courses': active_courses,
         u'archived_courses': archived_courses,
@@ -583,7 +596,8 @@ def course_listing(request):
         u'rerun_creator_status': GlobalStaff().has_user(user),
         u'allow_unicode_course_id': settings.FEATURES.get(u'ALLOW_UNICODE_COURSE_ID', False),
         u'allow_course_reruns': settings.FEATURES.get(u'ALLOW_COURSE_RERUNS', True),
-        u'optimization_enabled': optimization_enabled
+        u'optimization_enabled': optimization_enabled,
+        'org_list': org_list,
     })
 
 
@@ -822,24 +836,24 @@ def _create_or_rerun_course(request):
         if display_name is not None:
             fields['display_name'] = display_name
 
-        # ##kmooc
-        # classfy = request.json.get('classfy')
-        # fields['classfy'] = classfy
-        # classfysub = request.json.get('classfysub')
-        # fields['classfysub'] = classfysub
-        # middle_classfy = request.json.get('middle_classfy')
-        # fields['middle_classfy'] = middle_classfy
-        # middle_classfysub = request.json.get('middle_classfysub')
-        # fields['middle_classfysub'] = middle_classfysub
-        # linguistics = request.json.get('linguistics')
-        # fields['linguistics'] = linguistics
-        # course_period = request.json.get('course_period')
-        # fields['course_period'] = course_period
-        #
-        # # 한국학 null 방어 코드 ------- #
-        # if linguistics != 'Y':
-        #     linguistics = 'N'
-        # # 한국학 null 방어 코드 ------- #
+        ##kmooc
+        classfy = request.json.get('classfy')
+        fields['classfy'] = classfy
+        classfysub = request.json.get('classfysub')
+        fields['classfysub'] = classfysub
+        middle_classfy = request.json.get('middle_classfy')
+        fields['middle_classfy'] = middle_classfy
+        middle_classfysub = request.json.get('middle_classfysub')
+        fields['middle_classfysub'] = middle_classfysub
+        linguistics = request.json.get('linguistics')
+        fields['linguistics'] = linguistics
+        course_period = request.json.get('course_period')
+        fields['course_period'] = course_period
+
+        # 한국학 null 방어 코드 ------- #
+        if linguistics != 'Y':
+            linguistics = 'N'
+        # 한국학 null 방어 코드 ------- #
 
 
         # Set a unique wiki_slug for newly created courses. To maintain active wiki_slugs for
@@ -887,7 +901,7 @@ def _create_or_rerun_course(request):
 
             return rerun_course(request.user, org, course, run, fields)
         else:
-            #fields.update({'audit_yn': u'Y', 'user_edit': u'N'})
+            fields.update({'audit_yn': u'Y', 'user_edit': u'N'})
             return create_new_course(request.user, org, course, run, fields)
 
 
@@ -952,11 +966,19 @@ def create_new_course(user, org, number, run, fields):
             cur.execute(query)
 
         course_id = new_course.id
+        print 'course_id',course_id
+
         user_id = user.id
-        #middle_classfy = fields['middle_classfy'] 임시 비활성
-        middle_classfy = 'middle_classfy'
-        classfy = fields['classfy']
+        print 'user_id',user_id
+
+        middle_classfy = fields['middle_classfy']
+        print 'middle_classfy',middle_classfy
+
         course_number = new_course.number
+        print 'course_number',course_number
+
+        classfy = fields['classfy']
+        print 'classfy',classfy
 
         with connections['default'].cursor() as cur:
             query = """
@@ -1031,11 +1053,25 @@ def create_new_course_in_store(store, user, org, number, run, fields):
     return new_course
 
 
-def rerun_course(user, source_course_key, org, number, run, fields, async=True):
+def rerun_course(user, org, number, run, fields):
     """
     Rerun an existing course.
     """
     # verify user has access to the original course
+    source_course_key = CourseKey.from_string(user.json.get('source_course_key'))
+
+    try:
+        source_course = modulestore().get_course(source_course_key)
+        fields['classfy'] = source_course.classfy
+        fields['classfysub'] = source_course.classfysub
+        fields['middle_classfy'] = source_course.middle_classfy
+        fields['middle_classfysub'] = source_course.middle_classfysub
+        fields['linguistics'] = source_course.linguistics
+        fields['course_period'] = source_course.course_period
+        fields['user_edit'] = source_course.user_edit
+    except Exception as e:
+        print e
+
     if not has_studio_write_access(user, source_course_key):
         raise PermissionDenied()
 
@@ -1062,14 +1098,79 @@ def rerun_course(user, source_course_key, org, number, run, fields, async=True):
     fields['video_upload_pipeline'] = {}
 
     json_fields = json.dumps(fields, cls=EdxJSONEncoder)
-    args = [unicode(source_course_key), unicode(destination_course_key), user.id, json_fields]
+    try:
+        print 'new_course.id ====> ', destination_course_key
+        # 이수증 생성을 위한 course_mode 등록
 
-    if async:
-        rerun_course_task.delay(*args)
-    else:
-        rerun_course_task(*args)
+        with connections['default'].cursor() as cur:
+            query = """
+            INSERT INTO course_modes_coursemode(course_id,
+                                                mode_slug,
+                                                mode_display_name,
+                                                min_price,
+                                                currency,
+                                                suggested_prices,
+                                                expiration_datetime_is_explicit)
+                 VALUES ('{0}',
+                         'honor',
+                         '{0}',
+                         0,
+                         'usd',
+                         '',
+                         FALSE);
+            """.format(destination_course_key)
+            print '_create_new_course.query :', query
 
-    return destination_course_key
+            cur.execute(query)
+
+        user_id = user.user.id
+        middle_classfy = fields['middle_classfy']
+        classfy = fields['classfy']
+
+        with connections['default'].cursor() as cur:
+            query = """
+                INSERT INTO course_overview_addinfo(course_id,
+                                                    create_year,
+                                                    course_no,
+                                                    regist_id,
+                                                    regist_date,
+                                                    modify_id,
+                                                    middle_classfy,
+                                                    classfy)
+                     VALUES ('{course_id}',
+                             date_format(now(), '%Y'),
+                             (SELECT count(*)
+                                  FROM course_overviews_courseoverview
+                                 WHERE   display_number_with_default = '{course_number}'
+                                      AND org = '{org}'),
+                             '{user_id}',
+                             now(),
+                             '{user_id}',
+                             '{middle_classfy}',
+                             '{classfy}');
+            """.format(course_id=destination_course_key, user_id=user_id, middle_classfy=middle_classfy, classfy=classfy, course_number=number, org=org)
+
+            print 'rerun_course insert -------------- ', query
+            cur.execute(query)
+
+
+    except Exception as e:
+        print e
+
+    # Return course listing page
+    return JsonResponse({
+        'url': reverse_url('course_handler'),
+        'destination_course_key': unicode(destination_course_key)
+    })
+
+    # args = [unicode(source_course_key), unicode(destination_course_key), user.id, json_fields]
+    #
+    # if async:
+    #     rerun_course_task.delay(*args)
+    # else:
+    #     rerun_course_task(*args)
+    #
+    # return destination_course_key
 
 
 # pylint: disable=unused-argument
@@ -1428,12 +1529,45 @@ def advanced_settings_handler(request, course_key_string):
     with modulestore().bulk_operations(course_key):
         course_module = get_course_and_check_access(course_key, request.user)
         if 'text/html' in request.META.get('HTTP_ACCEPT', '') and request.method == 'GET':
+            need_lock = course_need_lock(request, course_key_string)
+            difficult_degree_list = course_difficult_degree(request, course_key_string)
+            advanced_dict = CourseMetadata.fetch(course_module)
+
+            # difficult_degree setting
+            with connections['default'].cursor() as cur:
+                query = """
+                    SELECT audit_yn
+                      FROM course_overview_addinfo
+                     WHERE course_id = '{course_id}';
+                """.format(course_id=course_key_string)
+                cur.execute(query)
+                audit_yn = cur.fetchone()[0] if cur.rowcount else 'N'
+
+            need_lock_dict = {
+                'deprecated': False,
+                'display_name': _("is_course_lock"),
+                'help': '',
+                'value': need_lock
+            }
+
+            audit_yn_dict = {
+                'deprecated': False,
+                'display_name': _("audit_yn"),
+                'help': u'Y또는 N을 입력합니다. Y를 입력할 경우, 강좌가 종료된 이후에도 청강신청을 하실 수 있습니다.',
+                'value': audit_yn
+            }
+
+            advanced_dict['audit_yn'] = audit_yn_dict
+            advanced_dict['need_lock'] = need_lock_dict
 
             return render_to_response('settings_advanced.html', {
                 'context_course': course_module,
-                'advanced_dict': CourseMetadata.fetch(course_module),
-                'advanced_settings_url': reverse_course_url('advanced_settings_handler', course_key)
+                'advanced_dict': advanced_dict,
+                'difficult_degree_list': difficult_degree_list,
+                'advanced_settings_url': reverse_course_url('advanced_settings_handler', course_key),
+                'is_staff': {"is_staff": 'true'} if request.user.is_staff is True else {"is_staff": 'false'}
             })
+
         elif 'application/json' in request.META.get('HTTP_ACCEPT', ''):
             if request.method == 'GET':
                 return JsonResponse(CourseMetadata.fetch(course_module))
@@ -1441,18 +1575,35 @@ def advanced_settings_handler(request, course_key_string):
                 try:
                     # validate data formats and update the course module.
                     # Note: don't update mongo yet, but wait until after any tabs are changed
+                    params = request.json
+
                     is_valid, errors, updated_data = CourseMetadata.validate_and_update_from_json(
                         course_module,
-                        request.json,
+                        params,
                         user=request.user,
                     )
+
+                    try:
+                        audit_yn = params['audit_yn']['value']
+                        audit_yn = 'N' if not audit_yn or audit_yn not in ['Y', 'y'] else 'Y'
+                        with connections['default'].cursor() as cur:
+                            query = """
+                                UPDATE course_overview_addinfo
+                                   SET audit_yn = '{audit_yn}'
+                                 WHERE course_id = '{course_id}';
+                            """.format(audit_yn=audit_yn, course_id=course_key_string)
+                            cur.execute(query)
+                    except Exception as e:
+                        is_valid = False
+                        errors.append({'message': 'audit_yn value is not collect', 'model': None})
+                        print e
 
                     if is_valid:
                         try:
                             # update the course tabs if required by any setting changes
                             _refresh_course_tabs(request, course_module)
                         except InvalidTabsException as err:
-                            log.exception(text_type(err))
+                            log.exception(err.message)
                             response_message = [
                                 {
                                     'message': _('An error occurred while trying to save your tabs'),
@@ -1471,7 +1622,7 @@ def advanced_settings_handler(request, course_key_string):
                 # Handle all errors that validation doesn't catch
                 except (TypeError, ValueError, InvalidTabsException) as err:
                     return HttpResponseBadRequest(
-                        django.utils.html.escape(text_type(err)),
+                        django.utils.html.escape(err.message),
                         content_type="text/plain"
                     )
 
@@ -1480,6 +1631,44 @@ class TextbookValidationError(Exception):
     "An error thrown when a textbook input is invalid"
     pass
 
+def course_need_lock(request, course_key_string):
+    if not request.user.is_staff and str(course_key_string).startswith('course'):
+        from django.db import connections
+        with connections['default'].cursor() as cursor:
+            cursor.execute('''
+              SELECT a.course_id,
+                     if(now() > min(b.created_date) OR now() > adddate(a.created, INTERVAL 1 YEAR), 1, 0) need_lock
+                FROM course_structures_coursestructure a
+                     LEFT JOIN certificates_generatedcertificate b
+                        ON a.course_id = b.course_id
+               WHERE a.course_id = %s
+            GROUP BY a.course_id, a.created;
+            ''', [course_key_string])
+            desc = cursor.description
+            result = [dict(zip([col[0] for col in desc], row)) for row in cursor.fetchall()][0]
+        need_lock = result['need_lock']
+    else:
+        need_lock = 0
+    return need_lock
+
+def course_difficult_degree(request, course_key_string):
+    with connections['default'].cursor() as cur:
+        query = '''
+          SELECT
+                detail_code, detail_name, detail_ename
+            FROM code_detail
+           WHERE group_code = '007'
+           AND   use_yn = 'Y'
+           AND   delete_yn = 'N'
+           ORDER BY detail_code asc
+        '''
+        cur.execute(query)
+        rows = cur.fetchall()
+        difficult_degree = {
+            'degree_list': rows
+        }
+        cur.close()
+    return difficult_degree
 
 def validate_textbooks_json(text):
     """

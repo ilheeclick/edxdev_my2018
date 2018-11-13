@@ -2675,6 +2675,7 @@ VIDEO_TRANSCRIPTS_SETTINGS = dict(
 # Note that this is used as the set of choices to the `code` field of the
 # `LanguageProficiency` model.
 ALL_LANGUAGES = [
+    [u"ko", u"Korean"],
     [u"aa", u"Afar"],
     [u"ab", u"Abkhazian"],
     [u"af", u"Afrikaans"],

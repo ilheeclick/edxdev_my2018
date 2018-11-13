@@ -79,6 +79,12 @@ urlpatterns = [
     url(r'^nicecheckplus_error$', student_account_views.nicecheckplus_error, name="nicecheckplus_error"),  # fail url
     # ---------- nice check end ---------- #
 
+    # ---------- multi site ---------- #
+    # url(r'^org/(?P<org>.*?)/(?P<msearch>.*?)$', branding_views.multisite_index, name="multisite_index"),
+    # url(r'^multisite_api$', branding_views.multisite_api, name="multisite_api"),
+    # url(r'^multisite_delete_api$', branding_views.multisite_delete_api, name="multisite_delete_api"),
+    # url(r'^multisite_error/$', branding_views.multisite_error, name="multisite_error"),
+
     #schools
     url(r'^schools/?$', courseware_views.schools, name="schools"),
     url(r'^school/(?P<org>.*?)$', courseware_views.haewoondaex, name="school"),
@@ -145,6 +151,10 @@ urlpatterns = [
 
     # Course API
     url(r'^api/courses/', include('course_api.urls')),
+
+    # ----- api request ----- #
+    #url(r'^api/happy', branding_views.course_api, name="course_api"),
+    # ----- api request ----- #
 
     # Completion API
     url(r'^api/completion/', include('completion.api.urls', namespace='completion_api')),

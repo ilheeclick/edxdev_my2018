@@ -768,6 +768,7 @@ class RegistrationFormFactory(object):
         )
 
     def _add_country_field(self, form_desc, required=True):
+        print '_add_country_field'
         """Add a country field to a form description.
         Arguments:
             form_desc: A form description

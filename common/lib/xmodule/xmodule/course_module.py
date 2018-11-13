@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Django module container for classes and operations related to the "Course Module" content type
 """
@@ -190,6 +191,10 @@ class CourseFields(object):
         default=[],
         scope=Scope.content
     )
+    audit_yn = String(help=_("Y또는 N을 입력합니다. Y를 입력할 경우, 강좌가 종료된 이후에도 청강신청을 하실 수 있습니다."), default=u'Y',
+                      scope=Scope.settings)
+
+    user_edit = String(help=_("Y또는 N을 입력합니다. Y를 입력할 경우 에디터를 이용한 수정이 불가합니다."), default=u'N', scope=Scope.settings)
 
     wiki_slug = String(help=_("Slug that points to the wiki for this course"), scope=Scope.content)
     enrollment_start = Date(help=_("Date that enrollment for this class is opened"), scope=Scope.settings)
@@ -264,6 +269,49 @@ class CourseFields(object):
             },
         },
         scope=Scope.content
+    )
+
+    classfy = String(
+        help=_("Select Section name"),
+        default="all",
+        display_name=_("Section"),
+        scope=Scope.settings
+    )
+
+    middle_classfy = String(
+        help=_("Select Section name"),
+        default="all",
+        display_name=_("Section"),
+        scope=Scope.settings
+    )
+
+
+    classfysub = String(
+        help=_("융복합 분류인 경우 중분류를 선택하기 위해 최대 3개 입력 가능"),
+        default="all",
+        display_name=_("Section"),
+        scope=Scope.settings
+    )
+
+    middle_classfysub = String(
+        help=_("융복합 분류인 경우 최대 3개 추가입력 가능"),
+        default="all",
+        display_name=_("Section"),
+        scope=Scope.settings
+    )
+
+    linguistics = String(
+        help=_("Select Section name"),
+        default="all",
+        display_name=_("Section"),
+        scope=Scope.settings
+    )
+
+    course_period = String(
+        help=_("Select Period of Studing"),
+        default="all",
+        display_name=_("Section"),
+        scope=Scope.settings
     )
     show_calculator = Boolean(
         display_name=_("Show Calculator"),
