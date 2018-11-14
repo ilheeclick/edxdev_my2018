@@ -189,7 +189,7 @@ def _update_certificate_context(context, course, user_certificate, platform_name
         verified_cert_url=context.get('company_verified_certificate_url'))
 
 
-def _update_context_with_basic_info(context, course_id, platform_name, configuration):
+def _update_context_with_basic_info(context, course_id, platform_name, configuration, user_id, preview_mode=None):
     """
     Updates context dictionary with basic info required before rendering simplest
     certificate templates.
@@ -748,7 +748,7 @@ def render_html_view(request, user_id, course_id):
 
     # Kick the user back to the "Invalid" screen if the feature is disabled globally
     if not settings.FEATURES.get('CERTIFICATES_HTML_VIEW', False):
-        return _render_invalid_certificate(course_id, platform_name, configuration)
+        return _render_invalid_certificate(course_id, platform_name, configuration, user_id)
 
     # Load the course and user objects
     try:
@@ -763,7 +763,7 @@ def render_html_view(request, user_id, course_id):
             "%d. Specific error: %s"
         )
         log.info(error_str, course_id, user_id, str(exception))
-        return _render_invalid_certificate(course_id, platform_name, configuration)
+        return _render_invalid_certificate(course_id, platform_name, configuration, user_id)
 
     # Kick the user back to the "Invalid" screen if the feature is disabled for the course
     if not course.cert_html_view_enabled:
@@ -782,7 +782,7 @@ def render_html_view(request, user_id, course_id):
             user_id,
             course_id,
         )
-        return _render_invalid_certificate(course_id, platform_name, configuration)
+        return _render_invalid_certificate(course_id, platform_name, configuration, user_id)
 
     # Get the active certificate configuration for this course
     # If we do not have an active certificate, we'll need to send the user to the "Invalid" screen
@@ -794,7 +794,7 @@ def render_html_view(request, user_id, course_id):
             course_id,
             user_id,
         )
-        return _render_invalid_certificate(course_id, platform_name, configuration)
+        return _render_invalid_certificate(course_id, platform_name, configuration, user_id)
 
     # Get data from Discovery service that will be necessary for rendering this Certificate.
     catalog_data = _get_catalog_data_for_course(course_key)
@@ -819,7 +819,7 @@ def render_html_view(request, user_id, course_id):
     with translation.override(certificate_language):
         context = {'user_language': user_language}
 
-        _update_context_with_basic_info(context, course_id, platform_name, configuration)
+        _update_context_with_basic_info(context, course_id, platform_name, configuration, user_id)
 
         context['certificate_data'] = active_configuration
 
@@ -909,9 +909,9 @@ def _get_custom_template_and_language(course_id, course_mode, course_language):
         return (None, None)
 
 
-def _render_invalid_certificate(course_id, platform_name, configuration):
+def _render_invalid_certificate(course_id, platform_name, configuration, user_id):
     context = {}
-    _update_context_with_basic_info(context, course_id, platform_name, configuration)
+    _update_context_with_basic_info(context, course_id, platform_name, configuration, user_id)
     return render_to_response(INVALID_CERTIFICATE_TEMPLATE_PATH, context)
 
 
