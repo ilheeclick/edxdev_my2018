@@ -454,6 +454,7 @@ define(['js/views/validation', 'codemirror', 'underscore', 'jquery', 'jquery.ui'
                 var enroll_start_date = new Date(enroll_start_date_value);
                 var enroll_end_date = new Date(enroll_end_date_value);
 
+                alert(this.model.get('need_lock'));
                 if(this.model.get('need_lock') == 1){
                     /*
                     *   -수업주차,주간학습권장시간,총동영상 재생시간
@@ -462,12 +463,12 @@ define(['js/views/validation', 'codemirror', 'underscore', 'jquery', 'jquery.ui'
                         -강좌 불러오기 메뉴 비활성화(내보내기는 가능하게 그대로 둠)
                     * */
 
-                    // $("#course-start-date,#course-start-time").attr("disabled", true).css("background", "#ccc");
-                    // $("#course-end-date,#course-end-time").attr("disabled", true).css("background", "#ccc");
-                    // $("#course-enrollment-start-date,#course-enrollment-start-time").attr("disabled", true).css("background", "#ccc");
-                    // $("#course-enrollment-end-date,#course-enrollment-end-time").attr("disabled", true).css("background", "#ccc");
-                    // $("#course-language").attr("disabled", true).css("background", "#ccc");
-                    // $("#field-course-effort input").attr("disabled", true).css("background", "#ccc");
+                    $("#course-start-date,#course-start-time").attr("disabled", true).css("background", "#ccc");
+                    $("#course-end-date,#course-end-time").attr("disabled", true).css("background", "#ccc");
+                    $("#course-enrollment-start-date,#course-enrollment-start-time").attr("disabled", true).css("background", "#ccc");
+                    $("#course-enrollment-end-date,#course-enrollment-end-time").attr("disabled", true).css("background", "#ccc");
+                    $("#course-language").attr("disabled", true).css("background", "#ccc");
+                    $("#field-course-effort input").attr("disabled", true).css("background", "#ccc");
 
                 }
 

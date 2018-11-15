@@ -1131,7 +1131,10 @@ def settings_handler(request, course_key_string):
             return render_to_response('settings.html', settings_context)
         elif 'application/json' in request.META.get('HTTP_ACCEPT', ''):
             if request.method == 'GET':
+                # 강좌 상세 내용 조회시 강좌 생성일 및 이수증 생성일을 조회하여 같이 전달
                 course_details = CourseDetails.fetch(course_key)
+                course_details.need_lock = course_need_lock(request, course_key)
+
                 return JsonResponse(
                     course_details,
                     # encoder serializes dates, old locations, and instances
@@ -1324,11 +1327,23 @@ def advanced_settings_handler(request, course_key_string):
     with modulestore().bulk_operations(course_key):
         course_module = get_course_and_check_access(course_key, request.user)
         if 'text/html' in request.META.get('HTTP_ACCEPT', '') and request.method == 'GET':
+            need_lock = course_need_lock(request, course_key_string)
+            advanced_dict = CourseMetadata.fetch(course_module)
+
+            need_lock_dict = {
+                'deprecated': False,
+                'display_name': _("is_course_lock"),
+                'help': '',
+                'value': need_lock
+            }
+
+            advanced_dict['need_lock'] = need_lock_dict
 
             return render_to_response('settings_advanced.html', {
                 'context_course': course_module,
-                'advanced_dict': CourseMetadata.fetch(course_module),
-                'advanced_settings_url': reverse_course_url('advanced_settings_handler', course_key)
+                'advanced_dict': advanced_dict,
+                'advanced_settings_url': reverse_course_url('advanced_settings_handler', course_key),
+                'is_staff': {"is_staff": 'true'} if request.user.is_staff is True else {"is_staff": 'false'}
             })
         elif 'application/json' in request.META.get('HTTP_ACCEPT', ''):
             if request.method == 'GET':
@@ -1370,6 +1385,27 @@ def advanced_settings_handler(request, course_key_string):
                         django.utils.html.escape(text_type(err)),
                         content_type="text/plain"
                     )
+
+
+def course_need_lock(request, course_key_string):
+    if not request.user.is_staff and str(course_key_string).startswith('course'):
+        from django.db import connections
+        with connections['default'].cursor() as cursor:
+            cursor.execute('''
+              SELECT a.course_id,
+                     if(now() > min(b.created_date) OR now() > adddate(a.created, INTERVAL 1 YEAR), 1, 0) need_lock
+                FROM course_structures_coursestructure a
+                     LEFT JOIN certificates_generatedcertificate b
+                        ON a.course_id = b.course_id
+               WHERE a.course_id = %s
+            GROUP BY a.course_id, a.created;
+            ''', [course_key_string])
+            desc = cursor.description
+            result = [dict(zip([col[0] for col in desc], row)) for row in cursor.fetchall()][0]
+        need_lock = result['need_lock']
+    else:
+        need_lock = 0
+    return need_lock
 
 
 class TextbookValidationError(Exception):
