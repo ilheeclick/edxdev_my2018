@@ -37,26 +37,15 @@ define(['js/views/validation',
 
                 // iterate through model and produce key : value editors for each property in model.get
                 var self = this;
-                var v_source = _.each(_.sortBy(_.keys(this.model.attributes), function(key) { return self.model.get(key).display_name; }),
+                _.each(_.sortBy(_.keys(this.model.attributes), function(key) { return self.model.get(key).display_name; }),
                     function(key) {
+                        if(key == 'need_lock')
+                            return true;
+
                         if (self.render_deprecated || !self.model.get(key).deprecated) {
                             HtmlUtils.append(listEle$, self.renderTemplate(key, self.model.get(key)));
                         }
                     });
-
-              _.each(v_source,
-                function(key) {
-                  if(key == 'need_lock')
-                    return true;
-
-                  if (self.render_deprecated || !self.model.get(key).deprecated) {
-                    HtmlUtils.append(listEle$, self.renderTemplate(key, self.model.get(key)));
-                  }
-                });
-
-              if(self.model.get('need_lock') == 1){
-                // some disabled column
-              }
 
               var policyValues = listEle$.find('.json');
                 _.each(policyValues, this.attachJSONEditor, this);
