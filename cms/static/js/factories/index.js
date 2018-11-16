@@ -1,9 +1,22 @@
 define(['jquery.form', 'js/index'], function() {
     'use strict';
     return function (courseNames) {
+        var course_cnt = ($('.course-title').length)
+        var co_title = $('.course-title')
+        var auto_title =[]
+
+        //DEBUG
+        // console.log('courseNames --- s');
+        // console.log([co_title][0][1].textContent);
+        // console.log('cnt =',course_cnt);
+        // console.log('courseNames --- e');
+
+        for (var i =0; i < course_cnt; i++){
+            var title = [co_title][0][i].textContent
+            auto_title.push(title)
+        }
 
         // 검색 자동 완성 (bug)
-
         $("#cms_text").autocomplete({
                 source: auto_title
         });
