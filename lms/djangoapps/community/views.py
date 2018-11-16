@@ -996,6 +996,10 @@ def comm_file(request, file_id=None):
     filepath = file.attach_file_path.replace('/manage/home/static/upload/', '/edx/var/edxapp/staticfiles/file_upload/') if file.attach_file_path else '/edx/var/edxapp/staticfiles/file_upload/'
     filename = file.attatch_file_name
 
+    print "디렉토리",(os.getcwd())  # 현재 디렉토리의
+    #print "파일",(os.path.realpath(__file__))  # 파일
+    #print "파일의 디렉토리",(os.path.dirname(os.path.realpath(__file__)))  # 파일이 위치한 디렉토리
+
     if not file or not os.path.exists(filepath + filename):
         print 'filepath + file.attatch_file_name :', filepath + filename
         return HttpResponse("<script>alert('파일이 존재하지 않습니다 .'); window.history.back();</script>")
