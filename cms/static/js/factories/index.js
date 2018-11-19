@@ -16,7 +16,7 @@ define(['jquery.form', 'js/index'], function() {
             auto_title.push(title)
         }
 
-        // 검색 자동 완성 (bug)
+        // 검색 자동 완성
         $("#cms_text").autocomplete({
                 source: auto_title
         });
