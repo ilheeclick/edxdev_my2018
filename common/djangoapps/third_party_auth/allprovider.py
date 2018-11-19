@@ -2,8 +2,8 @@ from social_core.backends.oauth import BaseOAuth2
 from django.utils.http import urlencode
 import json
 
-class LifelongeduOAuth2(BaseOAuth2):
-    """Lifelongedu OAuth authentication backend"""
+class AllOAuth2(BaseOAuth2):
+    """AllOAuth2 OAuth authentication backend"""
 
     name = 'allprovider'
     AUTHORIZATION_URL = 'http://all.kmooc.kr/o/authorize'
