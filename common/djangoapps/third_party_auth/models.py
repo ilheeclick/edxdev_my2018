@@ -376,6 +376,23 @@ class OAuth2ProviderConfig(ProviderConfig):
             return other_settings[name]
         raise KeyError
 
+    @classmethod
+    def current_oauth2(cls, entity_id):
+        """
+        Return the active data entry, if any, otherwise None
+        """
+        cached = cache.get(cls.cache_key_name(entity_id))
+        if cached is not None:
+            return cached
+
+        try:
+            current = cls.objects.filter(name=entity_id).order_by('-change_date')[0]
+        except IndexError:
+            current = None
+
+        cache.set(cls.cache_key_name(entity_id), current, cls.cache_timeout)
+        return current
+
 
 class SAMLConfiguration(ConfigurationModel):
     """
