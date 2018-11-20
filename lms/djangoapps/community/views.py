@@ -2201,6 +2201,7 @@ def comm_list_json(request):
 
     return HttpResponse(data, 'application/json')
 
+# ---------- 2018.06.22 Jo Ho Young ---------- #
 
 def cert_survey(request):
 
@@ -2240,6 +2241,7 @@ def cert_survey(request):
         return JsonResponse({"return": "success","course_id":course_id,"question_01":Q1,"question_02":Q2,"question_03":Q3,'question_04':Q4,'question_05':Q5,'regist_id':user_id})
 
     hello = request.GET['hello']
+    print "hello", hello
     course_id = request.GET['course_id']
     user_id = request.GET['user_id']
     course_id2 = request.GET['course_id']
@@ -2277,13 +2279,15 @@ def cert_survey(request):
         rows = cur.fetchall()
 
     from django.utils import timezone
-    base_time = datetime.datetime(2018, 7, 11, 00, 00, 00, tzinfo=timezone.utc)
+    base_time = datetime.datetime(2018, 7, 11, 00, 00, 00)
 
     # print "gggg---g",base_time
     # print "rows---",rows[0][1]
     # print "user_id = ",user_id
     # print "certificates = ", hello
-
+    # 2018-11-16 05:15:19.093068
+    print "time!!", rows[0][1]
+    print "base!!",base_time
     if base_time > rows[0][1]:
         print "trus"
         return redirect('/certificates/'+hello)

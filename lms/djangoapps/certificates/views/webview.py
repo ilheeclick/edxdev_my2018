@@ -909,9 +909,9 @@ def _get_custom_template_and_language(course_id, course_mode, course_language):
         return (None, None)
 
 
-def _render_invalid_certificate(course_id, platform_name, configuration,user_id):
+def _render_invalid_certificate(course_id, platform_name, configuration, user_id):
     context = {}
-    _update_context_with_basic_info(context, course_id, platform_name, configuration,user_id)
+    _update_context_with_basic_info(context, course_id, platform_name, configuration, user_id)
     return render_to_response(INVALID_CERTIFICATE_TEMPLATE_PATH, context)
 
 
