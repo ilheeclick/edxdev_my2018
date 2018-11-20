@@ -1147,6 +1147,7 @@ class CourseEnrollmentManager(models.Manager):
         """
         filter_kwargs = {
             'courseenrollment__course_id': course_id,
+            'courseenrollment__mode': 'honor'
         }
         if not include_inactive:
             filter_kwargs['courseenrollment__is_active'] = True
