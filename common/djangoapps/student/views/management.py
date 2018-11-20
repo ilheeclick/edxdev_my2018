@@ -198,9 +198,11 @@ def index(request, extra_context=None, user=AnonymousUser()):
     else:
         courses = courses1 + courses2
 
+    courses = [c for c in courses if not c.has_ended()]
+
     # audit_yn 값이 없으면 html 랜더시 오류, courses
     # audit_yn 값이 없는 강좌만 조회시 courses 가 None 이면 iterator 오류이므로 기본값을 셋팅
-    for c in [c for c in courses if not c.has_ended()]:
+    for c in courses:
         if not hasattr(c,'audit_yn'):
             c.audit_yn = 'N'
 
