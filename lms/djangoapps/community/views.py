@@ -2204,7 +2204,7 @@ def comm_list_json(request):
 # ---------- 2018.06.22 Jo Ho Young ---------- #
 
 def cert_survey(request):
-
+    print "survey_chk"
     if request.is_ajax():
 
         Q1 = request.POST.get('Q1')
@@ -2286,8 +2286,7 @@ def cert_survey(request):
     # print "user_id = ",user_id
     # print "certificates = ", hello
     # 2018-11-16 05:15:19.093068
-    print "time!!", rows[0][1]
-    print "base!!",base_time
+
     if base_time > rows[0][1]:
         print "trus"
         return redirect('/certificates/'+hello)
