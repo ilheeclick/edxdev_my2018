@@ -34,7 +34,7 @@ def plugin_settings(settings):
         'ALLOW_AUTOMATED_SIGNUPS': False,
 
         # Batch-Generated Certificates from Instructor Dashboard
-        'CERTIFICATES_INSTRUCTOR_GENERATION': False,
+        'CERTIFICATES_INSTRUCTOR_GENERATION': True,
 
         # Whether to check the "Notify users by email" checkbox in the batch enrollment form
         # in the instructor dashboard.

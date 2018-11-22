@@ -996,6 +996,10 @@ def comm_file(request, file_id=None):
     filepath = file.attach_file_path.replace('/manage/home/static/upload/', '/edx/var/edxapp/staticfiles/file_upload/') if file.attach_file_path else '/edx/var/edxapp/staticfiles/file_upload/'
     filename = file.attatch_file_name
 
+    print "디렉토리",(os.getcwd())  # 현재 디렉토리의
+    #print "파일",(os.path.realpath(__file__))  # 파일
+    #print "파일의 디렉토리",(os.path.dirname(os.path.realpath(__file__)))  # 파일이 위치한 디렉토리
+
     if not file or not os.path.exists(filepath + filename):
         print 'filepath + file.attatch_file_name :', filepath + filename
         return HttpResponse("<script>alert('파일이 존재하지 않습니다 .'); window.history.back();</script>")
@@ -2197,9 +2201,10 @@ def comm_list_json(request):
 
     return HttpResponse(data, 'application/json')
 
+# ---------- 2018.06.22 Jo Ho Young ---------- #
 
 def cert_survey(request):
-
+    print "survey_chk"
     if request.is_ajax():
 
         Q1 = request.POST.get('Q1')
@@ -2236,6 +2241,7 @@ def cert_survey(request):
         return JsonResponse({"return": "success","course_id":course_id,"question_01":Q1,"question_02":Q2,"question_03":Q3,'question_04':Q4,'question_05':Q5,'regist_id':user_id})
 
     hello = request.GET['hello']
+    print "hello", hello
     course_id = request.GET['course_id']
     user_id = request.GET['user_id']
     course_id2 = request.GET['course_id']
@@ -2273,12 +2279,13 @@ def cert_survey(request):
         rows = cur.fetchall()
 
     from django.utils import timezone
-    base_time = datetime.datetime(2018, 7, 11, 00, 00, 00, tzinfo=timezone.utc)
+    base_time = datetime.datetime(2018, 7, 11, 00, 00, 00)
 
     # print "gggg---g",base_time
     # print "rows---",rows[0][1]
     # print "user_id = ",user_id
     # print "certificates = ", hello
+    # 2018-11-16 05:15:19.093068
 
     if base_time > rows[0][1]:
         print "trus"
