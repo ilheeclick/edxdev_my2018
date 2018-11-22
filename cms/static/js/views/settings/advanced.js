@@ -39,12 +39,15 @@ define(['js/views/validation',
                 var self = this;
                 _.each(_.sortBy(_.keys(this.model.attributes), function(key) { return self.model.get(key).display_name; }),
                     function(key) {
+                        if(key == 'need_lock')
+                            return true;
+
                         if (self.render_deprecated || !self.model.get(key).deprecated) {
                             HtmlUtils.append(listEle$, self.renderTemplate(key, self.model.get(key)));
                         }
                     });
 
-                var policyValues = listEle$.find('.json');
+              var policyValues = listEle$.find('.json');
                 _.each(policyValues, this.attachJSONEditor, this);
                 return this;
             },
@@ -177,9 +180,10 @@ define(['js/views/validation',
             },
             renderTemplate: function(key, model) {
                 var newKeyId = _.uniqueId('policy_key_'),
+                    lock = this.model.get('need_lock'),
                     newEle = this.template({key: key, display_name: model.display_name, help: model.help,
                         value: JSON.stringify(model.value, null, 4), deprecated: model.deprecated,
-                        keyUniqueId: newKeyId, valueUniqueId: _.uniqueId('policy_value_')});
+                        keyUniqueId: newKeyId, need_lock: lock, valueUniqueId: _.uniqueId('policy_value_')});
 
                 this.fieldToSelectorMap[key] = newKeyId;
                 this.selectorToField[newKeyId] = key;

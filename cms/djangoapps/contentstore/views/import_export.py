@@ -37,6 +37,8 @@ from util.json_request import JsonResponse
 from util.views import ensure_valid_course_key
 from xmodule.modulestore.django import modulestore
 
+from contentstore.views.course import course_need_lock
+
 __all__ = [
     'import_handler', 'import_status_handler',
     'export_handler', 'export_output_handler', 'export_status_handler',
@@ -89,11 +91,14 @@ def import_handler(request, course_key_string):
         status_url = reverse_course_url(
             "import_status_handler", courselike_key, kwargs={'filename': "fillerName"}
         )
+        need_lock = course_need_lock(request, courselike_key)
+
         return render_to_response('import.html', {
             context_name: courselike_module,
             'successful_import_redirect_url': successful_url,
             'import_status_url': status_url,
-            'library': isinstance(courselike_key, LibraryLocator)
+            'library': isinstance(courselike_key, LibraryLocator),
+            'need_lock': need_lock,
         })
     else:
         return HttpResponseNotFound()
@@ -115,6 +120,15 @@ def _write_chunk(request, courselike_key):
     """
     Write the OLX file data chunk from the given request to the local filesystem.
     """
+    if course_need_lock(request, courselike_key) == 1:
+        return JsonResponse(
+            {
+                'ErrMsg': 'course is lock',
+                'Stage': -1
+            },
+            status=403
+        )
+
     # Upload .tar.gz to local filesystem for one-server installations not using S3 or Swift
     data_root = path(settings.GITHUB_REPO_ROOT)
     subdir = base64.urlsafe_b64encode(repr(courselike_key))
