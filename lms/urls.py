@@ -116,6 +116,10 @@ urlpatterns = [
     # survey url
     url(r'^cert_survey/$', community.cert_survey, name='cert_survey'),
 
+    # course_review
+    url(r'^course_review/$', courseware_views.course_review, name='course_review'),
+    url(r'^course_review_add$', courseware_views.course_review_add, name='course_review_add'),
+
     # course_list
     url(r'^course_search_list$', courses.course_search_list, name='course_list'),
 

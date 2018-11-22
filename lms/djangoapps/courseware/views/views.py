@@ -1727,3 +1727,17 @@ def haewoondaex(request, org):
         "courseware/univ_intro_" + org + ".html",
         {'courses': courses_list, 'course_discovery_meanings': course_discovery_meanings}
     )
+
+@login_required
+@require_POST
+def course_review(request):
+    return render_to_response("courseware/course_review.html")
+
+
+def course_review_add(request):
+    if request.is_ajax():
+        star = request.POST.get("star")
+        print 'star!!!!',star
+
+
+    return JsonResponse({"data":"success"})

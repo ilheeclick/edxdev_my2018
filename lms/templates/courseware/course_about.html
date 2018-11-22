@@ -20,6 +20,8 @@ from six import string_types
   <meta property="og:description" content="${get_course_about_section(request, course, 'short_description')}" />
 </%block>
 
+
+
 <%block name="js_extra">
   <script type="text/javascript">
   (function() {
@@ -208,6 +210,7 @@ from six import string_types
 
   <div class="container">
 
+
     <%block name="course_about_details">
     <div class="details">
       % if staff_access and studio_url is not None:
@@ -218,8 +221,11 @@ from six import string_types
 
       <div class="inner-wrapper">
         ${get_course_about_section(request, course, "overview")}
+        <!-- 평점 작업 -->
+        <%include file="course_review.html" />
       </div>
     </div>
+
     </%block>
 
     <div class="course-sidebar">
@@ -302,8 +308,10 @@ from six import string_types
           % if get_course_about_section(request, course, "prerequisites"):
             <li class="important-dates-item"><span class="icon fa fa-book" aria-hidden="true"></span><p class="important-dates-item-title">${_("Requirements")}</p><span class="important-dates-item-text prerequisites">${get_course_about_section(request, course, "prerequisites")}</span></li>
           % endif
+
         </ol>
         </%block>
+
     </div>
 
       <%block name="course_about_reviews_tool">
