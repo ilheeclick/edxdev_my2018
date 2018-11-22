@@ -173,6 +173,8 @@ FEATURES['CERTIFICATES_HTML_VIEW'] = True
 
 
 ########################## Course Discovery #######################
+# Il-Hee, Maeng addition start ----------------------------
+
 LANGUAGE_MAP = {'terms': {lang: display for lang, display in ALL_LANGUAGES}, 'name': 'Language'}
 COURSE_DISCOVERY_MEANINGS = {
     'org': {
@@ -186,7 +188,50 @@ COURSE_DISCOVERY_MEANINGS = {
         },
     },
     'language': LANGUAGE_MAP,
+    'classfy': {
+        'name': 'Section',
+        'terms':{
+            'classfy': 'classfy'
+        }
+    },
+    'middle_classfy': {
+        'name': 'Section',
+        'terms': {
+            'middle_classfy': 'middle_classfy'
+        }
+    },
+    'classfysub': {
+        'name': 'Section',
+        'terms': {
+            'classfysub': 'classfysub'
+        }
+    },
+    'middle_classfysub': {
+        'name': 'Section',
+        'terms': {
+            'middle_classfysub': 'middle_classfysub'
+        }
+    },
+    'difficult_degree': {
+        'name': 'Section',
+        'terms': {
+            'difficult_degree': 'difficult_degree'
+        }
+    },
+    'linguistics': {
+        'name': 'Section',
+        'terms': {
+            'linguistics': 'linguistics'
+        }
+    },
+    'course_period': {
+        'name': 'Period of Studing',
+        'terms': {
+            'course_period': 'course_period'
+        }
+    }
 }
+# Il-Hee, Maeng addition end ----------------------------
 
 FEATURES['ENABLE_COURSE_DISCOVERY'] = True
 # Setting for overriding default filtering facets for Course discovery

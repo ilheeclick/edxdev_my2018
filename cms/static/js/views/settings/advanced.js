@@ -14,13 +14,14 @@ define(['js/views/validation',
     // Model class is CMS.Models.Settings.Advanced
             events: {
                 'focus :input': 'focusInput',
-                'blur :input': 'blurInput'
+                'blur :input': 'blurInput',
+                'change :input' : "selectInput"
         // TODO enable/disable save based on validation (currently enabled whenever there are changes)
             },
             initialize: function() {
                 this.template = HtmlUtils.template(
-            $('#advanced_entry-tpl').text()
-        );
+                    $('#advanced_entry-tpl').text()
+                );
                 this.listenTo(this.model, 'invalid', this.handleValidationError);
                 this.render();
             },
@@ -37,20 +38,62 @@ define(['js/views/validation',
 
         // iterate through model and produce key : value editors for each property in model.get
                 var self = this;
-                _.each(_.sortBy(_.keys(this.model.attributes), function(key) { return self.model.get(key).display_name; }),
-            function(key) {
-                if (self.render_deprecated || !self.model.get(key).deprecated) {
-                    HtmlUtils.append(listEle$, self.renderTemplate(key, self.model.get(key)));
-                }
-            });
+                var v_source = _.sortBy(_.keys(this.model.attributes), function(key) { return self.model.get(key).display_name; });
+                _.each(v_source,
+                    function(key) {
+                        if(key == 'need_lock')
+                            return true;
 
-                var policyValues = listEle$.find('.json');
-                _.each(policyValues, this.attachJSONEditor, this);
+                        if (self.render_deprecated || !self.model.get(key).deprecated) {
+                            HtmlUtils.append(listEle$, self.renderTemplate(key, self.model.get(key)));
+                        }
+                    });
+
+                if(self.model.get('need_lock') == 1){
+                    // some disabled column
+                }
+
+                var policyValues1= listEle$.find('.json');
+                //console.log("policyValues1:" + policyValues1.length + ":" + policyValues1 );
+                _.each(policyValues1, this.attachJSONEditor, this);
+
+                var policyValues2 = listEle$.find('.select');
+                //console.log("policyValues2:" + policyValues2.length + ":" + policyValues2 );
+                _.each(policyValues2, this.attachJSONInput, this);
+
                 return this;
             },
+
+            attachJSONInput : function (input) {
+                //console.log('attachJSONInput : '+input);
+                var self = this;
+                var oldValue = $(input).val();
+                //console.log('attachJSONInput changed : '+oldValue);
+                var cm = $("#selectfixid")
+
+                cm.on('change', function (instance, changeobj) {
+                    //console.log('attachJSONInput changed');
+                    var index = $("#selectfixid").val();
+
+                    $("#txtfixid").text(index);
+                    $(".cm-string").eq(4).text(index);  // difficult_degree
+
+                    var newValue = $("#txtfixid").val();
+                    // save process
+                    if (newValue !== oldValue) {
+                            //console.log("attachJSONInput newValue : " + newValue + " : " + oldValue);
+                            var message = gettext("Your changes will not take effect until you save your progress. Take care with key and value formatting, as validation is not implemented.");
+                            self.showNotificationBar(message,
+                                                     _.bind(self.saveView, self),
+                                                     _.bind(self.revertView, self));
+                        }
+
+                });
+            },
+
             attachJSONEditor: function(textarea) {
-        // Since we are allowing duplicate keys at the moment, it is possible that we will try to attach
-        // JSON Editor to a value that already has one. Therefore only attach if no CodeMirror peer exists.
+                // Since we are allowing duplicate keys at the moment, it is possible that we will try to attach
+                // JSON Editor to a value that already has one. Therefore only attach if no CodeMirror peer exists.
                 if ($(textarea).siblings().hasClass('CodeMirror')) {
                     return;
                 }
@@ -108,10 +151,17 @@ define(['js/views/validation',
                 });
             },
             saveView: function() {
-        // TODO one last verification scan:
-        //    call validateKey on each to ensure proper format
-        //    check for dupes
+                // TODO one last verification scan:
+                //    call validateKey on each to ensure proper format
+                //    check for dupes
                 var self = this;
+                //audit_yn value validate
+                var v = this.model.get('audit_yn').value;
+                if (v == 'Y' || v == 'y')
+                    this.model.get('audit_yn').value = 'Y';
+                else
+                    this.model.get('audit_yn').value = 'N';
+
                 this.model.save({}, {
                     success: function() {
                         var title = gettext('Your policy changes have been saved.');
@@ -151,9 +201,12 @@ define(['js/views/validation',
             },
             renderTemplate: function(key, model) {
                 var newKeyId = _.uniqueId('policy_key_'),
+                lock = this.model.get('need_lock'),
                     newEle = this.template({key: key, display_name: model.display_name, help: model.help,
                         value: JSON.stringify(model.value, null, 4), deprecated: model.deprecated,
-                        keyUniqueId: newKeyId, valueUniqueId: _.uniqueId('policy_value_')});
+                        keyUniqueId: newKeyId, valueUniqueId: _.uniqueId('policy_value_'),
+                        need_lock: lock
+                    });
 
                 this.fieldToSelectorMap[key] = newKeyId;
                 this.selectorToField[newKeyId] = key;

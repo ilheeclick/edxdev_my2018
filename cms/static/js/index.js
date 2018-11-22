@@ -12,7 +12,19 @@ define(['domReady', 'jquery', 'underscore', 'js/utils/cancel_on_escape', 'js/vie
             errorMessage: '#course_creation_error',
             tipError: '.create-course span.tip-error',
             error: '.create-course .error',
-            allowUnicode: '.allow-unicode-course-id'
+            allowUnicode: '.allow-unicode-course-id',
+            // Il-Hee, Maeng update start --------------------------
+            classfy: '.new-course-classfy',
+            classfy_sub1: '.new-course-classfy-sub1',
+            classfy_sub2: '.new-course-classfy-sub2',
+            classfy_sub3: '.new-course-classfy-sub3',
+            middle_classfy: '.new-course-middle-classfy',
+            middle_classfy_sub1: '.new-course-middle-classfy-sub1',
+            middle_classfy_sub2: '.new-course-middle-classfy-sub2',
+            middle_classfy_sub3: '.new-course-middle-classfy-sub3',
+            linguistics: '.new-course-linguistics',
+            course_period: '.new-course-period'
+            // Il-Hee, Maeng update end --------------------------
         }, {
             shown: 'is-shown',
             showing: 'is-showing',
@@ -52,12 +64,76 @@ define(['domReady', 'jquery', 'underscore', 'js/utils/cancel_on_escape', 'js/vie
             var number = $newCourseForm.find('.new-course-number').val();
             var run = $newCourseForm.find('.new-course-run').val();
 
+            // Il-Hee, Maeng update start --------------------------
+            var classfy = $newCourseForm.find(".new-course-classfy").val();
+            var middle_classfy = $newCourseForm.find(".new-course-middle-classfy").val();
+            var difficult_degree = "";
+
+            var csub1 = $newCourseForm.find(".new-course-classfy-sub1").val();
+            var csub2 = $newCourseForm.find(".new-course-classfy-sub2").val();
+            var csub3 = $newCourseForm.find(".new-course-classfy-sub3").val();
+
+            var msub1 = $newCourseForm.find(".new-course-middle-classfy-sub1").val();
+            var msub2 = $newCourseForm.find(".new-course-middle-classfy-sub2").val();
+            var msub3 = $newCourseForm.find(".new-course-middle-classfy-sub3").val();
+
+            var classfysub = "";
+            var middle_classfysub = "";
+
+            if(csub1 != null && csub1 != "" && csub1 != "null")
+                classfysub = csub1;
+            if(csub2 != null && csub2 != "" && csub2 != "null")
+                classfysub += ","+csub2;
+            if(csub3 != null && csub3 != "" && csub3 != "null")
+                classfysub += ","+csub3;
+
+            if(msub1 != null && msub1 != "" && msub1 != "null")
+                middle_classfysub = msub1;
+            if(msub2 != null && msub2 != "" && msub2 != "null")
+                middle_classfysub += ","+msub2;
+            if(msub3 != null && msub3 != "" && msub3 != "null")
+                middle_classfysub += ","+msub3;
+            var linguistics = $newCourseForm.find(".new-course-linguistics").val();
+            var period = $newCourseForm.find(".new-course-period").val();
+
             var course_info = {
                 org: org,
                 number: number,
                 display_name: display_name,
-                run: run
+                run: run,
+                // Il-Hee, Maeng addition
+                classfy: classfy,
+                classfysub: classfysub,
+                middle_classfy: middle_classfy,
+                middle_classfysub: middle_classfysub,
+                difficult_degree: difficult_degree,
+                linguistics: linguistics,
+                period: period
             };
+
+            $("span.tip").css({"color": "#ccc"});
+
+            if (!middle_classfy || middle_classfy == "null")
+                $("span[id='tip-new-course-classfy']").css({"color": "#b20610"});
+
+            if (!linguistics)
+                $("span[id='tip-new-course-linguistics']").css({"color": "#b20610"});
+
+            if (!period)
+                $("span[id='tip-new-course-period']").css({"color": "#b20610"});
+
+            if (!classfy || !middle_classfy || middle_classfy == "null" || !linguistics || !period){
+                console.log(classfy);
+                console.log(classfysub);
+                console.log(middle_classfy);
+                console.log(middle_classfysub);
+                console.log(difficult_degree);
+                console.log(linguistics);
+                console.log(period);
+
+                return;
+            }
+            // Il-Hee, Maeng update end --------------------------
 
             analytics.track('Created a Course', course_info);
             CreateCourseUtils.create(course_info, function(errorMessage) {
@@ -111,7 +187,7 @@ define(['domReady', 'jquery', 'underscore', 'js/utils/cancel_on_escape', 'js/vie
             $('.new-course-save').on('click', saveNewCourse);
             $cancelButton.bind('click', makeCancelHandler('course'));
             CancelOnEscape($cancelButton);
-            CreateCourseUtils.setupOrgAutocomplete();
+            //CreateCourseUtils.setupOrgAutocomplete();
             CreateCourseUtils.configureHandlers();
             rtlTextDirection();
         };
