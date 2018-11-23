@@ -119,6 +119,7 @@ urlpatterns = [
     # course_review
     url(r'^course_review/$', courseware_views.course_review, name='course_review'),
     url(r'^course_review_add$', courseware_views.course_review_add, name='course_review_add'),
+    url(r'^course_review_list$', courseware_views.course_review_list, name='course_review_list'),
 
     # course_list
     url(r'^course_search_list$', courses.course_search_list, name='course_list'),

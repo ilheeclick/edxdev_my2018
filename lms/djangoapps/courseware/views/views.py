@@ -434,6 +434,11 @@ def course_info(request, course_id):
             # course is not yet visible to students.
             context['disable_student_access'] = True
             context['supports_preview_menu'] = False
+        course_id = request.POST.get('course_id')
+
+
+
+
 
         return render_to_response('courseware/info.html', context)
 
@@ -843,6 +848,26 @@ def course_about(request, course_id):
         # Embed the course reviews tool
         reviews_fragment_view = CourseReviewsModuleFragmentView().render_to_fragment(request, course=course)
 
+        # coure_review
+        with connections['default'].cursor() as cur:
+            query = """
+                    select content,point,user_id,reg_time 
+                    from course_review
+                    where course_id ='{course_id}'
+                """.format(course_id=course_id)
+            cur.execute(query)
+            review_list = cur.fetchall()
+
+            data_list = []
+
+            for data in review_list:
+                data_dict = dict()
+                data_dict['content'] = data[0]
+                data_dict['point'] = data[1]
+                data_dict['user_id'] = data[2]
+                data_dict['reg_time'] = data[3]
+                data_list.append(data_dict)
+
         context = {
             'course': course,
             'course_details': course_details,
@@ -873,6 +898,7 @@ def course_about(request, course_id):
             'course_image_urls': overview.image_urls,
             'reviews_fragment_view': reviews_fragment_view,
             'sidebar_html_enabled': sidebar_html_enabled,
+            'rev': data_list,
         }
 
         return render_to_response('courseware/course_about.html', context)
@@ -1311,7 +1337,7 @@ def course_survey(request, course_id):
 
 def is_course_passed(student, course, course_grade=None):
     """
-    check user's course passing status. return True if passed
+    check user's course passing status. return True if prows1assed
     Arguments:
         student : user object
         course : course object
@@ -1735,9 +1761,53 @@ def course_review(request):
 
 
 def course_review_add(request):
-    if request.is_ajax():
-        star = request.POST.get("star")
-        print 'star!!!!',star
+    user_id = request.POST.get('user_id')
+    course_id = request.POST.get('course_id')
+    review = request.POST.get('review')
+    point = request.POST.get("star")
 
+    lock=0
+
+    if request.is_ajax():
+
+        with connections['default'].cursor() as cur:
+            query = """
+                insert into edxapp.course_review(content,
+                                                point,
+                                                user_id,
+                                                course_id)
+                values('{review}',
+                        '{point}',
+                        '{user_id}',
+                        '{course_id}')
+            """.format(user_id=user_id,course_id=course_id,point=point,review=review)
+            cur.execute(query)
 
     return JsonResponse({"data":"success"})
+
+def course_review_list(request):
+    course_id = request.POST.get('course_id')
+
+    if request.is_ajax():
+
+        with connections['default'].cursor() as cur:
+            query = """
+                select content,point,user_id,reg_time 
+                from course_review
+                where course_id ='{course_id}'
+            """.format(course_id=course_id)
+            cur.execute(query)
+            review_list = cur.fetchall()
+
+            data_list=[]
+
+            for data in review_list:
+                data_dict = dict()
+                data_dict['content'] = data[0]
+                data_dict['point'] = data[1]
+                data_dict['user_id'] = data[2]
+                data_dict['reg_time'] = data[3]
+                data_list.append(data_dict)
+        context={"data_list":data_list}
+
+    return JsonResponse({"data":context})

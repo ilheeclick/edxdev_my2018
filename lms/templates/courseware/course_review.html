@@ -1,5 +1,6 @@
 
 <p class="important-dates-item-title">평점 및 리뷰</p>
+%if user.id is not None:
 <form>
   <fieldset class="starability-basic">
     <legend> &nbsp</legend>
@@ -20,13 +21,28 @@
 
   </fieldset>
   <textarea id="review_text" style="min-width: 500px;"></textarea>
-</form>
-
 <button onclick="chk()"> submit </button>
+</form>
+%endif
+
+
+
 
 <script type="text/javascript">
     var star=''
     var review = ''
+
+    $.ajax({
+                url : '/course_review_list',
+                type: "POST",
+                data : {
+                    course_id:"${course.id}",
+                    csrfmiddlewaretoken: '${ csrf_token }'
+                }
+            }).done(function(data){
+                console.log(data)
+
+            })
 
     function chk() {
         star = $(".starability-basic input:radio[name='rating']:checked").val();
@@ -46,13 +62,13 @@
                 data : {
                     star:star,
                     review:review,
+                    user_id:"${user.id}",
+                    course_id:"${course.id}",
                     csrfmiddlewaretoken: '${ csrf_token }'
                 }
             }).done(function(data){
                 alert("완료")
             })
-
         }}
-
 
 </script>
