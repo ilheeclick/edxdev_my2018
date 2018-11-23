@@ -1,7 +1,7 @@
-define(['domReady', 'jquery', 'underscore', 'js/utils/cancel_on_escape', 'js/views/utils/create_course_utils',
-    'js/views/utils/create_library_utils', 'common/js/components/utils/view_utils'],
-    function(domReady, $, _, CancelOnEscape, CreateCourseUtilsFactory, CreateLibraryUtilsFactory, ViewUtils) {
-        'use strict';
+define(["domReady", "jquery", "underscore", "js/utils/cancel_on_escape", "js/views/utils/create_course_utils",
+    "js/views/utils/create_library_utils", "common/js/components/utils/view_utils"],
+    function (domReady, $, _, CancelOnEscape, CreateCourseUtilsFactory, CreateLibraryUtilsFactory, ViewUtils) {
+        "use strict";
         var CreateCourseUtils = new CreateCourseUtilsFactory({
             name: '.new-course-name',
             org: '.new-course-org',
@@ -51,7 +51,7 @@ define(['domReady', 'jquery', 'underscore', 'js/utils/cancel_on_escape', 'js/vie
             error: 'error'
         });
 
-        var saveNewCourse = function(e) {
+        var saveNewCourse = function (e) {
             e.preventDefault();
 
             if (CreateCourseUtils.hasInvalidRequiredFields()) {
@@ -63,12 +63,12 @@ define(['domReady', 'jquery', 'underscore', 'js/utils/cancel_on_escape', 'js/vie
             var org = $newCourseForm.find('.new-course-org').val();
             var number = $newCourseForm.find('.new-course-number').val();
             var run = $newCourseForm.find('.new-course-run').val();
-
             // Il-Hee, Maeng update start --------------------------
             var classfy = $newCourseForm.find(".new-course-classfy").val();
             var middle_classfy = $newCourseForm.find(".new-course-middle-classfy").val();
             var difficult_degree = "";
 
+            // mih update
             var csub1 = $newCourseForm.find(".new-course-classfy-sub1").val();
             var csub2 = $newCourseForm.find(".new-course-classfy-sub2").val();
             var csub3 = $newCourseForm.find(".new-course-classfy-sub3").val();
@@ -123,76 +123,54 @@ define(['domReady', 'jquery', 'underscore', 'js/utils/cancel_on_escape', 'js/vie
                 $("span[id='tip-new-course-period']").css({"color": "#b20610"});
 
             if (!classfy || !middle_classfy || middle_classfy == "null" || !linguistics || !period){
-                console.log(classfy);
-                console.log(classfysub);
-                console.log(middle_classfy);
-                console.log(middle_classfysub);
-                console.log(difficult_degree);
-                console.log(linguistics);
-                console.log(period);
-
+                //console.log(classfy);
+                //console.log(classfysub);
+                //console.log(middle_classfy);
+                //console.log(middle_classfysub);
+                //console.log(difficult_degree);
+                //console.log(linguistics);
+                //console.log(period);
                 return;
             }
             // Il-Hee, Maeng update end --------------------------
-
             analytics.track('Created a Course', course_info);
-            CreateCourseUtils.create(course_info, function(errorMessage) {
+            CreateCourseUtils.create(course_info, function (errorMessage) {
                 $('.create-course .wrap-error').addClass('is-shown');
                 $('#course_creation_error').html('<p>' + errorMessage + '</p>');
                 $('.new-course-save').addClass('is-disabled').attr('aria-disabled', true);
             });
+
         };
 
-        var rtlTextDirection = function() {
-            var Selectors = {
-                new_course_run: '#new-course-run'
-            };
-
-            if ($('body').hasClass('rtl')) {
-                $(Selectors.new_course_run).addClass('course-run-text-direction placeholder-text-direction');
-                $(Selectors.new_course_run).on('input', function() {
-                    if (this.value === '') {
-                        $(Selectors.new_course_run).addClass('placeholder-text-direction');
-                    } else {
-                        $(Selectors.new_course_run).removeClass('placeholder-text-direction');
-                    }
-                });
-            }
-        };
-
-        var makeCancelHandler = function(addType) {
+        var makeCancelHandler = function (addType) {
             return function(e) {
                 e.preventDefault();
-                $('.new-' + addType + '-button').removeClass('is-disabled').attr('aria-disabled', false);
-                $('.wrapper-create-' + addType).removeClass('is-shown');
+                $('.new-'+addType+'-button').removeClass('is-disabled').attr('aria-disabled', false);
+                $('.wrapper-create-'+addType).removeClass('is-shown');
                 // Clear out existing fields and errors
-                $('#create-' + addType + '-form input[type=text]').val('');
-                $('#' + addType + '_creation_error').html('');
-                $('.create-' + addType + ' .wrap-error').removeClass('is-shown');
-                $('.new-' + addType + '-save').off('click');
+                $('#create-'+addType+'-form input[type=text]').val('');
+                $('#'+addType+'_creation_error').html('');
+                $('.create-'+addType+' .wrap-error').removeClass('is-shown');
+                $('.new-'+addType+'-save').off('click');
             };
         };
 
-        var addNewCourse = function(e) {
-            var $newCourse,
-                $cancelButton,
-                $courseName;
+        var addNewCourse = function (e) {
             e.preventDefault();
             $('.new-course-button').addClass('is-disabled').attr('aria-disabled', true);
             $('.new-course-save').addClass('is-disabled').attr('aria-disabled', true);
-            $newCourse = $('.wrapper-create-course').addClass('is-shown');
-            $cancelButton = $newCourse.find('.new-course-cancel');
-            $courseName = $('.new-course-name');
+            var $newCourse = $('.wrapper-create-course').addClass('is-shown');
+            var $cancelButton = $newCourse.find('.new-course-cancel');
+            var $courseName = $('.new-course-name');
             $courseName.focus().select();
             $('.new-course-save').on('click', saveNewCourse);
             $cancelButton.bind('click', makeCancelHandler('course'));
             CancelOnEscape($cancelButton);
             //CreateCourseUtils.setupOrgAutocomplete();
             CreateCourseUtils.configureHandlers();
-            rtlTextDirection();
         };
 
-        var saveNewLibrary = function(e) {
+        var saveNewLibrary = function (e) {
             e.preventDefault();
 
             if (CreateLibraryUtils.hasInvalidRequiredFields()) {
@@ -207,18 +185,18 @@ define(['domReady', 'jquery', 'underscore', 'js/utils/cancel_on_escape', 'js/vie
             var lib_info = {
                 org: org,
                 number: number,
-                display_name: display_name
+                display_name: display_name,
             };
 
             analytics.track('Created a Library', lib_info);
-            CreateLibraryUtils.create(lib_info, function(errorMessage) {
+            CreateLibraryUtils.create(lib_info, function (errorMessage) {
                 $('.create-library .wrap-error').addClass('is-shown');
                 $('#library_creation_error').html('<p>' + errorMessage + '</p>');
                 $('.new-library-save').addClass('is-disabled').attr('aria-disabled', true);
             });
         };
 
-        var addNewLibrary = function(e) {
+        var addNewLibrary = function (e) {
             e.preventDefault();
             $('.new-library-button').addClass('is-disabled').attr('aria-disabled', true);
             $('.new-library-save').addClass('is-disabled').attr('aria-disabled', true);
@@ -234,30 +212,35 @@ define(['domReady', 'jquery', 'underscore', 'js/utils/cancel_on_escape', 'js/vie
         };
 
         var showTab = function(tab) {
-            return function(e) {
-                e.preventDefault();
-                $('.courses-tab').toggleClass('active', tab === 'courses');
-                $('.archived-courses-tab').toggleClass('active', tab === 'archived-courses');
-                $('.libraries-tab').toggleClass('active', tab === 'libraries');
+          return function(e) {
+            e.preventDefault();
+            $('.courses-tab').toggleClass('active', tab === 'courses');
+            $('.archived-courses-tab').toggleClass('active', tab === 'archived-courses');
+            $('.libraries-tab').toggleClass('active', tab === 'libraries');
+            $('.programs-tab').toggleClass('active', tab === 'programs');
 
             // Also toggle this course-related notice shown below the course tab, if it is present:
-                $('.wrapper-creationrights').toggleClass('is-hidden', tab !== 'courses');
-            };
+            $('.wrapper-creationrights').toggleClass('is-hidden', tab !== 'courses');
+          };
         };
 
-        var onReady = function() {
+        var onReady = function () {
+
+            console.log('js/index.js onReady');
+
             $('.new-course-button').bind('click', addNewCourse);
             $('.new-library-button').bind('click', addNewLibrary);
 
-            $('.dismiss-button').bind('click', ViewUtils.deleteNotificationHandler(function() {
+            $('.dismiss-button').bind('click', ViewUtils.deleteNotificationHandler(function () {
                 ViewUtils.reload();
             }));
 
             $('.action-reload').bind('click', ViewUtils.reload);
 
             $('#course-index-tabs .courses-tab').bind('click', showTab('courses'));
-            $('#course-index-tabs .archived-courses-tab').bind('click', showTab('archived-courses'));
             $('#course-index-tabs .libraries-tab').bind('click', showTab('libraries'));
+            $('#course-index-tabs .programs-tab').bind('click', showTab('programs'));
+            $('#course-index-tabs .archived-courses-tab').bind('click', showTab('archived-courses'));
         };
 
         domReady(onReady);

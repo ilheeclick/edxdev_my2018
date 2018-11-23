@@ -24706,18 +24706,17 @@ msgid ""
 "#%(r2)d"
 msgstr "새로운 수정본 생성: 수정본 #%(r1)d 과 수정본 #%(r2)d 의 병합"
 
-
 #: lms/static/js/student_account/views/account_settings_factory.js
 msgid "Basic Account Information (required)"
 msgstr "계정 기본  정보 (필수)"
 
- #: lms/static/js/student_account/views/account_settings_factory.js
+#: lms/static/js/student_account/views/account_settings_factory.js
 msgid ""
 "The name that identifies you throughout {platform_name}. You cannot change "
 "your username."
 msgstr "{platform_name}에서 쓰게 되는 이름입니다. 변경할 수 없습니다. "
 
- #: lms/static/js/student_account/views/account_settings_factory.js
+#: lms/static/js/student_account/views/account_settings_factory.js
 msgid ""
 "The name that is used for ID verification and appears on your certificates. "
 "Other learners never see your full name. Make sure to enter your name "
@@ -24727,7 +24726,7 @@ msgstr ""
 "신분 확인을 위해 사용된 이름은 인증서에도 사용됩니다. 다른 사용자는 절대 실명을 볼 수 없습니다. 로마자가 아닌 부분을 포함해 정부 "
 "인증 신분증 상의 이름을 정확히 입력해야 합니다."
 
- #: lms/static/js/student_account/views/account_settings_factory.js
+#: lms/static/js/student_account/views/account_settings_factory.js
 msgid ""
 "The email address you use to sign in. Communications from {platform_name} "
 "and your courses are sent to this address."
@@ -26107,9 +26106,7 @@ msgstr "만족도 조사"
 msgid "Total recognized learning hours must have number"
 msgstr "학습인정시간에는 숫자만 입력 가능합니다"
 
-#---------------------------------------------------
-
-# footer.html
+#: footer.html
 msgid "2557, NAMBUSUNHWAN-RO, SEOCHO-GU, SEOUL, KOREA. "
 msgstr "(06734)서울특별시 서초구 남부순환로 2557 (서초동)"
 
@@ -26138,6 +26135,292 @@ msgid ""
 "The password that will identify you in your courses - {bold_start}(cannot be "
 "changed later){bold_end}"
 msgstr "영문 소문자, 숫자, 특수문자 3가지를 모두 조합하여 9자 이상으로 입력해주세요."
+
+#: university
+msgid "KYUNGNAMUNIVk"
+msgstr "경남대학교"
+
+msgid "KHUk"
+msgstr "경희대학교"
+
+msgid "KoreaUnivK"
+msgstr "고려대학교"
+
+msgid "DGUk"
+msgstr "대구대학교"
+
+msgid "PNUk"
+msgstr "부산대학교"
+
+msgid "SMUCk"
+msgstr "상명대학교"
+
+msgid "SMUk"
+msgstr "상명대학교"
+
+msgid "SNUk"
+msgstr "서울대학교"
+
+msgid "SKKUk"
+msgstr "성균관대학교"
+
+msgid "KKUk"
+msgstr "건국대학교(글로컬)"
+
+msgid "SSUk"
+msgstr "성신여자대학교"
+
+msgid "SejonguniversityK"
+msgstr "세종대학교"
+
+msgid "SookmyungK"
+msgstr "숙명여자대학교"
+
+msgid "YSUk"
+msgstr "연세대학교"
+
+msgid "YeungnamUnivK"
+msgstr "영남대학교"
+
+msgid "UOUk"
+msgstr "울산대학교"
+
+msgid "EwhaK"
+msgstr "이화여자대학교"
+
+msgid "INHAuniversityK"
+msgstr "인하대학교"
+
+msgid "CBNUk"
+msgstr "전북대학교"
+
+msgid "KonkukK"
+msgstr "건국대학교"
+
+msgid "KSUk"
+msgstr "경성대학교"
+
+msgid "SOGANGk"
+msgstr "서강대학교"
+
+msgid "POSTECHk"
+msgstr "포항공과대학교"
+
+msgid "KAISTk"
+msgstr "한국과학기술원"
+
+msgid "HYUk"
+msgstr "한양대학교"
+
+msgid "HongikUnivK"
+msgstr "홍익대학교"
+
+msgid "CAUk"
+msgstr "중앙대학교"
+
+msgid "GachonUnivK"
+msgstr "가천대학교"
+
+msgid "DonggukK"
+msgstr "동국대학교"
+
+msgid "DSUk"
+msgstr "동신대학교"
+
+msgid "DAUk"
+msgstr "동아대학교"
+
+msgid "TUk"
+msgstr "동명대학교"
+
+msgid "MokwonK"
+msgstr "목원대학교"
+
+msgid "PCUk"
+msgstr "배재대학교"
+
+msgid "PKNUk"
+msgstr "부경대학교"
+
+msgid "SunMoonK"
+msgstr "선문대학교"
+
+msgid "SCHk"
+msgstr "순천향대학교"
+
+msgid "WSUK"
+msgstr "우송대학교"
+
+msgid "WKUk"
+msgstr "원광대학교"
+
+msgid "InhatcK"
+msgstr "인하공업전문대학"
+
+msgid "ChosunK"
+msgstr "조선대학교"
+
+msgid "CNUk"
+msgstr "충남대학교"
+
+msgid "ChungbukK"
+msgstr "충북대학교"
+
+msgid "KonYangK"
+msgstr "건양대학교"
+
+msgid "UOSk"
+msgstr "서울시립대학교"
+
+msgid "SoongsilUnivK"
+msgstr "숭실대학교"
+
+msgid "JNUk"
+msgstr "전남대학교"
+
+msgid "CKUk"
+msgstr "가톨릭관동대학교"
+
+msgid "HallymK"
+msgstr "한림대학교"
+
+msgid "KONGJUk"
+msgstr "공주대학교"
+
+msgid "SEOULTECHk"
+msgstr "서울과학기술대학교"
+
+msgid "SKUk"
+msgstr "성결대학교"
+
+msgid "AYUk"
+msgstr "안양대학교"
+
+msgid "YonseiWK"
+msgstr "연세대학교(원주)"
+
+msgid "HansungK"
+msgstr "한성대학교"
+
+msgid "KUMOHk"
+msgstr "금오공과대학교"
+
+msgid "DKUK"
+msgstr "단국대학교"
+
+msgid "BUFSk"
+msgstr "부산외국어대학교"
+
+msgid "SWUk"
+msgstr "서울여자대학교"
+
+msgid "SWUK"
+msgstr "서울여자대학교"
+
+msgid "SYUk"
+msgstr "삼육대학교"
+
+msgid "KNUk"
+msgstr "경북대학교"
+
+msgid "KIUk"
+msgstr "경일대학교"
+
+msgid "KMUk"
+msgstr "국민대학교"
+
+msgid "KMUK"
+msgstr "국민대학교"
+
+msgid "DCUk"
+msgstr "대구가톨릭대학교"
+
+msgid "DHUk"
+msgstr "대구한의대학교"
+
+msgid "DJUk"
+msgstr "대전대학교"
+
+msgid "CUKk"
+msgstr "가톨릭대학교"
+
+msgid "JEJUk"
+msgstr "제주대학교"
+
+msgid "HGUk"
+msgstr "한동대학교"
+
+msgid "PTUk"
+msgstr "평택대학교"
+
+msgid "KONKUK UNIVERSITY"
+msgstr "건국대학교"
+
+msgid "UNIVERSITY OF SEOUL"
+msgstr "서울시립대학교"
+
+msgid "SOONGSIL UNIVERSITY"
+msgstr "숭실대학교"
+
+msgid "CHONNAM NATIONAL UNIVERSITY"
+msgstr "전남대학교"
+
+msgid "JEJU NATIONAL UNIVERSITY"
+msgstr "제주대학교"
+
+msgid "CHUNG-ANG UNIVERSITY"
+msgstr "중앙대학교"
+
+msgid "HANDONG GLOBAL UNIVERSITY"
+msgstr "한동대학교"
+
+msgid "KangwonK"
+msgstr "강원대학교"
+
+msgid "KYCU"
+msgstr "건양사이버대학교"
+
+msgid "KWU"
+msgstr "광운대학교"
+
+msgid "DSU"
+msgstr "동서대학교"
+
+msgid "BDUk"
+msgstr "부산디지털대학교"
+
+msgid "CUFS"
+msgstr "사이버한국외국어대학교"
+
+msgid "WHSUK"
+msgstr "원광보건대학교"
+
+msgid "INU"
+msgstr "인천대학교"
+
+msgid "HUFS"
+msgstr "한국외국어대학교"
+
+msgid "HYCUK"
+msgstr "한양사이버대학교"
+
+msgid "SJCU"
+msgstr "세종사이버대학교"
+
+msgid "CUK"
+msgstr "고려사이버대학교"
+
+msgid "SCU"
+msgstr "서울사이버대학교"
+
+msgid "semyung"
+msgstr "세명대학교"
+
+msgid "KOICA"
+msgstr "한국국제협력단"
+
+msgid "DEU"
+msgstr "동의대학교"
 
 msgid "Please use your most frequently used e-mails to activate your account, log in, and change your password."
 msgstr "계정활성화, 로그인, 비밀번호 변경 등에 사용되오니 자주 사용하는 이메일로 적어주세요."

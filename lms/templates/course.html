@@ -2,49 +2,62 @@
 <%namespace name='static' file='static_content.html'/>
 <%!
 from django.utils.translation import ugettext as _
-from django.urls import reverse
-from six import text_type
+from django.core.urlresolvers import reverse
 %>
 <%page args="course" expression_filter="h"/>
-<article class="course" id="${course.id}" role="region" aria-label="${course.display_name_with_default}">
-  <a href="${reverse('about_course', args=[text_type(course.id)])}">
-    <header class="course-image">
-      <div class="cover-image">
-        <img src="${course.course_image_url}" alt="${course.display_name_with_default} ${course.display_number_with_default}" />
-        <div class="learn-more" aria-hidden="true">${_("LEARN MORE")}</div>
-      </div>
-    </header>
-    <div class="course-info" aria-hidden="true">
-      <h2 class="course-name">
-        <span class="course-organization">${course.display_org_with_default}</span>
-        <span class="course-code">${course.display_number_with_default}</span>
-        <span class="course-title">${course.display_name_with_default}</span>
-      </h2>
-      <%
-      if course.start is not None:
-          course_date_string = course.start.strftime('%Y-%m-%dT%H:%M:%S%z')
-      else:
-          course_date_string = ''
-      %>
-      % if course.advertised_start is not None:
-          <div class="course-date" aria-hidden="true">${_("Starts")}: ${course.advertised_start}</div>
-      % else:
-          <div class="course-date localized_datetime" aria-hidden="true" data-format="shortDate" data-datetime="${course_date_string}" data-string="${_("Starts: {date}")}"></div>
-      % endif
-    </div>
-    <div class="sr">
-      <ul>
-        <li>${course.display_org_with_default}</li>
-        <li>${course.display_number_with_default}</li>
-        % if course.advertised_start is not None:
-            <li>${_("Starts")}: <time itemprop="startDate">${course.advertised_start}</time></li>
-        % else:
-            <li>${_("Starts")}: <time class="localized_datetime" itemprop="startDate" data-format="shortDate" data-datetime="${course_date_string}"></time></li>
-        % endif
-      </ul>
-    </div>
-  </a>
+<div hidden>${course.audit_yn}</div>
+<div hidden>${course.status}</div>
+% if course.audit_yn == 'Y':
+    <article class="course ${course.status} audit" id="${course.id}" role="region" aria-label="${course.display_name_with_default}"  style="" >
+% elif course.audit_yn == 'N':
+    <article class="course ${course.status}" id="${course.id}" role="region" aria-label="${course.display_name_with_default}"  style="" >
+% endif
+    <a href="${reverse('about_course', args=[course.id.to_deprecated_string()])}" alt="${course.display_name_with_default}" title="${course.display_name_with_default} 개강일 ${course.start.strftime("%Y-%m-%d") if course.start else ''} 종강일 ${course.end.strftime("%Y-%m-%d") if course.end else ''} 강좌상태 ${_(course.status)}">
+    <!--
+    nile/translation
+    <a href="/courses/${course.id}/about" alt="${course.display_name_with_default}" title="${course.display_name_with_default}">
+    -->
+        <header class="course-image">
+            <div class="cover-image">
+                <span class="univ-logo">
+                    <!--
+                    <img src="/static/images/univ/logo02_${course.display_org_with_default}.png" alt="logo02_${course.display_org_with_default}.png"  onerror="this.src='/static/images/unanswered-icon.png'">
+                    -->
+                </span>
+              % if course.audit_yn == 'Y' and course.status == 'end':
+                <img style="opacity: 0.5;" src="${course.course_image_url}" alt="${course.display_name_with_default} 개강일 ${course.start.strftime("%Y-%m-%d") if course.start else ''} 종강일 ${course.end.strftime("%Y-%m-%d") if course.end else ''} 강좌상태 ${_(course.status)}">
+              % else:
+                <img src="${course.course_image_url}" alt="${course.display_name_with_default} 개강일 ${course.start.strftime("%Y-%m-%d") if course.start else ''} 종강일 ${course.end.strftime("%Y-%m-%d") if course.end else ''} 강좌상태 ${_(course.status)}">
+              %endif
+                <div class="learn-more" aria-hidden="true">${_("LEARN MORE")}</div>
+            </div>
+        </header>
+        <div class="course-info" aria-hidden="true">
+            <h2 class="course-name">
+                % if course.audit_yn == 'Y' and course.status == 'end':
+                <span class="course-status over" style="opacity: 0.5;">${_(course.status)}(${_("audit course")})</span>
+                % else:
+                <span class="course-status over">${_(course.status)}</span>
+                % endif
+
+                <span class="course-title" style="height: 3.4em; !important;">${course.display_name}</span>
+            </h2>
+            <div class="course-date" aria-hidden="true" style="position: absolute;">
+                <time>${course.start.strftime("%Y-%m-%d")}</time></span>
+                % if course.end:
+                ~ </strong><time>${course.end.strftime("%Y-%m-%d")}</time>
+                % endif
+            </div>
+            <div class="course-date" aria-hidden="true" style="position: absolute; bottom: 25px;">
+                <time>${_(course.display_org_with_default)}</time>
+            </div>
+        </div>
+        <div class="sr">
+            <ul>
+                <li>${course.display_org_with_default}</li>
+                <li>${course.display_number_with_default}</li>
+                <li>${_("Starts")}: <time itemprop="startDate" datetime="${course.start_datetime_text()}">${course.start_datetime_text()}</time></li>
+            </ul>
+        </div>
+    </a>
 </article>
-<%static:require_module_async module_name="js/dateutil_factory" class_name="DateUtilFactory">
-    DateUtilFactory.transform(iterationKey=".localized_datetime");
-</%static:require_module_async>

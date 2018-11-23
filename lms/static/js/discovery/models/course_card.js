@@ -9,14 +9,17 @@
                 enrollment_start: '',
                 number: '',
                 content: {
-                    overview: '',
                     display_name: '',
-                    number: ''
+                    overview: '',
+                    number: '',
+                    catalog_visibility: ''
                 },
                 start: '',
                 image_url: '',
                 org: '',
-                id: ''
+                id: '',
+                status: '',
+                audit_yn: '',
             }
         });
     });

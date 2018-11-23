@@ -49,7 +49,7 @@ from lms.djangoapps.lms_xblock.mixin import LmsBlockMixin
 
 ################################### FEATURES ###################################
 # The display name of the platform to be used in templates/emails/etc.
-PLATFORM_NAME = _('Your Platform Name Here')
+PLATFORM_NAME = _('K-MOOC')
 PLATFORM_DESCRIPTION = _('Your Platform Description Here')
 CC_MERCHANT_NAME = PLATFORM_NAME
 
@@ -552,7 +552,7 @@ FEATURES = {
     'LICENSING': False,
 
     # Certificates Web/HTML Views
-    'CERTIFICATES_HTML_VIEW': False,
+    'CERTIFICATES_HTML_VIEW': True,
 
     # Course discovery feature
     'ENABLE_COURSE_DISCOVERY': True,
@@ -2922,6 +2922,7 @@ VIDEO_TRANSCRIPTS_SETTINGS = dict(
 # Note that this is used as the set of choices to the `code` field of the
 # `LanguageProficiency` model.
 ALL_LANGUAGES = [
+    [u"ko", u"Korean"],
     [u"aa", u"Afar"],
     [u"ab", u"Abkhazian"],
     [u"af", u"Afrikaans"],

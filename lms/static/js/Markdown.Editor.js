@@ -1,6 +1,56 @@
 // needs Markdown.Converter.js at the moment
 
 (function() {
+
+    var list = [{
+      type: '분수',
+      group: 0,
+                  children: [{value: "\\frac{a}{b}"},{value: "{a}/{b}"}]
+    },{
+      type: '첨자',
+      group: 1,
+                  children: [{value: "{a}^{b}"},{value: "{a}_{b}"},{value: "{a}^{b}_{c}"}]
+    },{
+      type: '삼각함수',
+      group: 2,
+                  children: [{value: "\\sin{a}"},{value: "\\cos{a}"},{value: "\\tan{a}"},{value: "\\sec{a}"},{value: "\\csc{a}"},{value: "\\cot{a}"},{value: "\\arcsin{a}"},{value: "\\arccos{a}"},{value: "\\arctan{a}"}]
+    },{
+      type: '로그',
+      group: 3,
+                  children: [{value: "\\sqrt{x}"},{value: "\\sqrt[3]{x}"},{value: "\\sqrt[n]{x}"},{value: "\\log{b}"},{value: "\\log_{a}{b}"},{value: "\\lg{b}"}]
+    },{
+      type: '합계 등',
+      group: 4,
+                  children: [{value: "\\sum_{k=1}^{N} k"},{value: "\\prod_{k=1}^{N} k"},{value: "\\coprod_{k=1}^{N} k"},{value: "\\bigcap_{i=1}^{n} A_i"},{value: "\\bigcup_{i=1}^{n} A_i"}]
+    },{
+      type: '미적분',
+      group: 5,
+                  children: [{value: "\\partial x"},{value: "\\partial^2 x"},{value: "dx"},{value: "\\dot x"},{value: "\\ddot y"},{value: "\\frac{dy}{dx}"},{value: "\\int_{A}^{B} "},{value: "\\iint_{A}^{B} "},{value: "\\iiint_{A}^{B} "},{value: "\\iiiint_{A}^{B} "},{value: "\\oint_{C} "}]
+    },{
+      type: '극한',
+      group: 6,
+                  children: [{value: "\\lim_{n \\to \\infty}{a_n}"},{value: "\\max_{i=0}^{n}{a_i}"},{value: "\\min_{i=0}^{n}{a_i}"}]
+    },{
+      type: '부호',
+      group: 7,
+                  children: [{value: "+"},{value: "-"},{value: "\\times "},{value: "\\div "},{value: "\\pm "},{value: "\\mp "},{value: "\\oplus "},{value: "\\otimes "},{value: "\\cdot "},{value: "\\land "},{value: "\\vee "},{value: "\\bar{q}"},{value: "\\to "},{value: "\\neg "},{value: "\\And "},{value: "\\sim "},{value: "\\approx "},{value: "\\simeq "},{value: "\\cong "},{value: "\\dot= "},{value: "\\le "},{value: "\\ll "},{value: "\\gg "},{value: "\\ge "},{value: "\\equiv "},{value: "\\not\\equiv "},{value: "\\ne "},{value: "\\propto "},{value: "\\geqq "},{value: "\\geqslant "},{value: "\\eqslantgtr "},{value: "\\gtrsim "},{value: "\\gtrapprox "},{value: "\\forall"},{value: "\\exists"},{value: "\\emptyset"},{value: "\\in"},{value: "\\ni"},{value: "\\notin"},{value: "\\subset"},{value: "\\subseteq"},{value: "\\supseteq"},{value: "\\supset"},{value: "\\cap"},{value: "\\cup"},{value: "\\angle"},{value: "^\\circ"},{value: "\\infty"}]
+    },{
+      type: '매트릭스',
+      group: 8,
+                  children: [{value: "\\begin{vmatrix} x & y \\\\ z & v \\end{vmatrix}"},{value: "\\begin{vmatrix} a & b & c \\\\ d & e & f \\\\ g & h & i \\end{vmatrix}"},{value: "\\begin{bmatrix}x & y \\\\ z & v \\end{bmatrix}"},{value: "\\begin{bmatrix} a & b &c \\\\ d & e & f \\\\ g & h & i \\end{bmatrix}"}]
+    },{
+      type: '그리스문자',
+      group: 9,
+                  children: [{value: "\\alpha "},{value: "\\beta "},{value: "\\gamma "},{value: "\\delta "},{value: "\\epsilon "},{value: "\\zeta "},{value: "\\eta "},{value: "\\theta "},{value: "\\iota "},{value: "\\kappa "},{value: "\\varkappa "},{value: "\\lambda "},{value: "\\mu "},{value: "\\nu "},{value: "\\xi "},{value: "\\omicron "},{value: "\\pi "},{value: "\\rho "},{value: "\\sigma "},{value: "\\tau "},{value: "\\upsilon "},{value: "\\phi "},{value: "\\chi "},{value: "\\psi "},{value: "\\omega "},
+      {value: "\\Gamma "},{value: "\\Delta "},{value: "\\Theta "},{value: "\\Lambda "},{value: "\\Xi "},{value: "\\Pi "},{value: "\\Sigma "},{value: "\\Upsilon "},{value: "\\Phi "},{value: "\\Psi "},{value: "\\Omega "}]
+//			  {value: "\\varAlpha "},{value: "\\Beta "},{value: "\\Gamma "},{value: "\\Delta "},{value: "\\Epsilon "},{value: "\\Zeta "},{value: "\\Eta "},{value: "\\Theta "},{value: "\\Iota "},{value: "\\Kappa "},{value: "\\Varkappa "},{value: "\\Lambda "},{value: "\\Mu "},{value: "\\Nu "},{value: "\\Xi "},{value: "\\Omicron "},{value: "\\Pi "},{value: "\\Rho "},{value: "\\Sigma "},{value: "\\Tau "},{value: "\\Upsilon "},{value: "\\Phi "},{value: "\\Chi "},{value: "\\Psi "},{value: "\\Omega "}]
+    },{
+      type: '벡터 등',
+      group: 10,
+      children:[{value: "\\dot{x}"},{value: "\\ddot{x}"},{value: "\\dddot{x}"},{value: "\\bar{x}"},{value: "\\vec{x}"},{value: "\\overleftarrow{a b}"},{value: "\\overrightarrow{a b}"}]
+    }
+    ];
+
     var util = {},
         position = {},
         ui = {},
@@ -1187,65 +1237,72 @@
     };
 
     function UIManager(postfix, panels, undoManager, previewManager, commandManager, helpOptions, imageUploadHandler) {
+
         var inputBox = panels.input,
             buttons = {}; // buttons.undo, buttons.link, etc. The actual DOM elements.
 
         makeSpritedButtonRow();
 
-        var keyEvent = 'keydown';
+        var keyEvent = "keydown";
         if (uaSniffed.isOpera) {
-            keyEvent = 'keypress';
+            keyEvent = "keypress";
         }
 
-        util.addEvent(inputBox, keyEvent, function(key) {
+        util.addEvent(inputBox, keyEvent, function (key) {
+
             // Check to see if we have a button key and, if so execute the callback.
             if ((key.ctrlKey || key.metaKey) && !key.altKey && !key.shiftKey) {
+
                 var keyCode = key.charCode || key.keyCode;
                 var keyCodeStr = String.fromCharCode(keyCode).toLowerCase();
 
                 switch (keyCodeStr) {
-                case 'b':
-                    doClick(buttons.bold);
-                    break;
-                case 'i':
-                    doClick(buttons.italic);
-                    break;
-                case 'l':
-                    doClick(buttons.link);
-                    break;
-                case 'q':
-                    doClick(buttons.quote);
-                    break;
-                case 'k':
-                    doClick(buttons.code);
-                    break;
-                case 'g':
-                    doClick(buttons.image);
-                    break;
-                case 'o':
-                    doClick(buttons.olist);
-                    break;
-                case 'u':
-                    doClick(buttons.ulist);
-                    break;
-                case 'h':
-                    doClick(buttons.heading);
-                    break;
-                case 'r':
-                    doClick(buttons.hr);
-                    break;
-                case 'y':
-                    doClick(buttons.redo);
-                    break;
-                case 'z':
-                    if (key.shiftKey) {
+                    case "b":
+                        doClick(buttons.bold);
+                        break;
+                    case "e":
+                        doClick(buttons.equation);
+                        break;
+                    case "i":
+                        doClick(buttons.italic);
+                        break;
+                    case "l":
+                        doClick(buttons.link);
+                        break;
+                    case "q":
+                        doClick(buttons.quote);
+                        break;
+                    case "k":
+                        doClick(buttons.code);
+                        break;
+                    case "g":
+                        doClick(buttons.image);
+                        break;
+                    case "o":
+                        doClick(buttons.olist);
+                        break;
+                    case "u":
+                        doClick(buttons.ulist);
+                        break;
+                    case "h":
+                        doClick(buttons.heading);
+                        break;
+                    case "r":
+                        doClick(buttons.hr);
+                        break;
+                    case "y":
                         doClick(buttons.redo);
-                    } else {
-                        doClick(buttons.undo);
-                    }
-                    break;
-                default:
-                    return;
+                        break;
+                    case "z":
+                        if (key.shiftKey) {
+                            doClick(buttons.redo);
+                        }
+                        else {
+                            doClick(buttons.undo);
+                        }
+                        break;
+                    default:
+                        return;
                 }
 
 
@@ -1260,13 +1317,13 @@
         });
 
         // Auto-indent on shift-enter
-        util.addEvent(inputBox, 'keyup', function(key) {
+        util.addEvent(inputBox, "keyup", function (key) {
             if (key.shiftKey && !key.ctrlKey && !key.metaKey) {
                 var keyCode = key.charCode || key.keyCode;
                 // Character 13 is Enter
                 if (keyCode === 13) {
                     var fakeButton = {};
-                    fakeButton.textOp = bindCommand('doAutoindent');
+                    fakeButton.textOp = bindCommand("doAutoindent");
                     doClick(fakeButton);
                 }
             }
@@ -1274,7 +1331,7 @@
 
         // special handler because IE clears the context of the textbox on ESC
         if (uaSniffed.isIE) {
-            util.addEvent(inputBox, 'keydown', function(key) {
+            util.addEvent(inputBox, "keydown", function (key) {
                 var code = key.keyCode;
                 if (code === 27) {
                     return false;
@@ -1285,9 +1342,11 @@
 
         // Perform the button's action.
         function doClick(button) {
+
             inputBox.focus();
 
             if (button.textOp) {
+
                 if (undoManager) {
                     undoManager.setCommandMode();
                 }
@@ -1317,7 +1376,8 @@
                 // Yes this is awkward and I think it sucks, but there's
                 // no real workaround.  Only the image and link code
                 // create dialogs and require the function pointers.
-                var fixupInputArea = function() {
+                var fixupInputArea = function () {
+
                     inputBox.focus();
 
                     if (chunks) {
@@ -1333,33 +1393,35 @@
                 if (!noCleanup) {
                     fixupInputArea();
                 }
+
             }
 
             if (button.execute) {
                 button.execute(undoManager);
             }
-        }
+        };
 
         function setupButton(button, isEnabled) {
-            var normalYShift = '0px';
-            var disabledYShift = '-20px';
-            var highlightYShift = '-40px';
-            var image = button.getElementsByTagName('span')[0];
+
+            var normalYShift = "0px";
+            var disabledYShift = "-20px";
+            var highlightYShift = "-40px";
+            var image = button.getElementsByTagName("span")[0];
             if (isEnabled) {
-                image.style.backgroundPosition = button.XShift + ' ' + normalYShift;
-                button.onmouseover = function() {
-                    image.style.backgroundPosition = this.XShift + ' ' + highlightYShift;
+                image.style.backgroundPosition = button.XShift + " " + normalYShift;
+                button.onmouseover = function () {
+                    image.style.backgroundPosition = this.XShift + " " + highlightYShift;
                 };
 
-                button.onmouseout = function() {
-                    image.style.backgroundPosition = this.XShift + ' ' + normalYShift;
+                button.onmouseout = function () {
+                    image.style.backgroundPosition = this.XShift + " " + normalYShift;
                 };
 
                 // IE tries to select the background image "button" text (it's
                 // implemented in a list item) so we have to cache the selection
                 // on mousedown.
                 if (uaSniffed.isIE) {
-                    button.onmousedown = function() {
+                    button.onmousedown = function () {
                         if (doc.activeElement && doc.activeElement !== panels.input) { // we're not even in the input box, so there's no selection
                             return;
                         }
@@ -1369,14 +1431,14 @@
                 }
 
                 if (!button.isHelp) {
-                    button.onclick = function() {
+                    button.onclick = function () {
                         if (this.onmouseout) {
                             this.onmouseout();
                         }
                         doClick(this);
                         return false;
-                    };
-                    util.addEvent(button, 'keydown', function(event) {
+                    }
+                    util.addEvent(button, "keydown", function(event) {
                         var keyCode = event.charCode || event.keyCode;
                         if (keyCode == 32 || keyCode == 13) {
                             if (event.preventDefault) {
@@ -1387,27 +1449,106 @@
                             }
                             doClick(button);
                         }
-                    });
+                    })
                 }
-                // This line does not appear in vanilla WMD. It was added by edX to improve accessibility.
-                // It should become a separate commit applied to WMD's official HEAD if we remove this edited version
-                // of WMD from Git and install it from NPM / a maintained public fork.
-                button.removeAttribute('aria-disabled');
-            } else {
-                image.style.backgroundPosition = button.XShift + ' ' + disabledYShift;
-                button.onmouseover = button.onmouseout = button.onclick = function() { };
-                // This line does not appear in vanilla WMD. It was added by edX to improve accessibility.
-                // It should become a separate commit applied to WMD's official HEAD if we remove this edited version
-                // of WMD from Git and install it from NPM / a maintained public fork.
-                button.setAttribute('aria-disabled', true);
+            }
+            else {
+                image.style.backgroundPosition = button.XShift + " " + disabledYShift;
+                button.onmouseover = button.onmouseout = button.onclick = function () { };
             }
         }
 
         function bindCommand(method) {
-            if (typeof method === 'string') { method = commandManager[method]; }
-            return function() { method.apply(commandManager, arguments); };
+            if (typeof method === "string")
+                method = commandManager[method];
+            return function () { method.apply(commandManager, arguments); }
         }
 
+        window.UpdateMath = function(str) {
+	    $('#MathOutput').html('\\('+str+'\\)');
+	    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+	}
+
+
+    function inputEquation(i,j) {
+	    var str = list[i].children[j].value;
+	    var obj = document.getElementById("myText");
+	    var startPos = obj.selectionStart;
+	    var endPos = obj.selectionEnd;
+	    var tmpStr = obj.value;
+	    obj.value = tmpStr.substring(0,startPos)+str+tmpStr.substring(endPos);
+	    obj.selectionStart = obj.selectionEnd = startPos+str.length;
+	    UpdateMath(obj.value);
+	    obj.focus();
+	}
+
+	function changeList(typeNum) {
+	    var i = 0;
+	    while (document.getElementById('type_'+i) != undefined) {
+		document.getElementById('type_'+i).className ="btn_type";
+		i++;
+	    }
+	    document.getElementById('type_'+typeNum).className ="btn_type active";
+//	    while ($('#type_'+i) != undefined) {
+//		$('#type_'+i).removeClass('active');
+//		i++;
+//	    }
+//	    $('#type_'+typeNum).addClass('active');
+//	    var el = document.getElementById("equationList");
+//	    el.innerHTML ="";
+	    var el = $('#equationList');
+	    el.html('');
+	    for (var i in list) {
+		if (list[i].group === typeNum) {
+		    var equationList = list[i].children;
+		    for (var j in equationList) {
+//			var newButton = document.createElement("span");
+//			newButton.id = 'equation_'+i;
+//			newButton.setAttribute("onclick", "inputEquation("+i+","+j+");");
+//			newButton.setAttribute("class", "equation_span");
+//			var newDiv = document.createElement("span");
+//			newDiv.innerHTML = "$"+equationList[j].value+"$";
+//			newButton.appendChild(newDiv);
+//			el.appendChild(newButton);
+
+			var newButton = $('<span></span>');
+			newButton.attr('id','equation_'+j);
+			newButton.click({'i':i,'j':j},function(event){inputEquation(event.data.i,event.data.j);});
+			newButton.addClass('equation_span');
+			var newSpan = $('<span></span');
+			newSpan.html('\\('+equationList[j].value+'\\)');
+//			newSpan.html(i+" "+j);
+			newButton.append(newSpan);
+			el.append(newButton);
+		    }
+		}
+	    }
+	    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+	}
+
+	function newTypeList(name,type) {
+//	    var tl = document.getElementById("typeList");
+//	    var newItem = document.createElement("li");
+//	    var newButton = document.createElement("div");
+//	    newButton.id = "type_"+type;
+//	    newButton.type = "button";
+//	    newButton.innerHTML = name;
+//	    newButton.setAttribute("onmouseover", "changeList("+type+");");
+//	    newButton.setAttribute("class", "btn_type");
+//	    newItem.appendChild(newButton);
+//	    newItem.innerHTML = name;
+//	    tl.appendChild(newItem);
+	    var tl = $('#typeList');
+	    var newItem = $('<li></li>');
+	    var newButton = $('<div></div>');
+	    newButton.attr('id','type_'+type);
+	    newButton.attr('type','button');
+	    newButton.html(name);
+	    newButton.mouseover(function(){changeList(type);});
+	    newButton.addClass('btn_type');
+	    newItem.append(newButton);
+	    tl.append(newItem);
+	}
         function makeSpritedButtonRow() {
             var buttonBar = panels.buttonBar;
 
@@ -1476,6 +1617,56 @@
 
             buttons.redo = makeButton('wmd-redo-button', redoTitle, '-220px', null, -1);
             buttons.redo.execute = function(manager) { if (manager) manager.redo(); };
+
+            //makeSpacer(4); no sass for spacer4
+            //buttons.equation = makeButton("wmd-equation-button", gettext("Equation (Ctrl+E)"), "-260px", bindCommand(function (chunk, postProcessing){
+            buttons.equation = makeButton("wmd-equation-button", gettext("수식편집기 (Ctrl+E)"), "-260px", bindCommand(function (chunk, postProcessing){
+//		var strRtn = window.showModalDialog("/static/js/vendor/ljneditor/test.html","","dialogHeight:500px;dialogWidth:800px;");
+//		alert(strRtn);
+//                if (strRtn != undefined  && strRtn !='') this.doEquation(chunk, postProcessing, strRtn);
+		$("body").append("<div id=\"divBackground\" class=\"wmd-prompt-background\" style=\"position: fixed; z-index: 1000; opacity: 0.5; top: 0px; left: 0px; height: 100%; width: 100%\"></div>");
+		$("body").append("<div id='divEquation' role='dialog' class='wmd-prompt-dialog' style='position: fixed; width: 800px; z-index: 1001; top: 50%; left: 40%; display: block; margin-top: -143.5px; margin-left: -221px;'>"
+		+"<div id='typeList' class='LJN_nav'></div>"
+		+"<div id='equationList' class='LJN_equation'></div>"
+		+"<div class='LJN_panel'>"
+		    +"<textarea id='myText' class='LJN_input' onkeyup='UpdateMath(this.value)' autofocus></textarea>"
+		    +"<div class = 'preview_container'><div class='preview_label'>미리보기</div>"
+		    +"<div id='MathOutput' class='LJN_preview'></div>"
+		+"</div>"
+	    +"</div><button id='btn_submit' class='btn_submit'>수식등록</button><button id='btn_cancel' class='btn_cancel'>취소</button></div>");
+		for (var i in list) {
+		    newTypeList(list[i].type,list[i].group);
+		}
+		changeList(0);
+	        //var strRtn = document.getElementById("myText").value;
+		//this.doEquation(chunk, postProcessing, strRtn);
+		$("#btn_submit").click({'pthis':this,'chunk':chunk,'postProcessing':postProcessing},function(event){
+		    var strRtn = document.getElementById("myText").value;
+		    event.data.pthis.doEquation(event.data.chunk, event.data.postProcessing, strRtn);
+		    inputBox.value = event.data.chunk.before+event.data.chunk.after;
+                    previewManager.refresh();
+		    $("#divEquation").remove();
+		    $("#divBackground").remove();
+		});
+		$("#btn_cancel").click(function(){
+		    $("#divEquation").remove();
+		    $("#divBackground").remove();
+		});
+//		alert('test');
+
+	    }));
+//	    buttons.equation.removeChild(buttons.equation.lastChild);
+//            var buttonImage = document.createElement("span");
+//	    buttonImage.src = "/static/images/equation/e0.png";
+//	    buttons.equation.appendChild(buttonImage);
+
+
+
+            var tmpText = document.createElement("input");
+	    tmpText.id = "equation-text"
+	    tmpText.type = "hidden";
+	    tmpText.value = "test";
+	    buttonRow.appendChild(tmpText);
 
             if (helpOptions) {
                 var helpButton = document.createElement('span');
@@ -2020,7 +2211,8 @@
         }
     };
 
-    commandProto.doList = function(chunk, postProcessing, isNumberedList) {
+    commandProto.doList = function (chunk, postProcessing, isNumberedList) {
+
         // These are identical except at the very beginning and end.
         // Should probably use the regex extension function to make this clearer.
         var previousItemsRegex = /(\n|^)(([ ]{0,3}([*+-]|\d+[.])[ \t]+.*)(\n.+|\n{2,}([*+-].*|\d+[.])[ \t]+.*|\n{2,}[ \t]+\S.*)*)\n*$/;
@@ -2029,25 +2221,27 @@
         // The default bullet is a dash but others are possible.
         // This has nothing to do with the particular HTML bullet,
         // it's just a markdown bullet.
-        var bullet = '-';
+        var bullet = "-";
 
         // The number in a numbered list.
         var num = 1;
 
         // Get the item prefix - e.g. " 1. " for a numbered list, " - " for a bulleted list.
-        var getItemPrefix = function() {
+        var getItemPrefix = function () {
             var prefix;
             if (isNumberedList) {
-                prefix = ' ' + num + '. ';
+                prefix = " " + num + ". ";
                 num++;
-            } else {
-                prefix = ' ' + bullet + ' ';
+            }
+            else {
+                prefix = " " + bullet + " ";
             }
             return prefix;
         };
 
         // Fixes the prefixes of the other list items.
-        var getPrefixedItem = function(itemText) {
+        var getPrefixedItem = function (itemText) {
+
             // The numbering flag is unset when called by autoindent.
             if (isNumberedList === undefined) {
                 isNumberedList = /^\s*\d/.test(itemText);
@@ -2055,7 +2249,7 @@
 
             // Renumber/bullet the list element.
             itemText = itemText.replace(/^[ ]{0,3}([*+-]|\d+[.])\s/gm,
-                function(_) {
+                function (_) {
                     return getItemPrefix();
                 });
 
@@ -2066,13 +2260,14 @@
 
         if (chunk.before && !/\n$/.test(chunk.before) && !/^\n/.test(chunk.startTag)) {
             chunk.before += chunk.startTag;
-            chunk.startTag = '';
+            chunk.startTag = "";
         }
 
         if (chunk.startTag) {
+
             var hasDigits = /\d+[.]/.test(chunk.startTag);
-            chunk.startTag = '';
-            chunk.selection = chunk.selection.replace(/\n[ ]{4}/g, '\n');
+            chunk.startTag = "";
+            chunk.selection = chunk.selection.replace(/\n[ ]{4}/g, "\n");
             this.unwrap(chunk);
             chunk.skipLines();
 
@@ -2088,7 +2283,7 @@
         var nLinesUp = 1;
 
         chunk.before = chunk.before.replace(previousItemsRegex,
-            function(itemText) {
+            function (itemText) {
                 if (/^\s*([*+-])/.test(itemText)) {
                     bullet = re.$1;
                 }
@@ -2097,7 +2292,7 @@
             });
 
         if (!chunk.selection) {
-            chunk.selection = gettext('List item');
+            chunk.selection = gettext("List item");
         }
 
         var prefix = getItemPrefix();
@@ -2105,7 +2300,7 @@
         var nLinesDown = 1;
 
         chunk.after = chunk.after.replace(nextItemsRegex,
-            function(itemText) {
+            function (itemText) {
                 nLinesDown = /[^\n]\n\n[^\n]/.test(itemText) ? 1 : 0;
                 return getPrefixedItem(itemText);
             });
@@ -2113,9 +2308,10 @@
         chunk.trimWhitespace(true);
         chunk.skipLines(nLinesUp, nLinesDown, true);
         chunk.startTag = prefix;
-        var spaces = prefix.replace(/./g, ' ');
+        var spaces = prefix.replace(/./g, " ");
         this.wrap(chunk, SETTINGS.lineLength - spaces.length);
-        chunk.selection = chunk.selection.replace(/\n/g, '\n' + spaces);
+        chunk.selection = chunk.selection.replace(/\n/g, "\n" + spaces);
+
     };
 
     commandProto.doHeading = function(chunk, postProcessing) {
@@ -2180,4 +2376,16 @@
         chunk.selection = '';
         chunk.skipLines(2, 1, true);
     };
-}());
+
+// chunk: The selected region that will be enclosed with $
+    // insertText: Equation
+    commandProto.doEquation = function (chunk, postProcessing, insertText) {
+
+        // Get rid of whitespace and fixup newlines.
+    chunk.trimWhitespace();
+	chunk.selection = "";
+        chunk.before = chunk.before+ " $" + insertText + "$ ";
+        return;
+    };
+
+})();

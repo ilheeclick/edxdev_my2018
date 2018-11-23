@@ -1,22 +1,22 @@
 define(['js/views/validation',
-    'jquery',
-    'underscore',
-    'gettext',
-    'codemirror',
-    'js/views/modals/validation_error_modal',
-    'edx-ui-toolkit/js/utils/html-utils'],
+        'jquery',
+        'underscore',
+        'gettext',
+        'codemirror',
+        'js/views/modals/validation_error_modal',
+        'edx-ui-toolkit/js/utils/html-utils'],
     function(ValidatingView, $, _, gettext, CodeMirror, ValidationErrorModal, HtmlUtils) {
         var AdvancedView = ValidatingView.extend({
             error_saving: 'error_saving',
             successful_changes: 'successful_changes',
             render_deprecated: false,
 
-    // Model class is CMS.Models.Settings.Advanced
+            // Model class is CMS.Models.Settings.Advanced
             events: {
                 'focus :input': 'focusInput',
                 'blur :input': 'blurInput',
                 'change :input' : "selectInput"
-        // TODO enable/disable save based on validation (currently enabled whenever there are changes)
+                // TODO enable/disable save based on validation (currently enabled whenever there are changes)
             },
             initialize: function() {
                 this.template = HtmlUtils.template(
@@ -26,20 +26,19 @@ define(['js/views/validation',
                 this.render();
             },
             render: function() {
-        // catch potential outside call before template loaded
+                // catch potential outside call before template loaded
                 if (!this.template) return this;
 
                 var listEle$ = this.$el.find('.course-advanced-policy-list');
                 listEle$.empty();
 
-        // b/c we've deleted all old fields, clear the map and repopulate
+                // b/c we've deleted all old fields, clear the map and repopulate
                 this.fieldToSelectorMap = {};
                 this.selectorToField = {};
 
-        // iterate through model and produce key : value editors for each property in model.get
+                // iterate through model and produce key : value editors for each property in model.get
                 var self = this;
-                var v_source = _.sortBy(_.keys(this.model.attributes), function(key) { return self.model.get(key).display_name; });
-                _.each(v_source,
+                _.each(_.sortBy(_.keys(this.model.attributes), function(key) { return self.model.get(key).display_name; }),
                     function(key) {
                         if(key == 'need_lock')
                             return true;
@@ -81,16 +80,15 @@ define(['js/views/validation',
                     var newValue = $("#txtfixid").val();
                     // save process
                     if (newValue !== oldValue) {
-                            //console.log("attachJSONInput newValue : " + newValue + " : " + oldValue);
-                            var message = gettext("Your changes will not take effect until you save your progress. Take care with key and value formatting, as validation is not implemented.");
-                            self.showNotificationBar(message,
-                                                     _.bind(self.saveView, self),
-                                                     _.bind(self.revertView, self));
-                        }
+                        //console.log("attachJSONInput newValue : " + newValue + " : " + oldValue);
+                        var message = gettext("Your changes will not take effect until you save your progress. Take care with key and value formatting, as validation is not implemented.");
+                        self.showNotificationBar(message,
+                            _.bind(self.saveView, self),
+                            _.bind(self.revertView, self));
+                    }
 
                 });
             },
-
             attachJSONEditor: function(textarea) {
                 // Since we are allowing duplicate keys at the moment, it is possible that we will try to attach
                 // JSON Editor to a value that already has one. Therefore only attach if no CodeMirror peer exists.
@@ -106,12 +104,12 @@ define(['js/views/validation',
                     lineWrapping: false});
                 cm.on('change', function(instance, changeobj) {
                     instance.save();
-                // this event's being called even when there's no change :-(
+                    // this event's being called even when there's no change :-(
                     if (instance.getValue() !== oldValue) {
                         var message = gettext('Your changes will not take effect until you save your progress. Take care with key and value formatting, as validation is not implemented.');
                         self.showNotificationBar(message,
-                                             _.bind(self.saveView, self),
-                                             _.bind(self.revertView, self));
+                            _.bind(self.saveView, self),
+                            _.bind(self.revertView, self));
                     }
                 });
                 cm.on('focus', function(mirror) {
@@ -121,14 +119,14 @@ define(['js/views/validation',
                     $(textarea).parent().children('label').removeClass('is-focused');
                     var key = $(mirror.getWrapperElement()).closest('.field-group').children('.key').attr('id');
                     var stringValue = $.trim(mirror.getValue());
-                // update CodeMirror to show the trimmed value.
+                    // update CodeMirror to show the trimmed value.
                     mirror.setValue(stringValue);
                     var JSONValue = undefined;
                     try {
                         JSONValue = JSON.parse(stringValue);
                     } catch (e) {
-                    // If it didn't parse, try converting non-arrays/non-objects to a String.
-                    // But don't convert single-quote strings, which are most likely errors.
+                        // If it didn't parse, try converting non-arrays/non-objects to a String.
+                        // But don't convert single-quote strings, which are most likely errors.
                         var firstNonWhite = stringValue.substring(0, 1);
                         if (firstNonWhite !== '{' && firstNonWhite !== '[' && firstNonWhite !== "'") {
                             try {
@@ -136,9 +134,9 @@ define(['js/views/validation',
                                 JSONValue = JSON.parse(stringValue);
                                 mirror.setValue(stringValue);
                             } catch (quotedE) {
-                            // TODO: validation error
-                            // console.log("Error with JSON, even after converting to String.");
-                            // console.log(quotedE);
+                                // TODO: validation error
+                                // console.log("Error with JSON, even after converting to String.");
+                                // console.log(quotedE);
                                 JSONValue = undefined;
                             }
                         }
@@ -176,14 +174,14 @@ define(['js/views/validation',
                     error: function(model, response, options) {
                         var json_response, reset_callback, err_modal;
 
-                /* Check that the server came back with a bad request error*/
+                        /* Check that the server came back with a bad request error*/
                         if (response.status === 400) {
                             json_response = $.parseJSON(response.responseText);
                             reset_callback = function() {
                                 self.revertView();
                             };
 
-                    /* initialize and show validation error modal */
+                            /* initialize and show validation error modal */
                             err_modal = new ValidationErrorModal();
                             err_modal.setContent(json_response);
                             err_modal.setResetCallback(reset_callback);
@@ -201,12 +199,10 @@ define(['js/views/validation',
             },
             renderTemplate: function(key, model) {
                 var newKeyId = _.uniqueId('policy_key_'),
-                lock = this.model.get('need_lock'),
+                    lock = this.model.get('need_lock'),
                     newEle = this.template({key: key, display_name: model.display_name, help: model.help,
                         value: JSON.stringify(model.value, null, 4), deprecated: model.deprecated,
-                        keyUniqueId: newKeyId, valueUniqueId: _.uniqueId('policy_value_'),
-                        need_lock: lock
-                    });
+                        keyUniqueId: newKeyId, need_lock: lock, valueUniqueId: _.uniqueId('policy_value_')});
 
                 this.fieldToSelectorMap[key] = newKeyId;
                 this.selectorToField[newKeyId] = key;

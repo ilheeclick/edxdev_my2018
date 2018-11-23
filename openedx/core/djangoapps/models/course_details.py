@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 CourseDetails
 """
@@ -23,6 +24,8 @@ ABOUT_ATTRIBUTES = [
     'description',
     'short_description',
     'overview',
+    # course_level 추가
+    'course_level',
     'effort',
     'entrance_exam_enabled',
     'entrance_exam_id',
@@ -55,6 +58,7 @@ class CourseDetails(object):
         self.overview = ""  # html to render as the overview
         self.about_sidebar_html = ""
         self.intro_video = None  # a video pointer
+        self.course_level = ""
         self.effort = None  # hours/week
         self.license = "all-rights-reserved"  # default course license is all rights reserved
         self.course_image_name = ""

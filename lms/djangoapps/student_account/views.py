@@ -460,11 +460,14 @@ def login_and_registration_form(request, initial_mode="login"):
     # Themed sites can use the new logistration page by setting
     # 'ENABLE_COMBINED_LOGIN_REGISTRATION' in their
     # configuration settings.
-    if is_request_in_themed_site() and not configuration_helpers.get_value('ENABLE_COMBINED_LOGIN_REGISTRATION', False):
-        if initial_mode == "login":
-            return old_login_view(request)
-        elif initial_mode == "register":
-            return old_register_view(request)
+        # microsite not 처리
+        if not is_request_in_themed_site() and not configuration_helpers.get_value('ENABLE_COMBINED_LOGIN_REGISTRATION',
+                                                                                   False):
+            if initial_mode == "login":
+                return old_login_view(request)
+            elif initial_mode == "register":
+                print 'student_views_login_register   pass3'
+                return old_register_view(request)
 
     # Allow external auth to intercept and handle the request
     ext_auth_response = _external_auth_intercept(request, initial_mode)
@@ -921,6 +924,7 @@ def finish_auth(request):  # pylint: disable=unused-argument
 
 
 def account_settings_context(request):
+    print 'account_settings_context!!!'
     """ Context for the account settings page.
 
     Args:
@@ -1054,7 +1058,7 @@ def account_settings_context(request):
 
     countries_list = list(countries)
     countries_list.insert(0, (u'KR', u'South Korea'))
-
+    print 'countries_list',countries_list
     context = {
         'user_gender': user_gender,  # context -> nice data
         'user_birthday': user_birthday,  # context -> nice data
@@ -1066,7 +1070,7 @@ def account_settings_context(request):
         'nav_hidden': True,
         'fields': {
             'country': {
-                'options': list(countries),
+                'options': countries_list,
             }, 'gender': {
                 'options': [(choice[0], _(choice[1])) for choice in UserProfile.GENDER_CHOICES],  # pylint: disable=translation-of-non-string
             }, 'language': {

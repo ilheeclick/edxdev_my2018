@@ -84,6 +84,11 @@ urlpatterns = [
     url(r'^remove_account$', student_account_views.remove_account, name="remove_account"),
     # ---------- remove account end ---------- #
 
+    # ---------- multi site ---------- #
+    # url(r'^org/(?P<org>.*?)/(?P<msearch>.*?)$', branding_views.multisite_index, name="multisite_index"),
+    # url(r'^multisite_api$', branding_views.multisite_api, name="multisite_api"),
+    # url(r'^multisite_delete_api$', branding_views.multisite_delete_api, name="multisite_delete_api"),
+    # url(r'^multisite_error/$', branding_views.multisite_error, name="multisite_error"),
 
     #schools
     url(r'^schools/?$', courseware_views.schools, name="schools"),
@@ -112,6 +117,9 @@ urlpatterns = [
     url(r'^comm_k_news$', community.comm_k_news, name='comm_k_news'),
     url(r'^comm_k_news_view/(?P<board_id>.*?)/$', community.comm_k_news_view, name='comm_k_news_view'),
     url(r'^comm_list_json$', community.comm_list_json, name='comm_list_json'),
+
+    # survey url
+    url(r'^cert_survey/$', community.cert_survey, name='cert_survey'),
 
     # course_list
     url(r'^course_search_list$', courses.course_search_list, name='course_list'),
@@ -152,6 +160,10 @@ urlpatterns = [
     # Course API
     url(r'^api/courses/', include('course_api.urls')),
 
+    # ----- api request ----- #
+    #url(r'^api/happy', branding_views.course_api, name="course_api"),
+    # ----- api request ----- #
+
     # Completion API
     url(r'^api/completion/', include('completion.api.urls', namespace='completion_api')),
 
@@ -190,6 +202,7 @@ urlpatterns = [
 
     url(r'^dashboard/', include('learner_dashboard.urls')),
     url(r'^api/experiments/', include('experiments.urls', namespace='api_experiments')),
+
 ]
 
 # TODO: This needs to move to a separate urls.py once the student_account and
@@ -497,6 +510,8 @@ urlpatterns += [
         courseware_views.progress,
         name='progress',
     ),
+
+
 
     # Takes optional student_id for instructor use--shows profile as that student sees it.
     url(

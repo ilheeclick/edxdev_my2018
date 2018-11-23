@@ -11,7 +11,9 @@ from django.conf import settings
 
 from opaque_keys.edx.keys import CourseKey
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
-
+from datetime import datetime
+from pytz import UTC
+from django.db import connections
 
 def get_visible_courses(org=None, filter_=None):
     """
@@ -30,17 +32,56 @@ def get_visible_courses(org=None, filter_=None):
     courses = []
     current_site_orgs = configuration_helpers.get_current_site_orgs()
 
-    if org:
+    if org and current_site_orgs:
+        print 'DEBUG ----------------1'
         # Check the current site's orgs to make sure the org's courses should be displayed
         if not current_site_orgs or org in current_site_orgs:
             courses = CourseOverview.get_all_courses(orgs=[org], filter_=filter_)
     elif current_site_orgs:
+        print 'DEBUG ----------------2'
         # Only display courses that should be displayed on this site
         courses = CourseOverview.get_all_courses(orgs=current_site_orgs, filter_=filter_)
     else:
-        courses = CourseOverview.get_all_courses(filter_=filter_)
+        print 'DEBUG ----------------3'
+        #courses = CourseOverview.get_all_courses(filter_=filter_)
+        target_org = org or current_site_orgs
+        courses = CourseOverview.get_all_courses(org=target_org, filter_=filter_)
+    #courses = sorted(courses, key=lambda course: course.number)
+    with connections['default'].cursor() as cur:
+        query = """
+            SELECT course_id, ifnull(classfy, ''), ifnull(b.audit_yn, 'N')
+            FROM course_overviews_courseoverview a
+            LEFT JOIN course_overview_addinfo b ON a.id = b.course_id
+        """
+        cur.execute(query)
+        course_tup = cur.fetchall()
+        cur.close()
+    # Add Course Status
+    for c in courses:
+        # print c.display_name, c.id, c.start, c.end, c.enrollment_start, c.enrollment_end
+        for cour in course_tup:
+            if str(c.id) == cour[0]:
+                c.classfy = cour[1]
+                try:
+                    c.audit_yn = cour[2]
+                except BaseException:
+                    c.audit_yn = 'N'
+        if c.start is None or c.start == '' or c.end is None or c.end == '':
+            c.status = 'none'
+        elif datetime.now(UTC) < c.start:
+            c.status = 'ready'
+        elif c.start <= datetime.now(UTC) <= c.end:
+            c.status = 'ing'
+        elif c.end < datetime.now(UTC):
+            c.status = 'end'
+        else:
+            c.status = 'none'
 
-    courses = sorted(courses, key=lambda course: course.number)
+        # print 'c.status = ', c.id, c.status
+
+
+
+
 
     # Filtering can stop here.
     if current_site_orgs:
