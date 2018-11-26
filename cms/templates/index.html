@@ -21,6 +21,135 @@ from openedx.core.djangolib.js_utils import (
 </%block>
 
 <%block name="content">
+<style>
+
+
+.layerPopupArea{position: absolute; z-index: 999; top: 100px; left: 100px;}
+.layerPupup{
+    z-index: 10010;
+	display: none;
+	border: 0px solid #fff;
+	opacity: 1;
+	background: #ffffff;
+	font-size: 13px;
+    line-height: 25px;
+	padding: 5px;
+	box-shadow: 0 2px 5px 3px #444444;
+	margin: 3px;
+	float: left;
+}
+
+</style>
+<div id="layerPopupArea" class="layerPopupArea" style="">
+
+    <!--popup K-mooc(1)-->
+    <div id="popupWrap_1" class="layerPupup">
+        <p style="text-align: left; font-weight: bold; margin-top: 5px;">
+            <a href="http://www.kmooc.kr/comm_view/N/1/245" target="_sub">
+            <img src="http://www.kmooc.kr/asset-v1:KMOOC+DEMOk+2015_1+type@asset+block@ppp.png" alt="2018" style="max-width: 800px;" />
+            </a>
+        </p>
+
+        <!-- close area -->
+        <div style="text-align: right; display: {{ 'none' if LANG == 'en' else 'block' }};">
+            <label onclick="closeWin1();">
+                <input id="chkbox_1" name="chkbox_1" type="checkbox" style="vertical-align: middle;">
+                <span style="font-style:normal; font-size:13px;"><b>${'Close this window for next 24 hours' if LANG == 'en' else '다시 열지 않음'} &nbsp;&nbsp;</b></span>
+            </label>
+
+            <span><a href="javascript:popClose('popupWrap_1');" title="닫기">[ ${'close' if LANG == 'en' else '닫기'} ]</a></span>
+        </div>
+    </div>
+
+    <!--popup K-mooc(2)-->
+    <div id="popupWrap_2" class="layerPupup">
+        <p style="text-align: left; font-weight: bold; margin-top: 5px; display: {{ 'none' if LANG == 'en' else 'block' }};">
+            <a href="http://www.kmooc.kr/comm_view/N/1/246" target="_sub">
+            <img src="http://www.kmooc.kr/asset-v1:KMOOC+DEMOk+2015_1+type@asset+block@ppp2.PNG" alt="2018" style="max-width: 800px; width:465px;" />
+            </a>
+        </p>
+
+        <div style="text-align: right; display: {{ 'none' if LANG == 'en' else 'block' }};">
+            <label onclick="closeWin2();">
+                <input id="chkbox_2" name="chkbox_2" type="checkbox" style="vertical-align: middle;">
+                <span style="font-style:normal; font-size:13px;"><b>${'Close this window for next 24 hours' if LANG == 'en' else '다시 열지 않음'} &nbsp;&nbsp;</b></span>
+            </label>
+
+            <span><a href="javascript:popClose('popupWrap_2');" title="닫기">[ ${'close' if LANG == 'en' else '닫기'} ]</a></span>
+        </div>
+    </div>
+</div>
+
+<script language="Javascript">
+function popClose(id){
+    $("#" + id).hide();
+}
+
+function setCookie1( name, value, expiredays ) {
+    var todayDate = new Date();
+    todayDate.setDate( todayDate.getDate() + expiredays );
+    document.cookie = name + "=" + escape( value ) + "; path=/; expires=" + todayDate.toGMTString() + ";"
+}
+
+function closeWin1() {
+    if ($("#chkbox_1").is(":checked")){
+        setCookie1( "popupdiv1", "done" , 3 );
+    }
+    document.all['popupWrap_1'].style.display = "none";
+}
+
+function closeWin2() {
+    if ($("#chkbox_2").is(":checked")){
+        setCookie1( "popupdiv2", "done" , 1 );
+    }
+    document.all['popupWrap_2'].style.display = "none";
+}
+
+cookiedata = document.cookie;
+
+popupDate = new Date();
+targetDate = new Date(2018, 1, 5);
+targetDate2 = new Date(2018, 1, 5);
+
+
+console.log('>>>>>>>>>>>> ' + cookiedata.indexOf("popupdiv1=done") + ":" + popupDate.getFullYear() + ":" + popupDate.getMonth() + ":" + popupDate.getDate() + ":" + popupDate.getHours());
+
+if (
+        (cookiedata.indexOf("popupdiv1=done") < 0 ) && (
+        (popupDate < targetDate)
+        )
+   )
+    {
+
+    if('{{ LANG }}' == 'en')
+        document.all['popupWrap_1'].style.display = "none";
+    else
+        document.all['popupWrap_1'].style.display = "block";
+
+    //console.log(popupDate.getFullYear() + ":" + popupDate.getMonth() + ":" + popupDate.getDate());
+
+} else {
+    document.all['popupWrap_1'].style.display = "none";
+}
+
+if (
+        (cookiedata.indexOf("popupdiv2=done") < 0 ) && (
+        (popupDate < targetDate2)
+        )
+   )
+    {
+
+    if('{{ LANG }}' == 'en')
+        document.all['popupWrap_2'].style.display = "none";
+    else
+        document.all['popupWrap_2'].style.display = "block";
+
+} else {
+    document.all['popupWrap_2'].style.display = "none";
+}
+
+</script>
+
 <div class="wrapper-mast wrapper">
   <header class="mast has-actions">
     <h1 class="page-header">${_("{studio_name} Home").format(studio_name=settings.STUDIO_SHORT_NAME)}</h1>
@@ -80,7 +209,13 @@ from openedx.core.djangolib.js_utils import (
                   <label for="new-course-org">${_("Organization")}</label>
                   ## Translators: This is an example for the name of the organization sponsoring a course, seen when filling out the form to create a new course. The organization name cannot contain spaces.
                   ## Translators: "e.g. UniversityX or OrganizationX" is a placeholder displayed when user put no data into this field.
-                  <input class="new-course-org" id="new-course-org" type="text" name="new-course-org" required placeholder="${_('e.g. UniversityX or OrganizationX')}" aria-describedby="tip-new-course-org tip-error-new-course-org" />
+                  <!--<input class="new-course-org" id="new-course-org" type="text" name="new-course-org" required placeholder="${_('e.g. UniversityX or OrganizationX')}" aria-describedby="tip-new-course-org tip-error-new-course-org" />-->
+                  <select class="new-course-org" id="new-course-org" name="new-course-org" onchange="check_2level();">
+                    <option value="">대학선택</option>
+                    %for code, name in org_list :
+                        <option value="${code}">${name}(${code})</option>
+                    %endfor
+                  </select>
                   <span class="tip" id="tip-new-course-org">${Text(_("The name of the organization sponsoring the course. {strong_start}Note: The organization name is part of the course URL.{strong_end} This cannot be changed, but you can set a different display name in Advanced Settings later.")).format(
                       strong_start=HTML('<strong>'),
                       strong_end=HTML('</strong>'),
@@ -112,6 +247,101 @@ from openedx.core.djangolib.js_utils import (
                   )}</span>
                   <span class="tip tip-error is-hiding" id="tip-error-new-course-run"></span>
                 </li>
+                <li class="field select required" id="field-classfy">
+                    <label for="new-course-classfy">${_("Classification")}</label>
+                    <select class="new-course-classfy" id="new-course-classfy" name="new-course-classfy"  onchange="middle_classfy(0)">
+                        <option value="">대분류 선택</option>
+                        <option value="hum">인문계열</option>
+                        <option value="social">사회계열</option>
+                        <option value="edu">교육계열</option>
+                        <option value="eng">공학계열</option>
+                        <option value="nat">자연계열</option>
+                        <option value="med">의약계열</option>
+                        <option value="art">예체능계열</option>
+                        <option value="intd">융ㆍ복합계열</option>
+                    </select>
+
+                    <span class="tip tip-error is-hiding" id="tip-error-new-course-classfy"></span>
+
+                    <select class="new-course-middle-classfy" id="new-course-middle-classfy" name="new-course-middle-classfy" onchange="middle_classfy_sub(1)">
+                        <option value="">중분류 선택</option>
+                    </select>
+                    <br>
+                    <select class="new-course-classfy-sub1" id="new-course-classfy-sub1" name="new-course-classfy-sub1" style="visibility: hidden"  onchange="middle_classfy(1)">
+                        <option value="">주 대분류 선택</option>
+                        <option value="hum">인문계열</option>
+                        <option value="social">사회계열</option>
+                        <option value="edu">교육계열</option>
+                        <option value="eng">공학계열</option>
+                        <option value="nat">자연계열</option>
+                        <option value="med">의약계열</option>
+                        <option value="art">예체능계열</option>
+                        <option value="intd">융ㆍ복합계열</option>
+                    </select>
+
+                    <select class="new-course-middle-classfy-sub1" id="new-course-middle-classfy-sub1" name="new-course-middle-classfy-sub1" style="visibility: hidden" onchange="middle_classfy_sub(2)">
+                        <option value="">융합 분류 선택1</option>
+                    </select>
+
+                    <select class="new-course-classfy-sub2" id="new-course-classfy-sub2" name="new-course-classfy-sub2" style="visibility: hidden" onchange="middle_classfy(2)">
+                        <option value="">보조 대분류 선택</option>
+                        <option value="hum">인문계열</option>
+                        <option value="social">사회계열</option>
+                        <option value="edu">교육계열</option>
+                        <option value="eng">공학계열</option>
+                        <option value="nat">자연계열</option>
+                        <option value="med">의약계열</option>
+                        <option value="art">예체능계열</option>
+                    </select>
+
+                    <select class="new-course-middle-classfy-sub2" id="new-course-middle-classfy-sub2" name="new-course-middle-classfy-sub2" style="visibility: hidden" onchange="middle_classfy_sub(3)">
+                        <option value="">융합 분류 선택2</option>
+                    </select>
+
+                    <select class="new-course-classfy-sub3" id="new-course-classfy-sub3" name="new-course-classfy-sub3" style="visibility: hidden" onchange="middle_classfy(3)">
+                        <option value="">보조 대분류 선택</option>
+                        <option value="hum">인문계열</option>
+                        <option value="social">사회계열</option>
+                        <option value="edu">교육계열</option>
+                        <option value="eng">공학계열</option>
+                        <option value="nat">자연계열</option>
+                        <option value="med">의약계열</option>
+                        <option value="art">예체능계열</option>
+                    </select>
+
+                    <select class="new-course-middle-classfy-sub3" id="new-course-middle-classfy-sub3" name="new-course-middle-classfy-sub3" style="visibility: hidden">
+                        <option value="">융합 분류 선택3</option>
+                    </select>
+                    <input class="new-course-org" id="new-course-classfy-sub" type="hidden" name=new-course-classfy-sub" aria-describedby="tip-new-course-org tip-error-new-course-org" />
+                    <input class="new-course-org" id="new-course-middle-classfy-sub" type="hidden" name=new-course-middle-classfy-sub" aria-describedby="tip-new-course-org tip-error-new-course-org" />
+                    <span class="tip" id="tip-new-course-classfy">선정평가 시 사업계획서에 기재한 전공을 선택하여 주시기 바랍니다. 선택한 전공은 이후 변경할 수 없습니다.</span>
+                    <span class="tip tip-error is-hiding" id="tip-error-new-course-category"></span>
+
+                </li>
+
+
+                <li class="field select required" id="field-category">
+                    <label for="new-course-">${_("Linguistics")}</label>
+                    <select class="new-course-linguistics" id="new-course-linguistics" name="new-course-linguistics">
+                        <option value="">한국학여부 선택</option>
+                        <option value="Y">한국학</option>
+                        <option value="N">그외</option>
+                    </select>
+                    <span class="tip" id="tip-new-course-linguistics">'한국' 관련 강좌의 경우 한국학을 선택하여 주시기 바랍니다.</span>
+                    <span class="tip tip-error is-hiding" id="tip-error-new-course-linguistics"></span>
+                </li>
+
+                <li class="field select required" id="field-category" style="display: none">
+                    <label for="new-course-">${_("Period of Studing")}</label>
+                    <select class="new-course-period" id="new-course-period" name="new-course-period">
+                        <option value=" ">학습기간 선택</option>
+                        <option value="S">단기(1~6 weeks)</option>
+                        <option value="M">중기(7~12 weeks)</option>
+                        <option value="L">장기(over 13 weeks)</option>
+                   </select>
+                    <span class="tip" id="tip-new-course-period">강좌의 주차를 기준으로 학습기간(단기/중기/장기)을 선택하여 주시기 바랍니다.</span>
+                    <span class="tip tip-error is-hiding" id="tip-error-new-course-category"></span>
+                </li>
               </ol>
 
             </fieldset>
@@ -124,7 +354,230 @@ from openedx.core.djangolib.js_utils import (
           </div>
         </form>
       </div>
+      <script type="text/javascript">
+          var check_2level = function(){
+              var level_1 = document.getElementById("new-course-org").options[document.getElementById("new-course-org").selectedIndex].value;
+              var level_2 = $('#new-course-number').val();
+              $.ajax({
+                    url: '/level_Verifi/',
+                    data: {
+                        level_1: level_1,
+                        level_2: level_2
+                }
+                }).done(function (data) {
+                    if(data != '0') {
+                        console.log('입력불가능함!');
+                        $('#new-course-org').parent().attr("class","field text required error");
+                        $('#new-course-number').parent().attr("class","field text required error");
+                        $('#tip-error-new-course-org').text('기관번호+강좌번호 중복입니다.');
+                        $('#tip-error-new-course-number').text('기관번호+강좌번호 중복입니다.');
+                    }
+                    else {
+                        $('#new-course-org').parent().attr("class","field text required");
+                        $('#new-course-number').parent().attr("class","field text required");
+                    }
+                });
+          };
 
+          var bcate = [
+                {'category':
+                        {'code': 'hum', 'gettext': '인문계열'}
+
+                },
+                {'category':
+                        {'code': 'social', 'gettext': '사회계열'}
+                },
+                {'category':
+                        {'code': 'edu', 'gettext': '교육계열'}
+                },
+                {'category':
+                        {'code': 'eng', 'gettext': '공학계열'}
+                },
+                {'category':
+                        {'code': 'nat', 'gettext': '자연계열'}
+                },
+                {'category':
+                        {'code': 'med', 'gettext': '의약계열'}
+                },
+                {'category':
+                        {'code': 'art', 'gettext': '예체능계'}
+                },
+                {'category':
+                        {'code': 'intd', 'gettext': '융ㆍ복합'}
+                },
+        ];
+
+        var mcate = {
+                'hum':[
+                                {'gettext': '언어ㆍ문학', 'code': 'lang'},
+                                {'gettext': '인문과학', 'code': 'husc'}
+                        ],
+                'social':[
+                                {'gettext': '경영ㆍ경제', 'code': 'busn'},
+                                {'gettext': '법률', 'code': 'law'},
+                                {'gettext': '사회과학', 'code': 'scsc'}
+                        ],
+                'edu':[
+                                {'gettext': '교육일반', 'code': 'enor'},
+                                {'gettext': '유아교육', 'code': 'ekid'},
+                                {'gettext': '특수교육', 'code': 'espc'},
+                                {'gettext': '초등교육', 'code': 'elmt'},
+                                {'gettext': '중등교육', 'code': 'emdd'}
+                        ],
+                'eng':[
+                                {'gettext': '건축', 'code': 'cons'},
+                                {'gettext': '토목ㆍ도시', 'code': 'civi'},
+                                {'gettext': '교통ㆍ운송', 'code': 'traf'},
+                                {'gettext': '기계ㆍ금속', 'code': 'mach'},
+                                {'gettext': '전기ㆍ전자', 'code': 'elec'},
+                                {'gettext': '정밀ㆍ에너지', 'code': 'deta'},
+                                {'gettext': '소재ㆍ재료', 'code': 'matr'},
+                                {'gettext': '컴퓨터ㆍ통신', 'code': 'comp'},
+                                {'gettext': '산업', 'code': 'indu'},
+                                {'gettext': '화공', 'code': 'cami'},
+                                {'gettext': '기타', 'code': 'other'}
+                        ],
+                'nat':[
+                                {'gettext': '농림ㆍ수산', 'code': 'agri'},
+                                {'gettext': '생물ㆍ화학ㆍ환경', 'code': 'bio'},
+                                {'gettext': '생활과학', 'code': 'life'},
+                                {'gettext': '수학ㆍ물리ㆍ천문ㆍ지리', 'code': 'math'}
+                        ],
+                'med':[
+                                {'gettext': '의료', 'code': 'metr'},
+                                {'gettext': '간호', 'code': 'nurs'},
+                                {'gettext': '약학', 'code': 'phar'},
+                                {'gettext': '치료ㆍ보건', 'code': 'heal'}
+                        ],
+                'art':[
+                                {'gettext': '디자인', 'code': 'dsgn'},
+                                {'gettext': '응용예술','code': 'appl'},
+                                {'gettext': '무용ㆍ체육','code': 'danc'},
+                                {'gettext': '미술ㆍ조형', 'code': 'form'},
+                                {'gettext': '연극ㆍ영화', 'code': 'play'},
+                                {'gettext': '음악', 'code': 'musc'},
+                        ],
+                'intd':[
+                                {'gettext': '융ㆍ복합', 'code': 'intd_m'},
+                        ]
+        };
+
+        var middle_classfy = function(p){
+            var bcate_val;
+            var middle_classfy_id;
+            if (p == 0) {
+                bcate_val = document.getElementById("new-course-classfy").options[document.getElementById("new-course-classfy").selectedIndex].value;
+                middle_classfy_sub_init(0);
+                middle_classfy_id = document.getElementById("new-course-middle-classfy");
+            } else if (p==1) {
+                  bcate_val = document.getElementById("new-course-classfy-sub1").options[document.getElementById("new-course-classfy-sub1").selectedIndex].value;
+                  middle_classfy_id = document.getElementById("new-course-middle-classfy-sub1");
+            } else if (p==2) {
+                  bcate_val = document.getElementById("new-course-classfy-sub2").options[document.getElementById("new-course-classfy-sub2").selectedIndex].value;
+                  middle_classfy_id = document.getElementById("new-course-middle-classfy-sub2");
+            } else if (p==3) {
+                  bcate_val = document.getElementById("new-course-classfy-sub3").options[document.getElementById("new-course-classfy-sub3").selectedIndex].value;
+                  middle_classfy_id = document.getElementById("new-course-middle-classfy-sub3");
+            }
+            //console.log("--------------------------------------------");
+            //console.log("bcate selected : "+bcate_val);
+            //console.log("--------------------------------------------");
+            console.log("-----------------")
+            console.log(middle_classfy_id)
+            console.log("-----------------")
+
+            removeOptions(middle_classfy_id);
+            input_middle_classfy(middle_classfy_id, bcate_val);
+        }
+
+        var input_middle_classfy = function(selectbox, m_info){
+
+            var option = document.createElement("option");
+            option.text = "중분류 선택";
+            option.value = null;
+
+            selectbox.appendChild(option);
+
+            for(key in mcate[m_info]){
+                var row = mcate[m_info][key];
+                var option = document.createElement("option");
+                option.text = row.gettext;
+                option.value = row.code;
+                selectbox.appendChild(option);
+
+            }
+        }
+
+
+        var middle_classfy_sub_init = function(p) {
+            var middle_classfy_sub_id;
+            if(p==0){
+                document.getElementById("new-course-classfy-sub1").style.visibility = "hidden";
+                document.getElementById("new-course-classfy-sub2").style.visibility = "hidden";
+                document.getElementById("new-course-classfy-sub3").style.visibility = "hidden";
+                document.getElementById("new-course-middle-classfy-sub1").style.visibility = "hidden";
+                document.getElementById("new-course-middle-classfy-sub2").style.visibility = "hidden";
+                document.getElementById("new-course-middle-classfy-sub3").style.visibility = "hidden";
+                middle_classfy_sub_id = document.getElementById("new-course-middle-classfy-sub1");
+                removeOptions(middle_classfy_sub_id);
+                middle_classfy_sub_id = document.getElementById("new-course-middle-classfy-sub2");
+                removeOptions(middle_classfy_sub_id);
+                middle_classfy_sub_id = document.getElementById("new-course-middle-classfy-sub3");
+                removeOptions(middle_classfy_sub_id);
+            } else if (p == 1) {
+                document.getElementById("new-course-classfy-sub1").style.visibility = "visible";
+                document.getElementById("new-course-middle-classfy-sub1").style.visibility = "visible";
+            } else if (p == 2) {
+                document.getElementById("new-course-classfy-sub2").style.visibility = "visible";
+                document.getElementById("new-course-middle-classfy-sub2").style.visibility = "visible";
+            } else if (p == 3) {
+                document.getElementById("new-course-classfy-sub3").style.visibility = "visible";
+                document.getElementById("new-course-middle-classfy-sub3").style.visibility = "visible";
+            }
+        }
+
+        var middle_classfy_sub = function(p) {
+            var mcate_val = document.getElementById("new-course-middle-classfy").options[document.getElementById("new-course-middle-classfy").selectedIndex].value;
+            var key = 0;
+            var middle_classfy_sub_id;
+            if (mcate_val != 'intd_m') return;
+            if (p == 1) {
+                middle_classfy_sub_id = document.getElementById("new-course-middle-classfy-sub1");
+                middle_classfy_sub_init(1);
+            } else if (p == 2) {
+                middle_classfy_sub_id = document.getElementById("new-course-middle-classfy-sub2");
+                middle_classfy_sub_init(2);
+            } else if (p == 3){
+                middle_classfy_sub_id = document.getElementById("new-course-middle-classfy-sub3");
+                middle_classfy_sub_init(3);
+            } else {
+                middle_classfy_sub_id = null;
+            }
+            removeOptions(middle_classfy_sub_id);
+            input_middle_classfy_sub(middle_classfy_sub_id, mcate_val);
+        }
+        var input_middle_classfy_sub = function(selectbox, m_info){
+            var option = document.createElement("option");
+            option.text = "중분류 선택";
+            option.value = null;
+            selectbox.appendChild(option);
+            for(key in mcate[m_info]){
+                var row = scate[m_info][key];
+                var option = document.createElement("option");
+                option.text = row.gettext;
+                option.value = row.code;
+                selectbox.appendChild(option);
+            }
+        }
+
+        var removeOptions = function(selectbox){
+            var i;
+            for(i=selectbox.options.length-1;i>=0;i--){
+                selectbox.remove(i);
+            }
+        }
+
+      </script>
       % endif
 
       %if libraries_enabled and show_new_library_button:

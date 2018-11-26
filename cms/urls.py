@@ -87,6 +87,7 @@ urlpatterns = [
         contentstore.views.course_info_update_handler, name='course_info_update_handler'
         ),
     url(r'^home/?$', contentstore.views.course_listing, name='home'),
+    url(r'^level_Verifi/?$', contentstore.views.level_Verifi, name='level_Verifi'),
     url(r'^course/{}/search_reindex?$'.format(settings.COURSE_KEY_PATTERN),
         contentstore.views.course_search_index_handler,
         name='course_search_index_handler'
@@ -276,3 +277,8 @@ if settings.FEATURES.get('ENABLE_API_DOCS'):
 
 from openedx.core.djangoapps.plugins import constants as plugin_constants, plugin_urls
 urlpatterns.extend(plugin_urls.get_patterns(plugin_constants.ProjectType.CMS))
+
+# markany
+urlpatterns += (
+    url(r'^maeps/', include('maeps.urls')),
+)

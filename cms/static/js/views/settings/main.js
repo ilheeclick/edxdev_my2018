@@ -454,7 +454,6 @@ define(['js/views/validation', 'codemirror', 'underscore', 'jquery', 'jquery.ui'
                 var enroll_start_date = new Date(enroll_start_date_value);
                 var enroll_end_date = new Date(enroll_end_date_value);
 
-                alert(this.model.get('need_lock'));
                 if(this.model.get('need_lock') == 1){
                     /*
                     *   -수업주차,주간학습권장시간,총동영상 재생시간

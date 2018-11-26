@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 """
 Middleware to auto-expire inactive sessions after N seconds, which is configurable in
 settings.
@@ -28,7 +29,13 @@ class SessionInactivityTimeout(object):
             #Can't log out if not logged in
             return
 
+        #lms.auth.json -> 기본설정 7200s = 120m =2h
         timeout_in_seconds = getattr(settings, "SESSION_INACTIVITY_TIMEOUT_IN_SECONDS", None)
+
+        if 'ISREMEMBER' in request.session:
+            timeout_in_seconds = 604800 #7일
+            #timeout_in_seconds = 2592000 #30일
+            print "session_timed_out"
 
         # Do we have this feature enabled?
         if timeout_in_seconds:
@@ -52,3 +59,8 @@ class SessionInactivityTimeout(object):
                     return
 
             request.session[LAST_TOUCH_KEYNAME] = utc_now
+
+            print 'user[ {user} ] timeout_in_seconds = {timeout_in_seconds}'.format(
+                user=request.user.id,
+                timeout_in_seconds=timeout_in_seconds
+            )

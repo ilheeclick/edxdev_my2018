@@ -19,6 +19,28 @@ import calendar
 
 <%block name="js_extra">
   <script type="text/javascript">
+
+    $(document).ready(function () {
+      var d = new Date();
+      var year = d.getFullYear();
+
+      %if request.session['division'] != 'Y':
+        console.log($("#register-year_of_birth").find("option").val());
+          $("#register-year_of_birth").find("option").each(function(){LogistrationFactory
+              if($(this).val() != "" && eval(year - $(this).val()) > 14)
+                  $(this).remove();
+          });
+
+      %else:
+          console.log($("#register-year_of_birth").find("option").val())
+          $("#register-year_of_birth").find("option").each(function(){
+              if($(this).val() != "" && eval(year - $(this).val()) < 14)
+                  $(this).remove();
+          });
+      %endif
+
+    });
+
     $(function() {
 
       // adding js class for styling with accessibility in mind
@@ -109,7 +131,7 @@ import calendar
 
 <section class="register container">
   <section role="main" class="content">
-    <form role="form" id="register-form" method="post" data-remote="true" action="/create_account" novalidate>
+
 <%
   # allow for theming override on the registration form
   registration_form = static.get_template_path('register-form.html')
@@ -120,6 +142,7 @@ import calendar
 
   <aside role="complementary">
 
+<form role="form" id="register-form" method="post" data-remote="true" action="/create_account" novalidate>
 ##<%
 ##  # allow for theming overrides on the registration sidebars, otherwise default to pre-existing ones
 ##  sidebar_file = static.get_template_path('register-sidebar.html')

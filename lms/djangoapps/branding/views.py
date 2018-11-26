@@ -16,7 +16,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 
 import branding.api as branding_api
 import courseware.views.views
-import student.views
+import student.views.management
 from edxmako.shortcuts import marketing_link, render_to_response
 from openedx.core.djangoapps.lang_pref.api import released_languages
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
@@ -33,6 +33,7 @@ def index(request):
     """
     Redirects to main page -- info page if user authenticated, or marketing if not
     """
+    print "request.user.is_authenticated",request.user.is_authenticated
     if request.user.is_authenticated:
         # Only redirect to dashboard if user has
         # courses in his/her dashboard. Otherwise UX is a bit cryptic.
@@ -41,7 +42,8 @@ def index(request):
         if configuration_helpers.get_value(
                 'ALWAYS_REDIRECT_HOMEPAGE_TO_DASHBOARD_FOR_AUTHENTICATED_USER',
                 settings.FEATURES.get('ALWAYS_REDIRECT_HOMEPAGE_TO_DASHBOARD_FOR_AUTHENTICATED_USER', True)):
-            return redirect(reverse('dashboard'))
+            #return redirect(reverse('dashboard'))
+            pass
 
     if settings.FEATURES.get('AUTH_USE_CERTIFICATES'):
         from openedx.core.djangoapps.external_auth.views import ssl_login
@@ -74,7 +76,7 @@ def index(request):
 
     #  we do not expect this case to be reached in cases where
     #  marketing and edge are enabled
-    return student.views.index(request, user=request.user)
+    return student.views.management.index(request, user=request.user)
 
 
 @ensure_csrf_cookie

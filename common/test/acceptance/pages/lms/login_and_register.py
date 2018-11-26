@@ -188,7 +188,8 @@ class CombinedLoginAndRegisterPage(PageObject):
         ).fulfill()
 
     def register(
-            self, email="", password="", username="", full_name="", country="", favorite_movie=""
+            self, email="", password="", username="", full_name="", country="", favorite_movie="",
+            terms_of_service=False
     ):
         """Fills in and submits the registration form.
 
@@ -206,7 +207,7 @@ class CombinedLoginAndRegisterPage(PageObject):
 
         """
         # Fill in the form
-        self.wait_for_element_visibility('#toggle_optional_fields', 'Support education research field is shown')
+        self.wait_for_element_visibility('#register-email', 'Email field is shown')
         if email:
             self.q(css="#register-email").fill(email)
         if full_name:
@@ -216,9 +217,11 @@ class CombinedLoginAndRegisterPage(PageObject):
         if password:
             self.q(css="#register-password").fill(password)
         if country:
-            self.q(css="#register-country").results[0].send_keys(country)
+            self.q(css="#register-country option[value='{country}']".format(country=country)).click()
         if favorite_movie:
             self.q(css="#register-favorite_movie").fill(favorite_movie)
+        if terms_of_service:
+            self.q(css="#register-honor_code").click()
 
         # Submit it
         self.q(css=".register-button").click()

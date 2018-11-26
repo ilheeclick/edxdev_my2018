@@ -10,11 +10,20 @@
 
 <section class="container full home" id="main">
     <!-- [s]  -->
-    <div class="univ-list-infotop"><img src="/static/images/univ_intro/univ_top_HGU.jpg" alt=""></div>
+    <div class="univ-list-infotop" style="position:relative; z-index: 1;">
+      <img src="/static/images/univ_intro/univ_top_HGU.jpg" alt="">
+    </div>
 
-    <section class="container univ">
+    <div style="position:relative; float: right; z-index: 2;">
+      <video width="440px" height="250px"   controls>
+        <source src="http://vod.kmoocs.kr/vod/2018/10/12/bd012c08-cbda-4d14-8413-82c4df965dfa.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="container univ">
         <h2>${_("HANDONG GLOBAL UNIVERSITY")}</h2>
+
         <div class="univ-info">
+
             <div class="sns-box"></div>
             ${_(
                "<p>For more than two decades since its establishment in 1995, Handong Global University has been redefining the Korean education landscape. Since Handong was founded, it harbored a vision of fostering honest and competent global leaders, exemplified by the unsupervised exam system. All freshmen enter without declaring a major or college, giving them the opportunity to discover a field of study that aligns with their talents and aptitudes. </p>"
@@ -37,7 +46,7 @@
                 </ul>
             </section>
         </section>
-    </section>
+    </div>
 
     <!-- [e]  -->
 </section>

@@ -36,7 +36,9 @@ from pytz import UTC
 from rest_framework import status
 from six import text_type
 from web_fragments.fragment import Fragment
-
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
+from util.json_request import JsonResponse
+from django.db import connections
 import shoppingcart
 import survey.views
 from lms.djangoapps.certificates import api as certs_api
@@ -841,6 +843,32 @@ def course_about(request, course_id):
         # Embed the course reviews tool
         reviews_fragment_view = CourseReviewsModuleFragmentView().render_to_fragment(request, course=course)
 
+        # today d-day와 청강에서 사용
+        today = datetime.now()
+
+        # 청강 - course.end < today
+        today_val = today.strptime(str(today)[0:10], "%Y-%m-%d").date()
+        course_end = course.end
+        time_compare = 'N'
+        if course_end is not None:
+            course_end_val = course_end.strptime(str(course_end)[0:10], "%Y-%m-%d").date()
+            if today_val > course_end_val:
+                time_compare = 'Y'
+
+        with connections['default'].cursor() as cur:
+            query = '''
+                SELECT audit_yn
+                  FROM course_overview_addinfo
+                 WHERE course_id = '{course_id}';
+            '''.format(course_id=course_id)
+            cur.execute(query)
+            audit_yn = cur.fetchall()
+
+            if len(audit_yn) != 0 and time_compare == 'Y':
+                audit_flag = audit_yn[0][0]
+            else:
+                audit_flag = 'N'
+
         context = {
             'course': course,
             'course_details': course_details,
@@ -871,6 +899,7 @@ def course_about(request, course_id):
             'course_image_urls': overview.image_urls,
             'reviews_fragment_view': reviews_fragment_view,
             'sidebar_html_enabled': sidebar_html_enabled,
+            'audit_flag': audit_flag,
         }
 
         return render_to_response('courseware/course_about.html', context)

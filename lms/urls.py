@@ -52,12 +52,16 @@ from static_template_view import views as static_template_view_views
 from staticbook import views as staticbook_views
 from student import views as student_views
 from student_account import views as student_account_views
+
+
 from track import views as track_views
 from util import views as util_views
 
 # community
-#from community.views import views as community_views
+# from community.views import views as community_views
 from lms.djangoapps.community import views as community
+#lms/djangoapps/courseware/courses.py
+from courseware import courses as courses
 
 if settings.DEBUG or settings.FEATURES.get('ENABLE_DJANGO_ADMIN_SITE'):
     django_autodiscover()
@@ -67,9 +71,19 @@ if settings.DEBUG or settings.FEATURES.get('ENABLE_DJANGO_ADMIN_SITE'):
     if password_policy_compliance.should_enforce_compliance_on_login():
         admin.site.login_form = PasswordPolicyAwareAdminAuthForm
 
-
 urlpatterns = [
-    url(r'^$', branding_views.index, name='root'),   # Main marketing page, or redirect to courseware
+    url(r'^$', branding_views.index, name='root'),  # Main marketing page, or redirect to courseware
+
+    # ---------- nice check start---------- #
+    url(r'^nicecheckplus$', student_account_views.nicecheckplus, name="nicecheckplus"),  # success url
+    url(r'^nicecheckplus_error$', student_account_views.nicecheckplus_error, name="nicecheckplus_error"),  # fail url
+    # ---------- nice check end ---------- #
+
+    # ---------- multi site ---------- #
+    # url(r'^org/(?P<org>.*?)/(?P<msearch>.*?)$', branding_views.multisite_index, name="multisite_index"),
+    # url(r'^multisite_api$', branding_views.multisite_api, name="multisite_api"),
+    # url(r'^multisite_delete_api$', branding_views.multisite_delete_api, name="multisite_delete_api"),
+    # url(r'^multisite_error/$', branding_views.multisite_error, name="multisite_error"),
 
     #schools
     url(r'^schools/?$', courseware_views.schools, name="schools"),
@@ -99,11 +113,14 @@ urlpatterns = [
     url(r'^comm_k_news_view/(?P<board_id>.*?)/$', community.comm_k_news_view, name='comm_k_news_view'),
     url(r'^comm_list_json$', community.comm_list_json, name='comm_list_json'),
 
+    # course_list
+    url(r'^course_search_list$', courses.course_search_list, name='course_list'),
+
     url(r'', include('student.urls')),
     # TODO: Move lms specific student views out of common code
     url(r'^dashboard/?$', student_views.student_dashboard, name='dashboard'),
     url(r'^change_enrollment$', student_views.change_enrollment, name='change_enrollment'),
-
+    url(r'^enrollment_verifi$', student_views.enrollment_verifi, name='enrollment_verifi'),
     # Event tracking endpoints
     url(r'', include('track.urls')),
 
@@ -134,6 +151,10 @@ urlpatterns = [
 
     # Course API
     url(r'^api/courses/', include('course_api.urls')),
+
+    # ----- api request ----- #
+    #url(r'^api/happy', branding_views.course_api, name="course_api"),
+    # ----- api request ----- #
 
     # Completion API
     url(r'^api/completion/', include('completion.api.urls', namespace='completion_api')),
@@ -206,7 +227,6 @@ if settings.FEATURES.get('ENABLE_OPENBADGES'):
 urlpatterns += [
     url(r'^openassessment/fileupload/', include('openassessment.fileupload.urls')),
 ]
-
 
 # sysadmin dashboard, to see what courses are loaded, to delete & load courses
 if settings.FEATURES.get('ENABLE_SYSADMIN_DASHBOARD'):
@@ -335,7 +355,7 @@ urlpatterns += [
 
     url(r'^courses/?$', branding_views.courses, name='courses'),
 
-    #About the course
+    # About the course
     url(
         r'^courses/{}/about$'.format(
             settings.COURSE_ID_PATTERN,
@@ -352,7 +372,7 @@ urlpatterns += [
         name='enroll_staff',
     ),
 
-    #Inside the course
+    # Inside the course
     url(
         r'^courses/{}/$'.format(
             settings.COURSE_ID_PATTERN,
@@ -511,6 +531,18 @@ urlpatterns += [
         name='instructor_dashboard',
     ),
 
+    # For copykiller
+    url(
+        r'^courses/{}/instructor/copykiller$'.format(settings.COURSE_ID_PATTERN),
+        instructor_dashboard_views.copykiller,
+        name="copykiller"
+    ),
+
+    url(
+        r'^courses/{}/instructor/copykiller_csv'.format(settings.COURSE_ID_PATTERN),
+        instructor_dashboard_views.copykiller_csv,
+        name="copykiller_csv"
+    ),
 
     url(
         r'^courses/{}/set_course_mode_price$'.format(
@@ -554,7 +586,12 @@ urlpatterns += [
         ),
         include(COURSE_URLS)
     ),
-
+    # url(
+    #     r'^course/{}/search_reindex?$'.format(
+    #         settings.COURSE_KEY_PATTERN),
+    #     'course_search_index_handler',
+    #     name='course_search_index_handler'
+    # ),
     # Discussions Management
     url(
         r'^courses/{}/discussions/settings$'.format(
@@ -879,7 +916,6 @@ if configuration_helpers.get_value('ENABLE_BULK_ENROLLMENT_VIEW', settings.FEATU
         url(r'^api/bulk_enroll/v1/', include('bulk_enroll.urls')),
     ]
 
-
 # Shopping cart
 urlpatterns += [
     url(r'^shoppingcart/', include('shoppingcart.urls')),
@@ -988,7 +1024,6 @@ urlpatterns += [
     url(r'^debug/show_parameters$', debug_views.show_parameters),
 ]
 
-
 # Third-party auth.
 if settings.FEATURES.get('ENABLE_THIRD_PARTY_AUTH'):
     urlpatterns += [
@@ -1072,10 +1107,10 @@ urlpatterns += [
 
 if 'debug_toolbar' in settings.INSTALLED_APPS:
     import debug_toolbar
+
     urlpatterns += [
         url(r'^__debug__/', include(debug_toolbar.urls)),
     ]
-
 
 # Custom error pages
 # These are used by Django to render these error codes. Do not remove.
@@ -1119,3 +1154,8 @@ if settings.FEATURES.get('ENABLE_API_DOCS'):
     ]
 
 urlpatterns.extend(plugin_urls.get_patterns(plugin_constants.ProjectType.LMS))
+
+# markany
+urlpatterns += (
+    url(r'^maeps/', include('maeps.urls')),
+)

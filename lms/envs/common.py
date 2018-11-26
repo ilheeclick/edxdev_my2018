@@ -308,10 +308,11 @@ FEATURES = {
     'CERTIFICATES_HTML_VIEW': False,
 
     # Course discovery feature
-    'ENABLE_COURSE_DISCOVERY': False,
+    'ENABLE_COURSE_DISCOVERY': True,
 
     # Setting for overriding default filtering facets for Course discovery
     # COURSE_DISCOVERY_FILTERS = ["org", "language", "modes"]
+    'COURSE_DISCOVERY_FILTERS': ["org", "language", "modes", 'classfy', 'middle_classfy','difficult_degree', 'linguistics', 'range', 'course_period'],
 
     # Software secure fake page feature flag
     'ENABLE_SOFTWARE_SECURE_FAKE': False,
@@ -2674,6 +2675,7 @@ VIDEO_TRANSCRIPTS_SETTINGS = dict(
 # Note that this is used as the set of choices to the `code` field of the
 # `LanguageProficiency` model.
 ALL_LANGUAGES = [
+    [u"ko", u"Korean"],
     [u"aa", u"Afar"],
     [u"ab", u"Abkhazian"],
     [u"af", u"Afrikaans"],
