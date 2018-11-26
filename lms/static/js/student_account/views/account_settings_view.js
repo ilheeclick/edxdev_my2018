@@ -30,6 +30,7 @@
                     tabindex: -1,
                     selected: false,
                     expanded: false
+                }
             ],
             events: {
                 'click .account-nav-link': 'switchTab',

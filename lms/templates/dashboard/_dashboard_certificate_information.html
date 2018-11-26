@@ -1,4 +1,4 @@
-<%page expression_filter="h" args="cert_status, course_overview, enrollment, reverify_link" />
+<%page expression_filter="h" args="cert_status, course_overview, enrollment, reverify_link, user" />
 
 <%!
 from django.utils.translation import ugettext as _
@@ -81,12 +81,15 @@ else:
                 </span>
               </li>
             % elif cert_status['status'] == 'downloadable' and cert_status.get('show_cert_web_view', False):
+              <!-- 여기가 이수증 보기 버튼(dashboard)-->
               <li class="action action-certificate">
-                <a class="btn" href="${cert_status['cert_web_view_url']}" target="_blank"
+                <!-- 기존<a class="btn" href="${cert_status['cert_web_view_url']}" target="_blank"-->
+                <a class="btn" href="/cert_survey?hello=${cert_status['cert_web_view_url']}&course_id=${course_overview.id}&user_id=${user.id}" target="_blank"
                    title="${_('This link will open the certificate web view')}">
                   ${_("View {cert_name_short}").format(cert_name_short=cert_name_short,)}
                 </a>
               </li>
+              <!-- 여기가 이수증 보기 버튼(dashboard)-->
             % elif cert_status['status'] == 'downloadable' and enrollment.mode in CourseMode.NON_VERIFIED_MODES:
               <li class="action action-certificate">
                 <a class="btn" href="${cert_status['download_url']}"

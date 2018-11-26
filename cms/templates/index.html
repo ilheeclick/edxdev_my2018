@@ -776,6 +776,19 @@ if (
       </ul>
       % endif
 
+      <div class="search_div" style="margin:10px; margin-left:0px;">
+        <input type="text" id="cms_text" style="">
+        <button class="btn btn-primary" id="cms_search" type="button"
+                style="height:30px;
+                       width:80px;
+                       margin-bottom:2px;
+                       border-radius:5px;
+                       background-color:#009fe6;
+                       color:#FFFFFF;
+                       font-size:90%;
+                       ">${_("Search")}</button>
+      </div>
+
       %if len(courses) > 0 or optimization_enabled:
       <div class="courses courses-tab react-course-listing active">
         ${static.renderReact(

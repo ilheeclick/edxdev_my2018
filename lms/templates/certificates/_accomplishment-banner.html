@@ -1,31 +1,31 @@
-<%page expression_filter="h"/>
 <%!
 from django.utils.translation import ugettext as _
-from openedx.core.djangolib.js_utils import js_escaped_string
+from django.template.defaultfilters import escapejs
 %>
 <%namespace name='static' file='../static_content.html'/>
 <%block name="js_extra">
   <%static:js group='certificates_wv'/>
+  <!--<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>-->
+<script src="https://unpkg.com/sweetalert2@7.17.0/dist/sweetalert2.all.js"></script>
   <script type="text/javascript">
       $(document).ready(function() {
-          //FaceBook.init({"facebook_app_id": '${facebook_app_id | n, js_escaped_string}'});
+          //FaceBook.init({"facebook_app_id": '${facebook_app_id}'});
           $.ajaxSetup({
               headers: {
-                  //'X-CSRFToken': $.cookie('csrftoken')
               },
               dataType: 'json'
           });
           $(".action-linkedin-profile").click(function() {
               var data = {
-                  user_id: '${accomplishment_user_id | n, js_escaped_string}',
+                  user_id: '${accomplishment_user_id}',
                   course_id: $(this).data('course-id'),
                   enrollment_mode: $(this).data('certificate-mode'),
-                  certificate_id: '${certificate_id_number | n, js_escaped_string}',
+                  certificate_id: '${certificate_id_number}',
                   certificate_url: window.location.href,
                   social_network: 'LinkedIn'
               };
               Logger.log('edx.certificate.shared', data);
-              window.open('${linked_in_url | n, js_escaped_string}');
+              window.open('${linked_in_url}');
           });
       });
 
@@ -35,24 +35,34 @@ from openedx.core.djangolib.js_utils import js_escaped_string
           var top = (screen.height/2)-(height/2);
           return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width='+width+', height='+height+', top='+top+', left='+left);
       }
+      function e_name_check(value) {
+          var check_index = value;
+          if (check_index == 'K') {
+              $('#e_name').css("display","none");
+          }
+          if (check_index == 'E'){
+              $('#e_name').css("display","inline-block");
+          }
+      }
+
   </script>
 </%block>
 <div id="fb-root"></div>
 <div class="wrapper-banner wrapper-banner-user">
     <section class="banner banner-user">
         <div class="message message-block message-notice">
-            <h2 class="message-title hd-5 emphasized">${accomplishment_banner_opening}Maeng _accomplishment-banner.html x 번째</h2>
+            <h2 class="message-title hd-5 emphasized">${accomplishment_banner_opening | h}</h2>
             <div class="wrapper-copy-and-actions">
                 <p class="message-copy copy copy-base emphasized">${accomplishment_banner_congrats}</p>
-                <div class="message-actions">
+                <div class="message-actions" align="left" style="color: white !important;">
                     <h3 class="sr-only">${_("Print or share your certificate:")}</h3>
                     % if facebook_share_enabled:
                       <button class="action action-share-facebook btn-inverse btn-small icon-only" id="action-share-facebook"
                          onclick="FaceBook.share({
-                          share_text: '${facebook_share_text | n, js_escaped_string}', ## xss-lint: disable=mako-invalid-html-filter
-                          share_link: '${share_url | n, js_escaped_string}', ## xss-lint: disable=mako-invalid-html-filter
-                          picture_link: '${full_course_image_url | n, js_escaped_string}', ## xss-lint: disable=mako-invalid-html-filter
-                          description: '${_('Click the link to see my certificate.') | n, js_escaped_string}' ## xss-lint: disable=mako-invalid-html-filter
+                          share_text: '${facebook_share_text | escapejs}',
+                          share_link: '${share_url}',
+                          picture_link: '${full_course_image_url}',
+                          description: '${_('Click the link to see my certificate.') | escapejs}'
                           });">
                           <span class="icon fa fa-facebook-official" aria-hidden="true"></span>
                           <span class="action-label">${_("Post on Facebook")}</span>
@@ -62,8 +72,7 @@ from openedx.core.djangolib.js_utils import js_escaped_string
                       <button data-tooltip="${_('Share on Twitter')}"
                         class="action action-share-twitter btn-inverse btn-small icon-only"
                         title="${_('Share on Twitter')}"
-                        ## xss-lint: disable=mako-invalid-html-filter
-                        onclick="popupWindow('${twitter_url | n, js_escaped_string}', 'tweetWindow', 640, 480); return false;">
+                        onclick="popupWindow('${twitter_url}', 'tweetWindow', 640, 480); return false;">
                           <span class="icon fa fa-twitter" aria-hidden="true"></span>
                           <span class="action-label">${_("Tweet this Accomplishment. Pop up window.")}</span>
                       </button>
@@ -75,7 +84,19 @@ from openedx.core.djangolib.js_utils import js_escaped_string
                         <span class="action-label">${_("Add to LinkedIn Profile")}</span>
                     </button>
                     %endif
+
+
+                    <span>선택언어</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;&nbsp;
+                    <input type="radio" name="radio" checked="checked" value="K" onclick="e_name_check(this.value)"> 한국어
+                    <input type="radio" name="radio" value="E" onclick="e_name_check(this.value)"> 영어 &nbsp;<input type="text" id="e_name" placeholder="영어이름을 넣어주세요." style="color: black; display: none"><br>
+
+                    <span>추가표기사항</span>&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;
+                    <input type="checkbox" id ="checkbox3"> 총 주차
+                    <input type="checkbox" id ="checkbox4"> 학습인정시간
+                    <input type="checkbox" id ="checkbox2"> 총 동영상시간
+                    <input type="checkbox" id ="checkbox1"> 성적
                     % if not preview_mode:
+                        &nbsp;&nbsp;&nbsp;&nbsp;
                         <button class="action action-print btn-inverse btn-small" id="action-print-view">
                             <span class="icon fa fa-print" aria-hidden="true"></span>
                             ${_("Print Certificate")}
@@ -87,13 +108,44 @@ from openedx.core.djangolib.js_utils import js_escaped_string
                         %endif
 
                         %if badge:
-                        <button class="action action-share-mozillaopenbadges btn btn-overlay btn-small">
-                            <img class="icon icon-mozillaopenbadges" src="/static/certificates/images/ico-mozillaopenbadges.png" alt="Mozilla Open Badges Backpack">
-                            ${_("Add to Mozilla Backpack")}
-                        </button>
+                            <button class="action action-share-mozillaopenbadges btn btn-overlay btn-small">
+                                <img class="icon icon-mozillaopenbadges" src="/static/certificates/images/ico-mozillaopenbadges.png" alt="Mozilla Open Badges Backpack">
+                                ${_("Add to Mozilla Backpack")}
+                            </button>
                         %endif
                     %endif
-
+                    <form name="frmPopup" method="POST">
+                        <input type="hidden" name="language_flag">
+                        <input type="hidden" name="checkbox1">
+                        <input type="hidden" name="checkbox2">
+                        <input type="hidden" name="checkbox3">
+                        <input type="hidden" name="checkbox4">
+                        <input type="hidden" name="static_url">
+                        <input type="hidden" name="certificate_id_number">
+                        <input type="hidden" name="created_date">
+                        <input type="hidden" name="nice_check_flag">
+                        <input type="hidden" name="accomplishment_copy_name">
+                        <input type="hidden" name="user_name">
+                        <input type="hidden" name="birth_date">
+                        <input type="hidden" name="accomplishment_course_title">
+                        <input type="hidden" name="course_id">
+                        <input type="hidden" name="start_date">
+                        <input type="hidden" name="end_date">
+                        <input type="hidden" name="Play_h">
+                        <input type="hidden" name="Play_m">
+                        <input type="hidden" name="course_week">
+                        <input type="hidden" name="course_effort_h">
+                        <input type="hidden" name="course_effort_m">
+                        <input type="hidden" name="grade">
+                        <input type="hidden" name="certificate_date_issued2">
+                        <input type="hidden" name="certificate_date_issued">
+                        <input type="hidden" name="classfy_k">
+                        <input type="hidden" name="classfy_e">
+                        <input type="hidden" name="logo_index">
+                        <input type="hidden" name="org_name_k">
+                        <input type="hidden" name="org_name_e">
+                        <input type="hidden" name="e_name">
+                    </form>
 
                     <form id="form2" name="form2" method="post" action="https://nice.checkplus.co.kr/CheckPlusSafeModel/checkplus.cb">
                         <input type="hidden" name="m" value="checkplusSerivce">

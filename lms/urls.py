@@ -113,6 +113,9 @@ urlpatterns = [
     url(r'^comm_k_news_view/(?P<board_id>.*?)/$', community.comm_k_news_view, name='comm_k_news_view'),
     url(r'^comm_list_json$', community.comm_list_json, name='comm_list_json'),
 
+    # survey url
+    url(r'^cert_survey/$', community.cert_survey, name='cert_survey'),
+
     # course_list
     url(r'^course_search_list$', courses.course_search_list, name='course_list'),
 

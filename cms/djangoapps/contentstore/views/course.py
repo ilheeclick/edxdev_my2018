@@ -1581,7 +1581,6 @@ def advanced_settings_handler(request, course_key_string):
         course_module = get_course_and_check_access(course_key, request.user)
         if 'text/html' in request.META.get('HTTP_ACCEPT', '') and request.method == 'GET':
             need_lock = course_need_lock(request, course_key_string)
-            advanced_dict = CourseMetadata.fetch(course_module)
 
             difficult_degree_list = course_difficult_degree(request, course_key_string)
             advanced_dict = CourseMetadata.fetch(course_module)

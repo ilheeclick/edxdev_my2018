@@ -103,6 +103,8 @@
             this.$list_problem_responses_csv_input = this.$section.find("input[name='problem-location']");
             this.$list_problem_responses_csv_btn = this.$section.find("input[name='list-problem-responses-csv']");
             this.$list_anon_btn = this.$section.find("input[name='list-anon-ids']");
+            this.$list_contents_stat_btn = this.$section.find("input[name='list-contents-stat']");
+            this.$list_contents_view_btn = this.$section.find("input[name='list-contents-view']");
             this.$grade_config_btn = this.$section.find("input[name='dump-gradeconf']");
             this.$calculate_grades_csv_btn = this.$section.find("input[name='calculate-grades-csv']");
             this.$problem_grade_report_csv_btn = this.$section.find("input[name='problem-grade-report']");
@@ -119,6 +121,12 @@
             this.clear_display();
             this.$list_anon_btn.click(function() {
                 location.href = dataDownloadObj.$list_anon_btn.data('endpoint');
+            });
+            this.$list_contents_stat_btn.click(function() {
+                location.href = dataDownloadObj.$list_contents_stat_btn.data('endpoint');
+            });
+            this.$list_contents_view_btn.click(function() {
+                location.href = dataDownloadObj.$list_contents_view_btn.data('endpoint');
             });
             this.$proctored_exam_csv_btn.click(function() {
                 var url = dataDownloadObj.$proctored_exam_csv_btn.data('endpoint');

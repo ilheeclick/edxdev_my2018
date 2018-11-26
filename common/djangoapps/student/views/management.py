@@ -197,7 +197,15 @@ def index(request, extra_context=None, user=AnonymousUser()):
         courses = courses1
     else:
         courses = courses1 + courses2
+
     courses = [c for c in courses if not c.has_ended()]
+
+    # audit_yn 값이 없으면 html 랜더시 오류, courses
+    # audit_yn 값이 없는 강좌만 조회시 courses 가 None 이면 iterator 오류이므로 기본값을 셋팅
+    for c in courses:
+        if not hasattr(c,'audit_yn'):
+            c.audit_yn = 'N'
+
     log.info(u'len(courses) ::: %s', len(courses))
 
     if user and user.is_staff:
@@ -606,6 +614,8 @@ def index(request, extra_context=None, user=AnonymousUser()):
     extra_context['max_pop'] = str(max_pop[0][0])
     extra_context['popzone_list'] = popzone_list
     context.update(extra_context)
+
+
 
     return render_to_response('index.html', context)
 
