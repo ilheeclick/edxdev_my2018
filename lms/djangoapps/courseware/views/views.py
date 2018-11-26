@@ -751,7 +751,16 @@ def course_about(request, course_id):
     Display the course's about page.
     """
     course_key = CourseKey.from_string(course_id)
+    course_id_str = str(course_id)
+    index_org_start = course_id_str.find(':') + 1
+    index_org_end = course_id_str.find('+')
+    index_number_start = index_org_end + 1
+    index_number_end = course_id_str.rfind('+')
+    course_org = course_id_str[index_org_start:index_org_end]
+    course_number = course_id_str[index_number_start:index_number_end]
 
+    print "course_org",course_org
+    print "course_number",course_number
     # If a user is not able to enroll in a course then redirect
     # them away from the about page to the dashboard.
     if not can_self_enroll_in_course(course_key):
@@ -851,12 +860,14 @@ def course_about(request, course_id):
         # coure_review
         with connections['default'].cursor() as cur:
             query = """
-                    select content,point,user_id,reg_time 
-                    from course_review
-                    where course_id ='{course_id}'
-                """.format(course_id=course_id)
+                    select a.content,a.point,a.user_id,DATE_FORMAT(a.reg_time, "%Y/%m/%d "),a.id,b.username
+                    from course_review a
+                    left join auth_user b on a.user_id = b.id
+                    where course_id LIKE "course-v1:{course_org}+{course_number}+%"
+                """.format(course_id=course_id,course_org=course_org, course_number=course_number)
             cur.execute(query)
             review_list = cur.fetchall()
+
 
             data_list = []
 
@@ -866,6 +877,8 @@ def course_about(request, course_id):
                 data_dict['point'] = data[1]
                 data_dict['user_id'] = data[2]
                 data_dict['reg_time'] = data[3]
+                data_dict['seq'] = data[4]
+                data_dict['username'] = data[5]
                 data_list.append(data_dict)
 
         context = {
@@ -1785,29 +1798,18 @@ def course_review_add(request):
 
     return JsonResponse({"data":"success"})
 
-def course_review_list(request):
+def course_review_del(request):
     course_id = request.POST.get('course_id')
+    id = request.POST.get('id')
+    user_id = request.POST.get('user_id')
 
     if request.is_ajax():
-
         with connections['default'].cursor() as cur:
             query = """
-                select content,point,user_id,reg_time 
-                from course_review
-                where course_id ='{course_id}'
-            """.format(course_id=course_id)
+                delete from course_review
+                where id='{id}'
+            """.format(id=id)
             cur.execute(query)
-            review_list = cur.fetchall()
 
-            data_list=[]
+    return JsonResponse({"data":"success"})
 
-            for data in review_list:
-                data_dict = dict()
-                data_dict['content'] = data[0]
-                data_dict['point'] = data[1]
-                data_dict['user_id'] = data[2]
-                data_dict['reg_time'] = data[3]
-                data_list.append(data_dict)
-        context={"data_list":data_list}
-
-    return JsonResponse({"data":context})

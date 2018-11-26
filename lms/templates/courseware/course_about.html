@@ -224,31 +224,8 @@ from six import string_types
         <!-- 평점 작업 -->
 
           <%include file="course_review.html" />
-        <div>
-          <table>
-            <thead> T_HEAD </thead>
-            <tr>
-              <td>id</td>
-              <td>content</td>
-              <td>별점</td>
-              <td>삭제</td>
-            </tr>
-            %for re_li in context['rev']:
-            <tr>
-              <td>${re_li['user_id']}</td>
-              <td>${re_li['content']}</td>
-              <td>
-                <input type="radio" id="rate1" name="rating" value="1" />
-                <input type="radio" id="rate2" name="rating" value="2" />
-                <input type="radio" id="rate3" name="rating" value="3" />
-                <input type="radio" id="rate4" name="rating" value="4" />
-                <input type="radio" id="rate5" name="rating" value="5" />
-              </td>
-              <td>${re_li['reg_time']}</td>
-            </tr>
-            %endfor
-          </table>
-        </div>
+
+
       </div>
     </div>
 

@@ -131,6 +131,7 @@
   opacity: 0;
 }
 
+
 .starability-basic > label:nth-of-type(5)::before {
   width: 120px;
   left: -120px;
@@ -188,3 +189,6 @@
     display: none;
   }
 }
+
+
+
