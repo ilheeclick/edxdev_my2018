@@ -190,5 +190,101 @@
   }
 }
 
+#review_table{
+  max-width: 750px;
+  text-align: center;
+  vertical-align: middle;
+  margin-top: 15px;
+  margin-left: 5px;
 
+}
+.star_img_1{
+  width: 20px;
+  height: 20px;
+  margin: -5px;
+}
+#review_table tr{
+  border-bottom: 3px gainsboro solid;
+  max-height: 40px;
+}
+.review_content{
+  min-width: 100px;
+  max-width: 300px;
+}
 
+.btn_del{
+  max-height: 50px;
+  min-width: 78px;
+  max-width: 78px;
+  border: 2px solid #f93f4a;
+  border-radius: 5px;
+  color: black;
+  display: inline-block;
+  font-size: inherit;
+  font-weight: bold;
+  background-color: #ffffff;
+  background-image: none;
+  box-shadow: none;
+  text-shadow:none;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+.btn_del:hover {
+  background-color: #f2dede; /* Green */
+  color: white;
+  background-image: none;
+  box-shadow: none;
+  text-shadow:none;
+}
+.btn_del:hover:not(:disabled), .btn_del:hover:not(:disabled) {
+    cursor: pointer;
+  border: 3px black solid;
+   background-color: #ff3061;
+   background-image: none;
+  box-shadow: white;
+}
+
+.btn:hover:not(:disabled), .btn:hover:not(:disabled) {
+  cursor: pointer;
+  background-color: #ffffff;
+  background-image: none;
+  box-shadow: white;
+}
+.btn:hover {
+  background-color: #f2dede;
+  color: white;
+  background-image: none;
+  box-shadow: none;
+  text-shadow:none;
+}
+.btn{
+  border: 2px white solid;
+  margin: 0;
+  padding: 0;
+  box-shadow: none;
+  overflow: visible;
+  text-shadow:none;
+  background: transparent;
+  background-image: none;
+  /* inherit font & color from ancestor */
+  color: inherit;
+  font: inherit;
+
+  /* Normalize `line-height`. Cannot be changed from `normal` in Firefox 4+. */
+  line-height: normal;
+
+  /* Corrects font smoothing for webkit */
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+
+  /* Corrects inability to style clickable `input` types in iOS */
+  -webkit-appearance: none;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+
+}
+
+.btn-chk{
+  width:60px;
+
+}

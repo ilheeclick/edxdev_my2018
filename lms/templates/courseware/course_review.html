@@ -1,5 +1,6 @@
-
-<p class="important-dates-item-title">평점 및 리뷰</p>
+<article class="response">
+<h3>평점 및 리뷰</h3>
+</article>
 %if user.id is not None:
 <form>
   <fieldset class="starability-basic">
@@ -20,17 +21,17 @@
     <label for="rate5" title="Amazing">5 stars</label>
 
   </fieldset>
-  <textarea id="review_text" style="min-width: 500px;"></textarea>
-<button onclick="chk()"> submit </button>
+  <textarea id="review_text" style="min-width: 400px; width: 630px; max-width: 630px;"></textarea>
+<button class="btn"onclick="chk()"><img class="btn-chk" src="/static/images/review_check.png"/></button>
 </form>
 %endif
 
 <div class="rs">
-  <table>
+  <table id="review_table">
     <thead></thead>
     <tr>
-      <td>id</td>
-      <td>content</td>
+      <td>이름</td>
+      <td class="review_content">내용</td>
       <td>별점</td>
       <td>생성날짜</td>
       <td></td>
@@ -39,7 +40,7 @@
     <tr>
       <td><h3>${re_li['username']}</h3></td>
       <td>${re_li['content']}</td>
-      <td>
+      <td style="min-width: 168px;">
         %if re_li['point'] ==1:
         <img class="star_img_1" src="/static/images/star.png"/>
         %elif re_li['point'] ==2:
@@ -65,7 +66,7 @@
       <td>${re_li['reg_time']}</td>
 
       %if  re_li['user_id'] == user.id or user.is_staff ==True:
-      <td><button onclick="re_del(${re_li['seq']})" value="${re_li['seq']}"> 삭제 </button></td>
+      <td><button class="btn_del" onclick="re_del(${re_li['seq']})" value="${re_li['seq']}"> 삭제 </button></td>
       %endif
     </tr>
     %endfor

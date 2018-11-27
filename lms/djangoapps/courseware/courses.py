@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Functions for accessing and displaying courses within the
 courseware.
@@ -269,6 +270,14 @@ def get_course_about_section(request, course, section_key):
     # Many of these are stored as html files instead of some semantic
     # markup. This can change without effecting this interface when we find a
     # good format for defining so many snippets of text/html.
+    course_week = False
+    course_video = False
+    if section_key == 'course_week':
+        course_week = True
+        section_key = 'effort'
+    if section_key == 'course_video':
+        course_video = True
+        section_key = 'effort'
 
     html_sections = {
         'short_description',
@@ -318,12 +327,33 @@ def get_course_about_section(request, course, section_key):
                         u"Error rendering course=%s, section_key=%s",
                         course, section_key
                     )
+
+            if section_key == "effort":
+                if course_week:
+                    if html.strip().find('#'):
+                        html = html.strip().split('#')[0]
+                    else:
+                        html = html.strip()[6:] + '주'
+                elif course_video:
+                    if html.strip().find('#'):
+                        html = html.strip().split('#')[1].split(':')[0] + '시간 ' + html.strip().split('#')[1].split(':')[1] + '분'
+                    else:
+                        html = ''
+
+                else:
+                    html = html.strip()[:5]
+
+                    if ':' in html:
+                        html = html.split(':')[0] + '시간 ' + html.split(':')[1] + '분'
+                    else:
+                        html += '시간'
+
             return html
 
         except ItemNotFoundError:
             log.warning(
                 u"Missing about section %s in course %s",
-                section_key, text_type(course.location)
+                section_key, course.location.to_deprecated_string()
             )
             return None
 
