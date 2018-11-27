@@ -64,7 +64,7 @@
       </td>
       <td>${re_li['reg_time']}</td>
 
-      %if  re_li['user_id'] == user.id:
+      %if  re_li['user_id'] == user.id or user.is_staff ==True:
       <td><button onclick="re_del(${re_li['seq']})" value="${re_li['seq']}"> 삭제 </button></td>
       %endif
     </tr>
@@ -103,7 +103,17 @@
                     csrfmiddlewaretoken: '${ csrf_token }'
                 }
             }).done(function(data){
-                alert("완료")
+                swal({
+                title: "success",
+                text: "완료",
+                icon: "success",
+                buttons: false,
+                dangerMode: false,
+              })
+                .then(function(willDelete) {
+
+                  location.reload()
+                });
             })
         }}
     function re_del(del_seq) {
@@ -117,12 +127,17 @@
                     csrfmiddlewaretoken: '${ csrf_token }'
                 }
             }).done(function(data){
-                swal(
-                'Success',
-                '삭제 완료',
-                'success'
-              )
-              location.reload();
+                swal({
+                title: "success",
+                text: "삭제 완료",
+                icon: "success",
+                buttons: false,
+                dangerMode: false,
+              })
+                .then(function(willDelete) {
+
+                  location.reload()
+                });
             })
 
     }
