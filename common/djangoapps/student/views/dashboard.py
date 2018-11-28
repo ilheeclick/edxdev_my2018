@@ -621,10 +621,6 @@ def student_dashboard(request):
     )
     course_optouts = Optout.objects.filter(user=user).values_list('course_id', flat=True)
 
-
-
-
-
     # Display activation message
     activate_account_message = ''
 
@@ -677,7 +673,6 @@ def student_dashboard(request):
             except Exception as e:
                 print 'registration_flag_history error.'
                 print e
-
 
     enterprise_message = get_dashboard_consent_notification(request, user, course_enrollments)
 
@@ -1016,4 +1011,3 @@ def modi_teacher_name(request):
             return HttpResponse(data, 'application/json')
 
         return HttpResponse('success', 'application/json')
-
