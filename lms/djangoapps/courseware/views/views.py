@@ -106,7 +106,9 @@ from xmodule.modulestore.django import modulestore
 from xmodule.modulestore.exceptions import ItemNotFoundError, NoPathToItem
 from xmodule.tabs import CourseTabList
 from xmodule.x_module import STUDENT_VIEW
-
+import MySQLdb as mdb
+import sys
+import json
 from ..entrance_exams import user_can_skip_entrance_exam
 from ..module_render import get_module, get_module_by_usage_id, get_module_for_descriptor
 
@@ -742,6 +744,114 @@ class EnrollStaffView(View):
         # In any other case redirect to the course about page.
         return redirect(reverse('about_course', args=[text_type(course_key)]))
 
+from django.http import JsonResponse
+
+@csrf_exempt
+@cache_if_anonymous()
+@require_http_methods(['POST'])
+def course_interest(request):
+
+    if request.method == 'POST':
+
+        if request.POST['method'] == 'add':
+    
+            user_id = request.POST.get('user_id')
+            org = request.POST.get('org')
+            display_number_with_default = request.POST.get('display_number_with_default')
+
+            sys.setdefaultencoding('utf-8')
+            con = mdb.connect(settings.DATABASES.get('default').get('HOST'),
+                                  settings.DATABASES.get('default').get('USER'),
+                                  settings.DATABASES.get('default').get('PASSWORD'),
+                                  settings.DATABASES.get('default').get('NAME'),
+                                  charset='utf8')
+            cur = con.cursor()
+            query = """
+                 select count(user_id) from interest_course where user_id = '""" + user_id + """' and org = '""" + org + """' and display_number_with_default = '""" + display_number_with_default + """';
+            """
+            cur.execute(query)
+            count = cur.fetchall()
+            ctn = count[0][0]
+            cur.close()
+
+            if(ctn == 1):
+                cur = con.cursor()
+                query = """
+                     UPDATE interest_course
+                       SET use_yn = 'Y'
+                     WHERE user_id = '""" + user_id + """' and org = '""" + org + """' and display_number_with_default = '""" + display_number_with_default + """';
+                """
+                cur.execute(query)
+                cur.execute('commit')
+                cur.close()
+                data = json.dumps('success')
+            elif(ctn == 0):
+                cur = con.cursor()
+                query = """
+                     insert into interest_course(user_id, org, display_number_with_default)
+                     VALUES ('""" + user_id + """',
+                             '""" + org + """',
+                             '""" + display_number_with_default + """');
+                """
+                cur.execute(query)
+                cur.execute('commit')
+                cur.close()
+                data = json.dumps('success')
+            return HttpResponse(data, 'application/json')
+
+        elif request.POST['method'] == 'modi':
+
+            user_id = request.POST.get('user_id')
+            org = request.POST.get('org')
+            display_number_with_default = request.POST.get('display_number_with_default')
+
+            sys.setdefaultencoding('utf-8')
+            con = mdb.connect(settings.DATABASES.get('default').get('HOST'),
+                                  settings.DATABASES.get('default').get('USER'),
+                                  settings.DATABASES.get('default').get('PASSWORD'),
+                                  settings.DATABASES.get('default').get('NAME'),
+                                  charset='utf8')
+            cur = con.cursor()
+            query = """
+                 UPDATE interest_course
+                   SET use_yn = 'N'
+                 WHERE user_id = '""" + user_id + """' and org = '""" + org + """' and display_number_with_default = '""" + display_number_with_default + """';
+            """
+            cur.execute(query)
+            cur.execute('commit')
+            cur.close()
+            data = json.dumps('success')
+
+            return HttpResponse(data, 'application/json')
+
+        elif request.POST['method'] == 'flag':
+            user_id = request.POST.get('user_id')
+            org = request.POST.get('org')
+            display_number_with_default = request.POST.get('display_number_with_default')
+
+            sys.setdefaultencoding('utf-8')
+            con = mdb.connect(settings.DATABASES.get('default').get('HOST'),
+                                  settings.DATABASES.get('default').get('USER'),
+                                  settings.DATABASES.get('default').get('PASSWORD'),
+                                  settings.DATABASES.get('default').get('NAME'),
+                                  charset='utf8')
+
+            cur = con.cursor()
+            query = """
+                 SELECT count(user_id)
+                  FROM interest_course
+                 WHERE user_id = '{0}' AND org = '{1}' AND display_number_with_default = '{2}' AND use_yn = 'Y';
+             """.format(user_id, org, display_number_with_default)
+            cur.execute(query)
+            count = cur.fetchall()
+            flag = count[0][0]
+            cur.close()
+
+            data = json.dumps(flag)
+
+            return HttpResponse(data, 'application/json')
+
+        return HttpResponse('success', 'application/json')
 
 @ensure_csrf_cookie
 @ensure_valid_course_key
