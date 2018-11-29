@@ -1,0 +1,145 @@
+<article class="response">
+<h3>평점 및 리뷰</h3>
+</article>
+%if user.id is not None:
+<form>
+  <fieldset class="starability-basic">
+    <legend> &nbsp</legend>
+    <input type="radio" id="rate1" name="rating" value="1" />
+    <label for="rate1" title="Terrible">1 star</label>
+
+    <input type="radio" id="rate2" name="rating" value="2" />
+    <label for="rate2" title="Not good">2 stars</label>
+
+    <input type="radio" id="rate3" name="rating" value="3" />
+    <label for="rate3" title="Average">3 stars</label>
+
+    <input type="radio" id="rate4" name="rating" value="4" />
+    <label for="rate4" title="Very good">4 stars</label>
+
+    <input type="radio" id="rate5" name="rating" value="5" />
+    <label for="rate5" title="Amazing">5 stars</label>
+
+  </fieldset>
+  <textarea id="review_text" style="min-width: 400px; width: 630px; max-width: 630px;"></textarea>
+<button class="btn"onclick="chk()"><img class="btn-chk" src="/static/images/review_check.png"/></button>
+</form>
+%endif
+
+<div class="rs">
+  <table id="review_table">
+    <thead></thead>
+    <tr>
+      <td>이름</td>
+      <td class="review_content">내용</td>
+      <td>별점</td>
+      <td>생성날짜</td>
+      <td></td>
+    </tr>
+    %for re_li in context['rev']:
+    <tr>
+      <td><h3>${re_li['username']}</h3></td>
+      <td>${re_li['content']}</td>
+      <td style="min-width: 168px;">
+        %if re_li['point'] ==1:
+        <img class="star_img_1" src="/static/images/star.png"/>
+        %elif re_li['point'] ==2:
+        <img class="star_img_1" src="/static/images/star.png"/>
+        <img class="star_img_1" src="/static/images/star.png"/>
+        %elif re_li['point'] ==3:
+        <img class="star_img_1" src="/static/images/star.png"/>
+        <img class="star_img_1" src="/static/images/star.png"/>
+        <img class="star_img_1" src="/static/images/star.png"/>
+        %elif re_li['point'] ==4:
+        <img class="star_img_1" src="/static/images/star.png"/>
+        <img class="star_img_1" src="/static/images/star.png"/>
+        <img class="star_img_1" src="/static/images/star.png"/>
+        <img class="star_img_1" src="/static/images/star.png"/>
+        %elif re_li['point'] ==5:
+        <img class="star_img_1" src="/static/images/star.png"/>
+        <img class="star_img_1" src="/static/images/star.png"/>
+        <img class="star_img_1" src="/static/images/star.png"/>
+        <img class="star_img_1" src="/static/images/star.png"/>
+        <img class="star_img_1" src="/static/images/star.png"/>
+        %endif
+      </td>
+      <td>${re_li['reg_time']}</td>
+
+      %if  re_li['user_id'] == user.id or user.is_staff ==True:
+      <td><button class="btn_del" onclick="re_del(${re_li['seq']})" value="${re_li['seq']}"> 삭제 </button></td>
+      %endif
+    </tr>
+    %endfor
+  </table>
+</div>
+<div readonly hidden id="hidden_id" value="${user.id}">${user.id}</div>
+
+<script type="text/javascript">
+    var star=''
+    var review = ''
+
+    $("#rate5").prop("checked", true)
+
+    function chk() {
+        star = $(".starability-basic input:radio[name='rating']:checked").val();
+        review =$('#review_text').val();
+
+        if (review.length > 100 || review.length==0){
+            swal(
+                'CAUTION',
+                '1 ~ 100자 이내로 작성해주세요',
+                'error'
+              )
+        }
+        else{
+            //ajax
+            $.ajax({
+                url : '/course_review_add',
+                type: "POST",
+                data : {
+                    star:star,
+                    review:review,
+                    user_id:"${user.id}",
+                    course_id:"${course.id}",
+                    csrfmiddlewaretoken: '${ csrf_token }'
+                }
+            }).done(function(data){
+                swal({
+                title: "success",
+                text: "완료",
+                icon: "success",
+                buttons: false,
+                dangerMode: false,
+              })
+                .then(function(willDelete) {
+
+                  location.reload()
+                });
+            })
+        }}
+    function re_del(del_seq) {
+
+        $.ajax({
+                url : '/course_review_del',
+                type: "POST",
+                data : {
+                    id:del_seq,
+                    user_id:$('#hidden_id').text(),
+                    csrfmiddlewaretoken: '${ csrf_token }'
+                }
+            }).done(function(data){
+                swal({
+                title: "success",
+                text: "삭제 완료",
+                icon: "success",
+                buttons: false,
+                dangerMode: false,
+              })
+                .then(function(willDelete) {
+
+                  location.reload()
+                });
+            })
+
+    }
+</script>
