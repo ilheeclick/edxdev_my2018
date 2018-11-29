@@ -28,7 +28,43 @@ from student.models import CourseEnrollment
 
 <%block name="pagetitle">${_("Dashboard")}</%block>
 <%block name="bodyclass">view-dashboard is-authenticated</%block>
+<style>
+    .faq-tab {
+        max-width: 600px;
+        margin-bottom: 0px;
+    }
 
+    .faq-tab > a {
+        padding: 15px 0 0 0;
+    }
+
+    .progress {
+        margin-top: 13px;
+        height: 2px;
+        width: 0%;
+        background: #b3ddeb;
+    }
+
+    .sub-end {
+        margin: 10px 0 10px 428px;
+        display: none;
+    }
+
+    .sub-interest {
+        margin: 10px 0 10px 335px;
+        display: none;
+    }
+
+    .sub-propose {
+        margin: 10px 0 10px 433px;
+        display: none;
+    }
+
+    nav.faq-tab > a:focus {
+        outline: none;
+    }
+
+</style>
 <%block name="header_extras">
 % for template_name in ["donation"]:
 <script type="text/template" id="${template_name}-tpl">
@@ -42,13 +78,89 @@ from student.models import CourseEnrollment
   <script src="${static.url('js/commerce/credit.js')}"></script>
   <%static:js group='dashboard'/>
   <script type="text/javascript">
-    $(document).ready(function() {
-      edx.dashboard.legacy.init({
-        dashboard: "${reverse('dashboard') | n, js_escaped_string}",
-        signInUser: "${reverse('signin_user') | n, js_escaped_string}",
-        changeEmailSettings: "${reverse('change_email_settings') | n, js_escaped_string}"
-      });
+    $(document).ready(function () {
+        edx.dashboard.legacy.init({
+            dashboard: "${reverse('dashboard') | n, js_escaped_string}",
+            signInUser: "${reverse('signin_user') | n, js_escaped_string}",
+            changeEmailSettings: "${reverse('change_email_settings') | n, js_escaped_string}"
+        });
+
+
+        var xhr;
+        $(".faq-tab a").click(function (e) {
+            var status = $(this).data("status");
+            $(".progress").stop().css("width", "0%");
+
+            if(xhr && xhr.readyState != 4)
+                xhr.abort();
+
+            $(e.target).find(".progress").stop().animate({
+                width: "70%"
+            }, 5000);
+
+            xhr = $.post("/dashboard", {
+                "status": status
+            }, function (data) {
+                $(e.target).find(".progress").stop().animate({
+                    width: "100%"
+                }, 50, function () {
+                    $(".faq-tab .progress").css("width", "0%");
+
+                    $(".faq-tab a").removeClass("on");
+                    $(e.target).addClass("on");
+                    $("#courses_target").html(data);
+
+                    var status = $(e.target).data("status");
+
+
+                    $(".sub-end, .sub-interest, .sub-propose").slideUp(200);
+
+                    if (status === "end")
+                        $(".sub-end").slideDown(400);
+                    else if (status === "interest")
+                        $(".sub-interest").slideDown(400);
+                    else if (status === "propose")
+                        $(".sub-propose").slideDown(400);
+                });
+
+            }).done(function () {
+                $(".progress").css("width", "0%");
+                console.log("ajax ok");
+            }).error(function (e) {
+                console.log(e);
+            });
+        });
     });
+
+    function focusTo(type) {
+        try {
+            switch (type) {
+                case 1:
+                    var target_top = $(".action-certificate:eq(0)").parents("li.course-item").position().top - 120;
+                    $('html, body').animate({scrollTop: target_top}, 500);
+                    break;
+                case 2:
+                    var target_top = $(".action-certificate:last").parents("li.course-item").next().position().top - 120;
+                    $('html, body').animate({scrollTop: target_top}, 500);
+                    break;
+                case 3:
+                    var target_top = $(".course-container[data-is_enrolled='True']:first").parents("li.course-item").position().top - 120;
+                    $('html, body').animate({scrollTop: target_top}, 500);
+                    break;
+                case 4:
+                    var target_top = $(".course-container[data-is_enrolled='False']:first").parents("li.course-item").position().top - 120;
+                    $('html, body').animate({scrollTop: target_top}, 500);
+                    break;
+
+                default:
+                    console.log('focusTo default');
+                    break;
+            }
+        }catch(err){
+            console.debug(err);
+        }
+
+    }
   </script>
   <%static:webpack entry="UnenrollmentFactory">
     UnenrollmentFactory({
@@ -139,6 +251,65 @@ from student.models import CourseEnrollment
     <div class="dashboard" id="dashboard-main">
       <div class="main-container">
         <div class="my-courses" id="my-courses">
+          <header class="wrapper-header-courses">
+                <h2 class="header-courses">${_("My Courses")}</h2>
+
+                <nav class="faq-tab">
+                    % if 'status' in request.session:
+                        <a href="#" class="on" data-status="ing" title="진행중">${_("ing course")}
+                            <div class="progress"></div>
+                        </a>
+                    % else:
+                        <a href="#" class="on" data-status="ing" title="진행중">${_("ing course")}
+                            <div class="progress"></div>
+                        </a>
+                        <a href="#" data-status="audit" title="청강강좌">${_("Audit Course")}
+                            <div class="progress"></div>
+                        </a>
+                    % endif
+
+                    <a href="#" data-status="end" title="완료">${_("complete/end Course")}
+                        <div class="progress"></div>
+                    </a>
+
+                    <a href="#" data-status="interest" title="관심강좌">${_("interest")}
+                        <div class="progress"></div>
+                    </a>
+                    <!--
+                    <a href="#" data-status="propose" title="추천강좌">${_("propose(Beta)")}
+                        <div class="progress"></div>
+                    </a>
+                    -->
+                </nav>
+
+                <div class="sub-end">
+                    <a href="javascript:focusTo(1);">이수강좌</a> | <a href="javascript:focusTo(2);">미이수강좌</a>
+                </div>
+                <div class="sub-interest">
+                    <a href="javascript:focusTo(3);">신청중인강좌</a> | <a href="javascript:focusTo(4);">대기강좌</a>
+                </div>
+
+            </header>
+
+
+            <div id="interest_course" style="display:none;">
+                <a id="request_course1" onclick="show_list('request_course1')">신청한 과정</a> | <a id="request_course2" onclick="show_list('request_course2')">신청안한 과정</a>
+
+                <script>
+                    function show_list(id) {
+                        if (id == 'request_course1') {
+                            document.getElementById('interest_course_list').style.display = '';
+                            document.getElementById('uninterest_course_list').style.display = 'none';
+                        }
+                        else if (id == 'request_course2') {
+                            document.getElementById('uninterest_course_list').style.display = '';
+                            document.getElementById('interest_course_list').style.display = 'none';
+                        }
+                    }
+                </script>
+            </div>
+
+            <div id="courses_target">
           % if display_dashboard_courses:
           <%include file="learner_dashboard/_dashboard_navigation_courses.html"/>
           % endif
@@ -205,7 +376,36 @@ from student.models import CourseEnrollment
                 course_overview = enrollment.course_overview
                 resume_button_url = resume_button_urls[dashboard_index]
               %>
-              <%include file='dashboard/_dashboard_course_listing.html' args='course_overview=course_overview, course_card_index=dashboard_index, enrollment=enrollment, is_unfulfilled_entitlement=is_unfulfilled_entitlement, is_fulfilled_entitlement=is_fulfilled_entitlement, entitlement=entitlement, entitlement_session=entitlement_session, entitlement_available_sessions=entitlement_available_sessions, entitlement_expiration_date=entitlement_expiration_date, entitlement_expired_at=entitlement_expired_at, show_courseware_link=show_courseware_link, cert_status=cert_status, can_refund_entitlement=can_refund_entitlement, can_unenroll=can_unenroll, credit_status=credit_status, show_email_settings=show_email_settings, course_mode_info=course_mode_info, is_paid_course=is_paid_course, is_course_blocked=is_course_blocked, verification_status=course_verification_status, course_requirements=course_requirements, dashboard_index=dashboard_index, share_settings=share_settings, user=user, related_programs=related_programs, display_course_modes_on_dashboard=display_course_modes_on_dashboard, show_consent_link=show_consent_link, enterprise_customer_name=enterprise_customer_name, resume_button_url=resume_button_url' />
+              <%include file='dashboard/_dashboard_course_listing.html'
+              args='course_overview=course_overview,
+              course_card_index=dashboard_index,
+              enrollment=enrollment,
+              is_unfulfilled_entitlement=is_unfulfilled_entitlement,
+              is_fulfilled_entitlement=is_fulfilled_entitlement,
+              entitlement=entitlement,
+              entitlement_session=entitlement_session,
+              entitlement_available_sessions=entitlement_available_sessions,
+              entitlement_expiration_date=entitlement_expiration_date,
+              entitlement_expired_at=entitlement_expired_at,
+              show_courseware_link=show_courseware_link,
+              cert_status=cert_status,
+              can_refund_entitlement=can_refund_entitlement,
+              can_unenroll=can_unenroll,
+              credit_status=credit_status,
+              show_email_settings=show_email_settings,
+              course_mode_info=course_mode_info,
+              is_paid_course=is_paid_course,
+              is_course_blocked=is_course_blocked,
+              verification_status=course_verification_status,
+              course_requirements=course_requirements,
+              dashboard_index=dashboard_index,
+              share_settings=share_settings,
+              user=user,
+              related_programs=related_programs,
+              display_course_modes_on_dashboard=display_course_modes_on_dashboard,
+              show_consent_link=show_consent_link,
+              enterprise_customer_name=enterprise_customer_name,
+              resume_button_url=resume_button_url' />
             % endfor
 
             </ul>
@@ -227,7 +427,7 @@ from student.models import CourseEnrollment
               % endif
           </div>
           % endif
-
+            </div>
           % if staff_access and len(errored_courses) > 0:
             <div id="course-errors">
               <h2>${_("Course-loading errors")}</h2>
@@ -246,7 +446,8 @@ from student.models import CourseEnrollment
           % endif
         </div>
       </div>
-      <div class="side-container">
+
+      <!--<div class="side-container">-->
         %if display_sidebar_account_activation_message:
           <div class="sidebar-notification">
             <%include file="${static.get_template_path('registration/account_activation_sidebar_notice.html')}" />
@@ -295,7 +496,7 @@ from student.models import CourseEnrollment
           </div>
         % endif
       </div>
-    </div>
+    <!--</div>-->
 </main>
 
 <div id="email-settings-modal" class="modal" aria-hidden="true">
@@ -362,3 +563,15 @@ from student.models import CourseEnrollment
 </div>
 
 <%include file="dashboard/_dashboard_entitlement_unenrollment_modal.html"/>
+<script>
+
+    var course_index;
+
+    $('.action.action-more').click(function () {
+        course_index = $(this).attr('id');
+    });
+
+    $('.close-modal').click(function () {
+        $('#' + course_index).next().addClass('is-visible');
+    });
+</script>

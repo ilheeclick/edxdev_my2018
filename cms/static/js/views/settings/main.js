@@ -101,6 +101,260 @@ define(['js/views/validation', 'codemirror', 'underscore', 'jquery', 'jquery.ui'
                     model: this.model
                 });
             },
+            overviewLayerSetting: function(){
+                console.log('overviewLayerSetting called ...');
+                //overviewLayerEditor 상에 표시될 항목들을 셋팅한다.
+                var regex = /<br\s*[\/]?>/gi;
+
+                // overview object
+                var ov = $.parseHTML(this.model.get('overview'));
+                // 수업내용/목표
+                var goal = $(ov).find(".goal:eq(0)").html().replace(regex, "");
+                goal = this.textareaTrim(goal);
+
+                // 홍보영상/예시강의
+                var vurl = $(ov).find(".video source:eq(0)").attr("src");
+                // 강좌 계획
+                var syllabus = $(ov).find(".syllabus_table:eq(0)");
+                // 강좌운영진
+                var team = $(ov).find(".course-staff:eq(0)").html();
+                console.log('team ================================================');
+                console.log(team);
+                console.log('team ================================================');
+
+
+                var professor_len = $(ov).find("article.professor");
+                var professor_html = '';
+                for(var j = 0 ; j < professor_len.length ; j++){
+                    var staff1 = $(ov).find("article.professor:eq("+j+") img").prop('src');
+                    var staff2 = $(ov).find("article.professor:eq("+j+") .staff_descript i.staff-name").text();
+                    var staff3 = '';
+                    var row_len =  $(ov).find("article.professor:eq("+j+") .staff_descript dd").length;
+                    $(ov).find("article.professor:eq("+j+") .staff_descript dd").each(function(idx) {
+                        if(idx != row_len -1)
+                            staff3 += $(this).html().trim() + '\n';
+                        else if(idx == row_len -1){
+                            staff3 += $(this).html().trim();
+                        }
+                    });
+                    //staff3 = this.textareaTrim(staff3);
+                    console.log('professor check ---------------------------------------------------');
+                    console.log('staff1: ' + staff1);
+                    console.log('staff2: ' + staff2);
+                    console.log('staff3: ' + staff3);
+                    console.log('professor check ---------------------------------------------------');
+
+                    professor_html += '' +
+                            '<li class="field-group course-grading-assignment-list-item">' +
+                            '<div style="width: 34%; float: left;">' +
+                            '<div class="field text" id="field-course-grading-assignment-name" style="width: 100%;">' +
+                            '<label for="staff-photo">사진 URL</label>' +
+                            '<input type="text" class="long" id="staff-photo" value="'+ staff1 +'" placeholder="http://example.com/photo.jpg">' +
+                            '<span class="tip tip-stacked">웹 에서 접근 가능한 주소</span>' +
+                            '</div>' +
+                            '<br>' +
+                            '<div class="field text" id="field-course-grading-assignment-shortname" style="width: 100%;">' +
+                            '<label for="staff-name">성명</label>' +
+                            '<input type="text" class="short" id="staff-name" value="'+ staff2 +'" placeholder="교수">' +
+                            '<span class="tip tip-stacked">표시될 이름</span>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div style="width: 64%; float: right;">'+
+                            '<div style="width: 100%;">'+
+                            '<label for="staff-career">약력</label>'+
+                            '<textarea id="staff-career" style="width: 96%; height: 135px;">'+ staff3 +'</textarea>'+
+                            '<span class="tip tip-stacked">화면에 표시될 경력 사항</span>'+
+                            '</div>'+
+                            '</div>'+
+                            '<div class="actions">'+
+                            '<a href="#" class="button delete-button standard remove-item"><span class="delete-icon"></span>삭제</a>'+
+                            '</div>'+
+                            '</li>';
+
+
+                    console.log(professor_html);
+
+                }
+                if(professor_len.length != 0)
+                    $("#course-instructor").html(professor_html);
+
+                var staff_len = $(ov).find("article.staff");
+                var staff_html = '';
+                for(var j = 0 ; j < staff_len.length ; j++){
+                    var staff1 = $(ov).find("article.staff:eq("+j+") img").prop('src');
+                    var staff2 = $(ov).find("article.staff:eq("+j+") .staff_descript i.staff-name").text();
+                    var staff3 = '';
+                    var staff_row_len =  $(ov).find("article.staff:eq("+j+") .staff_descript dd").length;
+                    $(ov).find("article.staff:eq("+j+") .staff_descript dd").each(function(idx) {
+                        if(idx != staff_row_len -1)
+                            staff3 += $(this).html().trim() + '\n';
+                        else if(idx == staff_row_len -1)
+                            staff3 += $(this).html().trim();
+                    });
+                    //staff3 = this.textareaTrim(staff3);
+                    console.log('staff check ---------------------------------------------------');
+                    console.log('staff1: ' + staff1);
+                    console.log('staff2: ' + staff2);
+                    console.log('staff3: ' + staff3);
+                    console.log('staff check ---------------------------------------------------');
+
+                    staff_html += '' +
+                            '<li class="field-group course-grading-assignment-list-item">' +
+                            '<div style="width: 34%; float: left;">' +
+                            '<div class="field text" id="field-course-grading-assignment-name" style="width: 100%;">' +
+                            '<label for="staff-photo">사진 URL</label>' +
+                            '<input type="text" class="long" id="staff-photo" value="'+ staff1 +'" placeholder="http://example.com/photo.jpg">' +
+                            '<span class="tip tip-stacked">웹 에서 접근 가능한 주소</span>' +
+                            '</div>' +
+                            '<br>' +
+                            '<div class="field text" id="field-course-grading-assignment-shortname" style="width: 100%;">' +
+                            '<label for="staff-name">성명</label>' +
+                            '<input type="text" class="short" id="staff-name" value="'+ staff2 +'" placeholder="조교">' +
+                            '<span class="tip tip-stacked">표시될 이름</span>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div style="width: 64%; float: right;">'+
+                            '<div style="width: 100%;">'+
+                            '<label for="staff-career">약력</label>'+
+                            '<textarea id="staff-career" style="width: 96%; height: 135px;">'+ staff3 +'</textarea>'+
+                            '<span class="tip tip-stacked">화면에 표시될 경력 사항</span>'+
+                            '</div>'+
+                            '</div>'+
+                            '<div class="actions">'+
+                            '<a href="#" class="button delete-button standard remove-item"><span class="delete-icon"></span>삭제</a>'+
+                            '</div>'+
+                            '</li>';
+
+                    console.log(staff_html);
+
+                }
+                if(staff_len.length != 0)
+                    $("#course-ta").html(staff_html);
+
+                // 이수/평가정보
+                var evaluation = $(ov).find(".grade_table:eq(0)");
+                // 강좌 수준 및 선수요건
+                //var level = $(ov).find("#course-level").html().replace(regex, "\n");
+                var level = $(ov).find("#course-level").html().replace(regex, "");
+                level = this.textareaTrim(level);
+                // 교재 및 참고문헌
+                var reference = $(ov).find("#course-reference").html().replace(regex, "");
+                reference = this.textareaTrim(reference);
+                // FAQ
+                var faq = $(ov).find(".faq article");
+                var faq_form = '';
+                // FAQ 데이터 출력
+                $(faq).each(function(){
+                    var question = $(this).find("h4").text().trim();
+                    var answer = $(this).find("p").text().trim();
+                    faq_form +=  '' +
+                            '<li class="field-group course-grading-assignment-list-item">' +
+                            '<div>' +
+                            '<div class="field text" id="field-course-grading-assignment-name" style="width: 100%;">' +
+                            '<label for="faq-question">질문</label>' +
+                            '<input type="text" class="long" id="faq-question" value="' + question + '" placeholder="강좌 교재가 따로 있나요?">' +
+                            '</div>' +
+                            '<div class="field text" id="field-course-grading-assignment-shortname" style="width: 100%;">' +
+                            '<label for="faq-answer">답변</label>' +
+                            '<input type="text" class="short" id="faq-answer" value="' + answer + '" placeholder="네. 있습니다.">' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="actions">' +
+                            '<a href="#" class="button delete-button standard remove-item"><span class="delete-icon"></span>삭제</a>' +
+                            '</div>' +
+                            '</li>';
+                });
+                console.log('faq_form s ===================================');
+                console.log(faq_form);
+                console.log('faq_form e ===================================');
+                if(faq.length != 0){
+                    $("#overview-tab5 ol#course-question").html(faq_form);
+                }
+
+                // 사용자 추가 내용
+                var user_content = $(ov).find(".user_add:eq(0)");
+
+                // ------------------------------------------------
+                //syllabus table 에 에디터 안에서의 크기조절을 위한 속성 추가
+                syllabus.find("table").attr("style", "width: 100%;");
+                evaluation.find("table").attr("style", "width: 100%;");
+                // ------------------------------------------------
+
+                //홍보영상
+                console.log('video url s ==============================')
+                console.log($(ov).find(".video source:eq(0)").attr("src"));
+                console.log('video url e ==============================')
+
+                //tinymce 에디터 사용시 getContent 함수 이용을 위해 textarea 의 아이디를 지정하요 사용
+                console.log('goal start --- s');
+                console.log(goal);
+                console.log('goal start --- e');
+
+                $("#overview-tab1 textarea").val(goal.trim());
+                $("#overview-tab1 input").val(vurl.trim());
+                $("#course_plan").val(syllabus.html());
+                $("#grade_table").val(evaluation.html());
+                $("#user_content").val(user_content.html());
+                $("#overview-tab4 textarea:eq(1)").val(level.trim());
+                $("#overview-tab4 textarea:eq(2)").val(reference.trim());
+
+                this.tinymceInit('#course_plan');
+                this.tinymceInit('#grade_table');
+                this.tinymceInit('#user_content');
+
+                //tinymce.get('course_plan').setContent(syllabus.html());
+
+            },
+            textareaTrim: function(text){
+                // textarea에서 공백 처리
+                var text_lines = text.split('\n');
+                var return_txt = 'text   first line';
+                for(var i = 0 ; i < text_lines.length; i++){
+                    //alert(goal_lines[i]);
+                    if(text_lines[i].trim() != ''){
+                        //alert('ok');
+                        return_txt += text_lines[i].trim() + '\n';
+                    } else if(i == text_lines.length -1){
+                        return_txt += text_lines[i].trim();
+                    } else {
+                        return_txt += '\n';
+                    }
+                }
+                return_txt = return_txt.replace(/text   first line\n/g, '').replace(/text   first line/g, '');
+
+                return return_txt;
+            },
+            tinymceInit: function (selector) {
+                tinymce.init({
+                    selector: selector,
+                    entity_encoding: 'raw',
+                    menubar: false,
+                    statusbar: false,
+                    plugins: "codemirror, table, link, image",
+                    codemirror: {
+                        path: "" + baseUrl + "/js/vendor"
+                    },
+                    toolbar_items_size: 'small',
+                    extended_valid_elements: "iframe[src|frameborder|style|scrolling|class|width|height|name|align|id]",
+                    toolbar: "fontselect | fontsizeselect | bold italic underline forecolor wrapAsCode | table link | bullist numlist outdent indent blockquote | link unlink image | code",
+                    resize: true,
+                    fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
+                    min_height: 300,
+                    setup: function (ed) {
+                        ed.on('click', function (e) {
+                            tinymce.execCommand('mceFocus', false, '.new-update-form:eq(0) textarea');
+                        });
+                    },
+                    block_formats: interpolate("%(paragraph)s=p;%(preformatted)s=pre;%(heading3)s=h3;%(heading4)s=h4;%(heading5)s=h5;%(heading6)s=h6", {
+                        paragraph: gettext("Paragraph"),
+                        preformatted: gettext("Preformatted"),
+                        heading3: gettext("Heading 3"),
+                        heading4: gettext("Heading 4"),
+                        heading5: gettext("Heading 5"),
+                        heading6: gettext("Heading 6")
+                    }, true),
+                });
+            },
             setEffort:function(){
                 var hh = $("#course-effort-hh").val();
                 var mm = $("#course-effort-mm").val();

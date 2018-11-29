@@ -106,7 +106,9 @@ from xmodule.modulestore.django import modulestore
 from xmodule.modulestore.exceptions import ItemNotFoundError, NoPathToItem
 from xmodule.tabs import CourseTabList
 from xmodule.x_module import STUDENT_VIEW
-
+import MySQLdb as mdb
+import sys
+import json
 from ..entrance_exams import user_can_skip_entrance_exam
 from ..module_render import get_module, get_module_by_usage_id, get_module_for_descriptor
 
@@ -434,6 +436,11 @@ def course_info(request, course_id):
             # course is not yet visible to students.
             context['disable_student_access'] = True
             context['supports_preview_menu'] = False
+        course_id = request.POST.get('course_id')
+
+
+
+
 
         return render_to_response('courseware/info.html', context)
 
@@ -737,6 +744,114 @@ class EnrollStaffView(View):
         # In any other case redirect to the course about page.
         return redirect(reverse('about_course', args=[text_type(course_key)]))
 
+from django.http import JsonResponse
+
+@csrf_exempt
+@cache_if_anonymous()
+@require_http_methods(['POST'])
+def course_interest(request):
+
+    if request.method == 'POST':
+
+        if request.POST['method'] == 'add':
+    
+            user_id = request.POST.get('user_id')
+            org = request.POST.get('org')
+            display_number_with_default = request.POST.get('display_number_with_default')
+
+            sys.setdefaultencoding('utf-8')
+            con = mdb.connect(settings.DATABASES.get('default').get('HOST'),
+                                  settings.DATABASES.get('default').get('USER'),
+                                  settings.DATABASES.get('default').get('PASSWORD'),
+                                  settings.DATABASES.get('default').get('NAME'),
+                                  charset='utf8')
+            cur = con.cursor()
+            query = """
+                 select count(user_id) from interest_course where user_id = '""" + user_id + """' and org = '""" + org + """' and display_number_with_default = '""" + display_number_with_default + """';
+            """
+            cur.execute(query)
+            count = cur.fetchall()
+            ctn = count[0][0]
+            cur.close()
+
+            if(ctn == 1):
+                cur = con.cursor()
+                query = """
+                     UPDATE interest_course
+                       SET use_yn = 'Y'
+                     WHERE user_id = '""" + user_id + """' and org = '""" + org + """' and display_number_with_default = '""" + display_number_with_default + """';
+                """
+                cur.execute(query)
+                cur.execute('commit')
+                cur.close()
+                data = json.dumps('success')
+            elif(ctn == 0):
+                cur = con.cursor()
+                query = """
+                     insert into interest_course(user_id, org, display_number_with_default)
+                     VALUES ('""" + user_id + """',
+                             '""" + org + """',
+                             '""" + display_number_with_default + """');
+                """
+                cur.execute(query)
+                cur.execute('commit')
+                cur.close()
+                data = json.dumps('success')
+            return HttpResponse(data, 'application/json')
+
+        elif request.POST['method'] == 'modi':
+
+            user_id = request.POST.get('user_id')
+            org = request.POST.get('org')
+            display_number_with_default = request.POST.get('display_number_with_default')
+
+            sys.setdefaultencoding('utf-8')
+            con = mdb.connect(settings.DATABASES.get('default').get('HOST'),
+                                  settings.DATABASES.get('default').get('USER'),
+                                  settings.DATABASES.get('default').get('PASSWORD'),
+                                  settings.DATABASES.get('default').get('NAME'),
+                                  charset='utf8')
+            cur = con.cursor()
+            query = """
+                 UPDATE interest_course
+                   SET use_yn = 'N'
+                 WHERE user_id = '""" + user_id + """' and org = '""" + org + """' and display_number_with_default = '""" + display_number_with_default + """';
+            """
+            cur.execute(query)
+            cur.execute('commit')
+            cur.close()
+            data = json.dumps('success')
+
+            return HttpResponse(data, 'application/json')
+
+        elif request.POST['method'] == 'flag':
+            user_id = request.POST.get('user_id')
+            org = request.POST.get('org')
+            display_number_with_default = request.POST.get('display_number_with_default')
+
+            sys.setdefaultencoding('utf-8')
+            con = mdb.connect(settings.DATABASES.get('default').get('HOST'),
+                                  settings.DATABASES.get('default').get('USER'),
+                                  settings.DATABASES.get('default').get('PASSWORD'),
+                                  settings.DATABASES.get('default').get('NAME'),
+                                  charset='utf8')
+
+            cur = con.cursor()
+            query = """
+                 SELECT count(user_id)
+                  FROM interest_course
+                 WHERE user_id = '{0}' AND org = '{1}' AND display_number_with_default = '{2}' AND use_yn = 'Y';
+             """.format(user_id, org, display_number_with_default)
+            cur.execute(query)
+            count = cur.fetchall()
+            flag = count[0][0]
+            cur.close()
+
+            data = json.dumps(flag)
+
+            return HttpResponse(data, 'application/json')
+
+        return HttpResponse('success', 'application/json')
 
 @ensure_csrf_cookie
 @ensure_valid_course_key
@@ -746,7 +861,16 @@ def course_about(request, course_id):
     Display the course's about page.
     """
     course_key = CourseKey.from_string(course_id)
+    course_id_str = str(course_id)
+    index_org_start = course_id_str.find(':') + 1
+    index_org_end = course_id_str.find('+')
+    index_number_start = index_org_end + 1
+    index_number_end = course_id_str.rfind('+')
+    course_org = course_id_str[index_org_start:index_org_end]
+    course_number = course_id_str[index_number_start:index_number_end]
 
+    print "course_org",course_org
+    print "course_number",course_number
     # If a user is not able to enroll in a course then redirect
     # them away from the about page to the dashboard.
     if not can_self_enroll_in_course(course_key):
@@ -843,6 +967,30 @@ def course_about(request, course_id):
         # Embed the course reviews tool
         reviews_fragment_view = CourseReviewsModuleFragmentView().render_to_fragment(request, course=course)
 
+        # coure_review
+        with connections['default'].cursor() as cur:
+            query = """
+                    select a.content,a.point,a.user_id,DATE_FORMAT(a.reg_time, "%Y/%m/%d "),a.id,b.username
+                    from course_review a
+                    left join auth_user b on a.user_id = b.id
+                    where course_id LIKE "course-v1:{course_org}+{course_number}+%"
+                """.format(course_id=course_id,course_org=course_org, course_number=course_number)
+            cur.execute(query)
+            review_list = cur.fetchall()
+
+
+            data_list = []
+
+            for data in review_list:
+                data_dict = dict()
+                data_dict['content'] = data[0]
+                data_dict['point'] = data[1]
+                data_dict['user_id'] = data[2]
+                data_dict['reg_time'] = data[3]
+                data_dict['seq'] = data[4]
+                data_dict['username'] = data[5]
+                data_list.append(data_dict)
+
         context = {
             'course': course,
             'course_details': course_details,
@@ -873,6 +1021,7 @@ def course_about(request, course_id):
             'course_image_urls': overview.image_urls,
             'reviews_fragment_view': reviews_fragment_view,
             'sidebar_html_enabled': sidebar_html_enabled,
+            'rev': data_list,
         }
 
         return render_to_response('courseware/course_about.html', context)
@@ -1311,7 +1460,7 @@ def course_survey(request, course_id):
 
 def is_course_passed(student, course, course_grade=None):
     """
-    check user's course passing status. return True if passed
+    check user's course passing status. return True if prows1assed
     Arguments:
         student : user object
         course : course object
@@ -1727,3 +1876,50 @@ def haewoondaex(request, org):
         "courseware/univ_intro_" + org + ".html",
         {'courses': courses_list, 'course_discovery_meanings': course_discovery_meanings}
     )
+
+@login_required
+@require_POST
+def course_review(request):
+    return render_to_response("courseware/course_review.html")
+
+
+def course_review_add(request):
+    user_id = request.POST.get('user_id')
+    course_id = request.POST.get('course_id')
+    review = request.POST.get('review')
+    point = request.POST.get("star")
+
+    lock=0
+
+    if request.is_ajax():
+
+        with connections['default'].cursor() as cur:
+            query = """
+                insert into edxapp.course_review(content,
+                                                point,
+                                                user_id,
+                                                course_id)
+                values('{review}',
+                        '{point}',
+                        '{user_id}',
+                        '{course_id}')
+            """.format(user_id=user_id,course_id=course_id,point=point,review=review)
+            cur.execute(query)
+
+    return JsonResponse({"data":"success"})
+
+def course_review_del(request):
+    course_id = request.POST.get('course_id')
+    id = request.POST.get('id')
+    user_id = request.POST.get('user_id')
+
+    if request.is_ajax():
+        with connections['default'].cursor() as cur:
+            query = """
+                delete from course_review
+                where id='{id}'
+            """.format(id=id)
+            cur.execute(query)
+
+    return JsonResponse({"data":"success"})
+

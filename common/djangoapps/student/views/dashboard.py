@@ -63,6 +63,7 @@ import MySQLdb as mdb
 from django.db import connections
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
+from django.http import JsonResponse
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -203,42 +204,98 @@ def _create_recent_enrollment_message(course_enrollments, course_modes):  # pyli
         )
 
 
-def get_course_enrollments(user, org_whitelist, org_blacklist):
+def get_course_enrollments(user, org_to_include, orgs_to_exclude, status=None, multisiteStatus=None):
     """
     Given a user, return a filtered set of his or her course enrollments.
 
     Arguments:
         user (User): the user in question.
-        org_whitelist (list[str]): If not None, ONLY courses of these orgs will be returned.
-        org_blacklist (list[str]): Courses of these orgs will be excluded.
+        org_to_include (str): If not None, ONLY courses of this org will be returned.
+        orgs_to_exclude (list[str]): If org_to_include is not None, this
+            argument is ignored. Else, courses of this org will be excluded.
 
     Returns:
         generator[CourseEnrollment]: a sequence of enrollments to be displayed
         on the user's dashboard.
     """
-    for enrollment in CourseEnrollment.enrollments_for_user_with_overviews_preload(user):
-
-        # If the course is missing or broken, log an error and skip it.
-        course_overview = enrollment.course_overview
-        if not course_overview:
-            log.error(
-                "User %s enrolled in broken or non-existent course %s",
-                user.username,
-                enrollment.course_id
-            )
-            continue
-
-        # Filter out anything that is not in the whitelist.
-        if org_whitelist and course_overview.location.org not in org_whitelist:
-            continue
-
-        # Conversely, filter out any enrollments in the blacklist.
-        elif org_blacklist and course_overview.location.org in org_blacklist:
-            continue
-
-        # Else, include the enrollment.
+    if not status:
+        if multisiteStatus == True:
+            enrollments = CourseEnrollment.enrollments_for_user_multi(user)
         else:
+            enrollments = CourseEnrollment.enrollments_for_user_ing(user)
+
+
+    elif status == 'end':
+        enrollments = CourseEnrollment.enrollments_for_user_end(user)
+    elif status == 'audit':
+        enrollments = CourseEnrollment.enrollments_for_user_audit(user)
+    elif status == 'interest':
+        enrollments = CourseEnrollment.enrollments_for_user_interest(user)
+    elif status == 'propose':
+        enrollment_rows = CourseEnrollment.enrollments_for_user_propose_score_pick(user)
+
+        # init list
+        where_display_number = []  # 운영기본번호 dict.
+        where_org = []  # org 코드
+        propose_course_list = []
+
+        for enrollment_row in enrollment_rows:
+            print enrollment_row
+
+            # I'll get middle_classfy data from mongodb
+            where_display_number.append(enrollment_row[3])  # 운영기본번호
+            where_org.append(enrollment_row[4])  # org 코드
+            propose_course_list.append(enrollment_row[0])  # 강좌아이디
+
+        print "-----------------------> s"
+        print "propose_course_list = ", propose_course_list
+        print "len(propose_course_list) = ", len(propose_course_list)
+        print "-----------------------> e"
+
+        n = 0
+        for i in propose_course_list:
+            if n == 0:
+                course_ids = '\'' + i + '\''
+            else:
+                course_ids = course_ids + ',\'' + i + '\''
+            n = n + 1
+
+        if len(propose_course_list) == 0:
+            course_ids = "''"  # <--- null except
+
+        enrollments = CourseEnrollment.enrollments_for_user_propose(course_ids)
+    else:
+        enrollments = CourseEnrollment.enrollments_for_user_ing(user)
+
+    if status == 'propose':
+        for enrollment in enrollments:
             yield enrollment
+    else:
+        for enrollment in enrollments:
+            enrollment.is_enrolled = CourseEnrollment.is_enrolled(user, enrollment.course_id)
+            # If the course is missing or broken, log an error and skip it.
+            course_overview = enrollment.course_overview
+            if not course_overview:
+                log.error(
+                    "User %s enrolled in broken or non-existent course %s",
+                    user.username,
+                    enrollment.course_id
+                )
+                continue
+            else:
+                pass
+
+            # Filter out anything that is not attributed to the current ORG.
+            if org_to_include and course_overview.location.org != org_to_include:
+                continue
+
+            # Conversely, filter out any enrollments with courses attributed to current ORG.
+            elif course_overview.location.org in orgs_to_exclude:
+                continue
+
+            # Else, include the enrollment.
+            else:
+                yield enrollment
 
 
 def get_filtered_course_entitlements(user, org_whitelist, org_blacklist):
@@ -595,13 +652,39 @@ def student_dashboard(request):
         site_org_whitelist,
         site_org_blacklist
     )
+    course_org_filter = configuration_helpers.get_value('course_org_filter')
 
+    # Let's filter out any courses in an "org" that has been declared to be
+    # in a configuration
+    org_filter_out_set = configuration_helpers.get_all_orgs()
+
+    # remove our current org from the "filter out" list, if applicable
+    if course_org_filter:
+        org_filter_out_set.remove(course_org_filter)
     # Record how many courses there are so that we can get a better
     # understanding of usage patterns on prod.
     monitoring_utils.accumulate('num_courses', len(course_enrollments))
 
     # Sort the enrollment pairs by the enrollment date
-    course_enrollments.sort(key=lambda x: x.created, reverse=True)
+    #course_enrollments.sort(key=lambda x: x.created, reverse=True)
+
+    if 'status' in request.session:
+        multisiteStatus = True
+        status = None
+    else:
+        multisiteStatus = False
+        status = None
+
+    print "multisiteStatus = ", multisiteStatus
+
+    # 개강예정, 진행중, 종료 로 구분하여 대시보드 로딩 속도를 개선한다.
+    if request.is_ajax():
+        status = request.POST.get('status')
+        # print 'status:', status
+        course_enrollments = list(get_course_enrollments(user, course_org_filter, org_filter_out_set, status))
+    else:
+        print "this is fucking logic"
+        course_enrollments = list(get_course_enrollments(user, course_org_filter, org_filter_out_set, status, multisiteStatus))
 
     # Retrieve the course modes for each course
     enrolled_course_ids = [enrollment.course_id for enrollment in course_enrollments]
@@ -621,8 +704,67 @@ def student_dashboard(request):
     )
     course_optouts = Optout.objects.filter(user=user).values_list('course_id', flat=True)
 
+    course_type1 = []
+    course_type2 = []
+    course_type3 = []
+    course_type4 = []
 
+    # 수정필요. https://github.com/kmoocdev2/edx-platform/commit/8da64778a4c8e758c5a9b012624c39846f100084#diff-55b798ee23a7fde8d1103408afcd0f16
 
+    for c in course_enrollments:
+        # 이수증 생성 여부: c.course.has_any_active_web_certificate
+
+        print c.course.id, c.course.display_name, c.course.has_any_active_web_certificate
+
+        if c.course.start and c.course.end and c.course.start > c.course.end:
+            continue
+
+        elif c.course.start and c.course.start > datetime.datetime.now(UTC):
+            c.status = 'ready'
+            course_type1.append(c)
+
+        elif c.course.start and c.course.end and c.course.start <= datetime.datetime.now(
+                UTC) <= c.course.end and datetime.datetime.now(UTC) <= c.course.enrollment_end:
+            c.status = 'ing(ing)'
+            course_type2.append(c)
+
+        elif c.course.start and c.course.end and c.course.start <= datetime.datetime.now(
+                UTC) <= c.course.end and datetime.datetime.now(UTC) <= c.course.enrollment_end:
+            c.status = 'ing(end)'
+            course_type2.append(c)
+
+        elif c.course.has_ended():
+            c.status = 'end'
+            course_type3.append(c)
+
+        else:
+            c.status = 'none'
+            course_type4.append(c)
+
+    course_type1.sort(key=lambda x: x.created, reverse=True)
+    course_type2.sort(key=lambda x: x.created, reverse=True)
+    # course_type3.sort(key=lambda x: x.created, reverse=True)
+    # course_type4.sort(key=lambda x: x.created, reverse=True)
+
+    '''
+    print 'course 1:'
+    print course_type1
+    print 'course 2:'
+    print course_type2
+    print 'course 3:'
+    print course_type3
+    print 'course 4:'
+    print course_type4
+    '''
+
+    course_enrollments = course_type1 + course_type2 + course_type3 + course_type4
+
+    '''
+    print 'check step 1 s'
+    for c in course_enrollments:
+        print c.course.id, c.course.display_name
+    print 'check step 1 e'
+    '''
 
 
     # Display activation message
@@ -899,6 +1041,9 @@ def student_dashboard(request):
 
     response = render_to_response('dashboard.html', context)
     set_user_info_cookie(response, request)
+    if request.is_ajax():
+        print "dashboard_ajax-----------ok"
+        return render_to_response('dashboard_ajax.html', context)
     return response
 
 

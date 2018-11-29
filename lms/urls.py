@@ -121,8 +121,16 @@ urlpatterns = [
     # survey url
     url(r'^cert_survey/$', community.cert_survey, name='cert_survey'),
 
+    # course_review
+    url(r'^course_review/$', courseware_views.course_review, name='course_review'),
+    url(r'^course_review_add$', courseware_views.course_review_add, name='course_review_add'),
+    url(r'^course_review_del$', courseware_views.course_review_del, name='course_review_del'),
+
     # course_list
     url(r'^course_search_list$', courses.course_search_list, name='course_list'),
+
+    #interest_course
+    url(r'^course_interest$', courseware_views.course_interest, name='course_interest'),
 
     url(r'', include('student.urls')),
     # TODO: Move lms specific student views out of common code

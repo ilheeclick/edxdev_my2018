@@ -1680,6 +1680,88 @@ class CourseEnrollment(models.Model):
         return cls.objects.filter(user=user, is_active=1).select_related('user')
 
     @classmethod
+    def enrollments_for_user_ing(cls, user):
+        return cls.objects.raw('''
+                SELECT a.*
+                  FROM student_courseenrollment a, course_overviews_courseoverview b
+                 WHERE     a.course_id = b.id
+                       AND now() <= b.end
+                       and a.is_active = 1
+                       AND a.user_id = %s
+                       AND a.mode != 'audit'
+                ORDER BY b.start DESC;
+            ''', [user.id])
+
+    @classmethod
+    def enrollments_for_user_end(cls, user):
+        return cls.objects.raw('''
+                      SELECT a.*
+                        FROM student_courseenrollment a
+                             LEFT JOIN certificates_generatedcertificate c
+                                ON     a.user_id = c.user_id
+                                   AND a.course_id = c.course_id
+                                   AND c.status = 'downloadable'
+                             JOIN course_overview_addinfo d ON a.course_id = d.course_id,
+                             course_overviews_courseoverview b
+                       WHERE     a.course_id = b.id
+                             AND now() > b.end
+                             AND a.user_id = %s
+                             AND a.is_active = 1
+                             AND a.mode != 'audit'
+                    ORDER BY c.created_date DESC, a.created DESC;
+            ''', [user.id])
+
+    @classmethod
+    def enrollments_for_user_audit(cls, user):
+        return cls.objects.raw('''
+                      SELECT a.*
+                        FROM student_courseenrollment a
+                             JOIN course_overview_addinfo d ON a.course_id = d.course_id,
+                             course_overviews_courseoverview b
+                       WHERE     a.course_id = b.id
+                             AND now() > b.end
+                             AND a.user_id = %s
+                             AND a.is_active = 1
+                             AND d.audit_yn = 'Y'
+                             AND a.mode = 'audit'
+                    ORDER BY a.created DESC;
+            ''', [user.id])
+
+    @classmethod
+    def enrollments_for_user_interest(cls, user):
+        return cls.objects.raw('''
+                      SELECT b.interest_id          id,
+                             b.user_id,
+                             a.id                   course_id,
+                             b.created,
+                             if(b.use_yn = 'Y', 1, 0) is_active,
+                             'honor'                mode,
+                             c.created
+                        FROM (SELECT org,
+                                     display_number_with_default,
+                                     id,
+                                     effort,
+                                     (SELECT Count(*)
+                                        FROM edxapp.course_overviews_courseoverview bb
+                                       WHERE     aa.org = bb.org
+                                             AND aa.display_number_with_default =
+                                                    bb.display_number_with_default
+                                             AND aa.start <= bb.start)
+                                        AS rank,
+                                        start
+                                FROM edxapp.course_overviews_courseoverview aa) a
+                             JOIN interest_course b
+                                ON     a.org = b.org
+                                   AND a.display_number_with_default =
+                                          b.display_number_with_default
+                                   AND b.use_yn = 'Y'
+                                   AND b.user_id = %s
+                             LEFT JOIN student_courseenrollment c
+                                ON a.id = c.course_id AND b.user_id = c.user_id
+                       WHERE a.rank = 1
+                    ORDER BY a.start DESC;
+            ''', [user.id])
+    @classmethod
     def enrollments_for_user_with_overviews_preload(cls, user):  # pylint: disable=invalid-name
         """
         List of user's CourseEnrollments, CourseOverviews preloaded if possible.
