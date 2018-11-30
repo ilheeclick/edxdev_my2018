@@ -1460,25 +1460,90 @@ def settings_handler(request, course_key_string):
                 settings.FEATURES.get('EDITABLE_SHORT_DESCRIPTION', True)
             )
             self_paced_enabled = SelfPacedConfiguration.current().enabled
-
-
-
             sidebar_html_enabled = course_experience_waffle().is_enabled(ENABLE_COURSE_ABOUT_SIDEBAR_HTML)
-            # self_paced_enabled = SelfPacedConfiguration.current().enabled
+            con = mdb.connect(settings.DATABASES.get('default').get('HOST'),
+                              settings.DATABASES.get('default').get('USER'),
+                              settings.DATABASES.get('default').get('PASSWORD'),
+                              settings.DATABASES.get('default').get('NAME'),
+                              charset='utf8')
+            cur = con.cursor()
+            # 교수자명
+            query = """
+                             SELECT IFNULL(teacher_name, '')
+                              FROM course_overview_addinfo
+                             WHERE course_id = '{0}';
+                        """.format(course_key)
+            cur.execute(query)
+            teacher_index = cur.fetchall()
+            cur.close()
+
+            if (len(teacher_index) == 1):
+                teacher_name = teacher_index[0][0]
+            else:
+                teacher_name = ""
+
+            cur = con.cursor()
+            query = """
+                             SELECT count(*)
+                              FROM course_structures_coursestructure
+                             WHERE created >= date('2017-12-21') AND course_id = '{0}';
+                        """.format(course_key)
+            cur.execute(query)
+            created_check = cur.fetchall()
+            cur.close()
+
+            if (created_check[0][0] == 1):
+                modi_over = True
+            else:
+                modi_over = False
 
             difficult_degree_list = course_difficult_degree(request, course_key_string)
 
-            # 교수자명
-            with connections['default'].cursor() as cur:
-                query = '''
-                     SELECT IFNULL(teacher_name, '')
-                      FROM course_overview_addinfo
-                     WHERE course_id = '{0}';
-                '''.format(course_key)
-                cur.execute(query)
-                teacher_sel = cur.fetchall()
+            edit_check = 'Y'
 
-            teacher_name = teacher_sel[0][0] if len(teacher_sel) != 0 else ''
+            client = MongoClient(settings.CONTENTSTORE.get('DOC_STORE_CONFIG').get('host'),
+                                 settings.CONTENTSTORE.get('DOC_STORE_CONFIG').get('port'))
+            db = client.edxapp
+
+            course_id = str(course_key)
+            org = course_id.split('+')[0][10:]
+            cid = course_id.split('+')[1]
+            run = course_id.split('+')[2]
+
+            cursor_active_versions = db.modulestore.active_versions.find_one({'course': cid, 'run': run, 'org': org})
+            pb = cursor_active_versions.get('versions').get('published-branch')
+
+            print "modi_course_about > pb = ", pb
+
+            structures_data = db.modulestore.structures.find_one({'_id': ObjectId(pb)})
+
+            blocks = structures_data.get('blocks')
+
+            for block in blocks:
+                if block['block_type'] == 'course':
+                    if 'user_edit' in block['fields']:
+                        edit_check = block['fields']['user_edit']
+
+            print "------------------------------------>"
+            course_lang = settings.ALL_LANGUAGES
+
+            course_lang_tmp = []
+            course_lang_tmp.append([u'ko', u'Korean'])
+            course_lang_tmp.append([u'en', u'English'])
+            course_lang_tmp.append([u'zh_HANS', u'Simplified Chinese'])
+            course_lang_tmp.append([u'zh_HANT', u'Traditional Chinese'])
+            for lang in course_lang:
+                if lang == 'en':
+                    pass
+                elif lang == 'zh_HANS':
+                    pass
+                elif lang == 'zh_HANT':
+                    pass
+                elif lang == 'en':
+                    pass
+                else:
+                    course_lang_tmp.append(lang)
+            print "------------------------------------>"
 
             settings_context = {
                 'context_course': course_module,
