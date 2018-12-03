@@ -283,11 +283,14 @@ from util.course import get_link_for_about_page, get_encoded_course_sharing_utm_
                     <span class="sr">&nbsp;
                       ${course_overview.display_name_with_default}
                     </span>
+                    %if can_unenroll:
                     <span class="fa fa-cog" aria-hidden="true"></span>
+                    %endif
                   </button>
-                  <h1>${can_unenroll}</h1>
+                  <!--<h1>${can_unenroll}</h1>-->
                   <div class="actions-dropdown" id="actions-dropdown-${dashboard_index}" tabindex="-1">
                     <ul class="actions-dropdown-list" id="actions-dropdown-list-${dashboard_index}" aria-label="${_('Available Actions')}" role="menu">
+                      <li>&nbsp</li>
                       % if can_unenroll:
                         <li class="actions-item" id="actions-item-unenroll-${dashboard_index}" role="menuitem">
                           <% course_refund_url = reverse('course_run_refund_status', args=[unicode(course_overview.id)]) %>
