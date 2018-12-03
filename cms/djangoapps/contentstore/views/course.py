@@ -911,8 +911,9 @@ def _create_or_rerun_course(request):
         #         })
         #     except ValidationError as ex:
         #         return JsonResponse({'error': text_type(ex)}, status=400)
-
-        if 'source_course_key' in request.json:
+        source_course_key = request.json.get('source_course_key')
+        if source_course_key:
+            source_course_key = CourseKey.from_string(source_course_key)
             # 기존 강좌의 청강 허용여부
             try:
                 with connections['default'].cursor() as cur:
@@ -925,10 +926,17 @@ def _create_or_rerun_course(request):
                     audit_yn = cur.fetchone() if cur.rowcount else 'Y'
                     fields.update({'audit_yn': audit_yn[0]})
 
+                destination_course_key = rerun_course(request.user, source_course_key, org, course, run, fields)
+
+                return JsonResponse({
+                    'url': reverse_url('course_handler'),
+                    'destination_course_key': unicode(destination_course_key)
+                })
+
+                # return rerun_course(request.user, source_course_key, org, course, run, fields)
+
             except Exception as e:
                 print e
-
-            return rerun_course(request.user, org, course, run, fields)
         else:
             fields.update({'audit_yn': u'Y', 'user_edit': u'N'})
             return create_new_course(request.user, org, course, run, fields)
@@ -1092,12 +1100,12 @@ def create_new_course_in_store(store, user, org, number, run, fields):
     return new_course
 
 
-def rerun_course(user, org, number, run, fields):
+def rerun_course(user, source_course_key, org, number, run, fields, async=True):
     """
     Rerun an existing course.
     """
     # verify user has access to the original course
-    source_course_key = CourseKey.from_string(user.json.get('source_course_key'))
+    # source_course_key = CourseKey.from_string(user.json.get('source_course_key'))
 
     try:
         source_course = modulestore().get_course(source_course_key)
@@ -1137,79 +1145,83 @@ def rerun_course(user, org, number, run, fields):
     fields['video_upload_pipeline'] = {}
 
     json_fields = json.dumps(fields, cls=EdxJSONEncoder)
+
+    args = [unicode(source_course_key), unicode(destination_course_key), user.id, json_fields]
+
+    if async:
+        rerun_status = rerun_course_task.delay(*args)
+    else:
+        rerun_status = rerun_course_task(*args)
+
     try:
         print 'new_course.id ====> ', destination_course_key
         # 이수증 생성을 위한 course_mode 등록
+        if rerun_status.status == 'SUCCESS':
+            with connections['default'].cursor() as cur:
+                query = """
+                INSERT INTO course_modes_coursemode(course_id,
+                                                    mode_slug,
+                                                    mode_display_name,
+                                                    min_price,
+                                                    currency,
+                                                    suggested_prices,
+                                                    expiration_datetime_is_explicit)
+                     VALUES ('{0}',
+                             'honor',
+                             '{0}',
+                             0,
+                             'usd',
+                             '',
+                             FALSE);
+                """.format(destination_course_key)
+                print '_create_new_course.query :', query
 
-        with connections['default'].cursor() as cur:
-            query = """
-            INSERT INTO course_modes_coursemode(course_id,
-                                                mode_slug,
-                                                mode_display_name,
-                                                min_price,
-                                                currency,
-                                                suggested_prices,
-                                                expiration_datetime_is_explicit)
-                 VALUES ('{0}',
-                         'honor',
-                         '{0}',
-                         0,
-                         'usd',
-                         '',
-                         FALSE);
-            """.format(destination_course_key)
-            print '_create_new_course.query :', query
+                cur.execute(query)
 
-            cur.execute(query)
+            user_id = user.id
+            middle_classfy = fields['middle_classfy']
+            classfy = fields['classfy']
+            # 기존 강좌의 청강여부 추가
+            audit_yn = fields['audit_yn'] if 'audit_yn' in fields else 'Y'
 
-        user_id = user.user.id
-        middle_classfy = fields['middle_classfy']
-        classfy = fields['classfy']
+            with connections['default'].cursor() as cur:
+                query = """
+                    INSERT INTO course_overview_addinfo(course_id,
+                                                        create_year,
+                                                        course_no,
+                                                        regist_id,
+                                                        regist_date,
+                                                        modify_id,
+                                                        middle_classfy,
+                                                        classfy,
+                                                        audit_yn)
+                         VALUES ('{course_id}',
+                                 date_format(now(), '%Y'),
+                                 (SELECT count(*)
+                                      FROM course_overviews_courseoverview
+                                     WHERE   display_number_with_default = '{course_number}'
+                                          AND org = '{org}'),
+                                 '{user_id}',
+                                 now(),
+                                 '{user_id}',
+                                 '{middle_classfy}',
+                                 '{classfy}',
+                                 '{audit_yn}');
+                """.format(course_id=destination_course_key, user_id=user_id, middle_classfy=middle_classfy, classfy=classfy, course_number=number, org=org, audit_yn=audit_yn)
 
-        with connections['default'].cursor() as cur:
-            query = """
-                INSERT INTO course_overview_addinfo(course_id,
-                                                    create_year,
-                                                    course_no,
-                                                    regist_id,
-                                                    regist_date,
-                                                    modify_id,
-                                                    middle_classfy,
-                                                    classfy)
-                     VALUES ('{course_id}',
-                             date_format(now(), '%Y'),
-                             (SELECT count(*)
-                                  FROM course_overviews_courseoverview
-                                 WHERE   display_number_with_default = '{course_number}'
-                                      AND org = '{org}'),
-                             '{user_id}',
-                             now(),
-                             '{user_id}',
-                             '{middle_classfy}',
-                             '{classfy}');
-            """.format(course_id=destination_course_key, user_id=user_id, middle_classfy=middle_classfy, classfy=classfy, course_number=number, org=org)
-
-            print 'rerun_course insert -------------- ', query
-            cur.execute(query)
-
+                print 'rerun_course insert -------------- ', query
+                cur.execute(query)
 
     except Exception as e:
         print e
 
-    # Return course listing page
-    return JsonResponse({
-        'url': reverse_url('course_handler'),
-        'destination_course_key': unicode(destination_course_key)
-    })
+    # # Return course listing page
+    # return JsonResponse({
+    #     'url': reverse_url('course_handler'),
+    #     'destination_course_key': unicode(destination_course_key)
+    # })
 
-    # args = [unicode(source_course_key), unicode(destination_course_key), user.id, json_fields]
-    #
-    # if async:
-    #     rerun_course_task.delay(*args)
-    # else:
-    #     rerun_course_task(*args)
-    #
-    # return destination_course_key
+    return destination_course_key
 
 
 def _rerun_course(request, org, number, run, fields):
@@ -1859,6 +1871,7 @@ def advanced_settings_handler(request, course_key_string):
         course_module = get_course_and_check_access(course_key, request.user)
         if 'text/html' in request.META.get('HTTP_ACCEPT', '') and request.method == 'GET':
             need_lock = course_need_lock(request, course_key_string)
+
             difficult_degree_list = course_difficult_degree(request, course_key_string)
             advanced_dict = CourseMetadata.fetch(course_module)
 
@@ -1871,8 +1884,6 @@ def advanced_settings_handler(request, course_key_string):
                 """.format(course_id=course_key_string)
                 cur.execute(query)
                 audit_yn = cur.fetchone()[0] if cur.rowcount else 'N'
-
-            advanced_dict = CourseMetadata.fetch(course_module)
 
             need_lock_dict = {
                 'deprecated': False,

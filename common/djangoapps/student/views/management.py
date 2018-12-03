@@ -742,6 +742,38 @@ def _update_email_opt_in(request, org):
 @transaction.non_atomic_requests
 @require_POST
 @outer_atomic(read_committed=True)
+def enrollment_verifi(request):
+    course_id = request.POST.get('course_id')
+    user_id = request.POST.get('user_id')
+
+    con = mdb.connect(settings.DATABASES.get('default').get('HOST'),
+                      settings.DATABASES.get('default').get('USER'),
+                      settings.DATABASES.get('default').get('PASSWORD'),
+                      settings.DATABASES.get('default').get('NAME'),
+                      charset='utf8')
+
+    cur = con.cursor()
+    query = """
+            INSERT INTO student_courseenrollment(user_id,
+                                                 course_id,
+                                                 created,
+                                                 is_active,
+                                                 mode)
+                 VALUES ('{0}',
+                         '{1}',
+                         now(),
+                         TRUE,
+                         'audit')
+       """.format(user_id, course_id)
+    cur.execute(query)
+    con.commit()
+
+    return HttpResponse()
+
+
+@transaction.non_atomic_requests
+@require_POST
+@outer_atomic(read_committed=True)
 def change_enrollment(request, check_access=True):
     """
     Modify the enrollment status for the logged-in user.

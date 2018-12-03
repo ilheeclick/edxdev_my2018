@@ -49,7 +49,7 @@ def get_visible_courses(org=None, filter_=None):
     #courses = sorted(courses, key=lambda course: course.number)
     with connections['default'].cursor() as cur:
         query = """
-            SELECT course_id, ifnull(classfy, ''), ifnull(b.audit_yn, 'N')
+            SELECT a.id, ifnull(classfy, ''), ifnull(b.audit_yn, 'N')
             FROM course_overviews_courseoverview a
             LEFT JOIN course_overview_addinfo b ON a.id = b.course_id
         """
@@ -78,10 +78,6 @@ def get_visible_courses(org=None, filter_=None):
             c.status = 'none'
 
         # print 'c.status = ', c.id, c.status
-
-
-
-
 
     # Filtering can stop here.
     if current_site_orgs:

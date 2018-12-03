@@ -1573,6 +1573,22 @@ class CourseEnrollment(models.Model):
             raise
 
     @classmethod
+    def enrollments_for_user_audit(cls, user):
+        return cls.objects.raw('''
+                  SELECT a.*
+                    FROM student_courseenrollment a
+                         JOIN course_overview_addinfo d ON a.course_id = d.course_id,
+                         course_overviews_courseoverview b
+                   WHERE     a.course_id = b.id
+                         AND now() > b.end
+                         AND a.user_id = %s
+                         AND a.is_active = 1
+                         AND d.audit_yn = 'Y'
+                         AND a.mode = 'audit'
+                ORDER BY a.created DESC;
+        ''', [user.id])
+
+    @classmethod
     def unenroll(cls, user, course_id, skip_refund=False):
         """
         Remove the user from a given course. If the relevant `CourseEnrollment`

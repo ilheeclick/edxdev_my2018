@@ -153,6 +153,7 @@ define(['js/views/validation',
                 //    call validateKey on each to ensure proper format
                 //    check for dupes
                 var self = this;
+
                 //audit_yn value validate
                 var v = this.model.get('audit_yn').value;
                 if (v == 'Y' || v == 'y')

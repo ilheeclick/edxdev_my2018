@@ -104,10 +104,58 @@ from six import string_types
   })(this)
   </script>
 
+  <script type="text/javascript">
+      $("#audit_mode").click(function(event) {
+          event.preventDefault();
+      %if user.is_authenticated():
+          swal("본 강좌는 운영기간이 종료되어 청강신청만 가능합니다. 청강자는 동영상 등 강좌콘텐츠에는 접근 가능하지만, 강좌 운영진(교수자, TA)의 학습지원과 이수증은 받을 수 없습니다. 청강신청하시겠습니까?",
+              {
+                  buttons: {
+                      cancel: "신청하지 않기",
+                      confirm: {text: "신청하기", className: "audit"}
+                  }
+              }).then(function (isConfirm) {
+              if (isConfirm == true) {
+
+                  $.post('/enrollment_verifi', {
+                          course_id: '${course.id}',
+                          user_id: '${user.id}'
+                      },
+                      function (data) {
+                          location.href = "/dashboard";
+                      }
+                  );
+              } else {
+                  return;
+              }
+          });
+      %endif
+      });
+  </script>
+
   <script src="${static.url('js/course_info.js')}"></script>
 </%block>
 
 <%block name="pagetitle">${course.display_name_with_default_escaped}</%block>
+
+<style>
+  .audit {
+    color: #fff !important;
+    background-color: #218838 !important;
+    border-color: #1e7e34 !important;
+    background-image: none !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
+
+  .swal-button--cancel {
+    color: #555 !important;
+    background-color: #efefef !important;
+    background-image: none !important;
+    text-shadow: none !important;
+  }
+
+</style>
 
 <section class="course-info">
 
@@ -227,8 +275,10 @@ from six import string_types
         ## Shib courses need the enrollment button to be displayed even when can_enroll is False,
         ## because AnonymousUsers cause can_enroll for shib courses to be False, but we need them to be able to click
         ## so that they can register and become a real user that can enroll.
-        % elif not is_shib_course and not can_enroll:
+        % elif not is_shib_course and not can_enroll and audit_flag == 'N':
           <span class="register disabled">${_("Enrollment is Closed")}</span>
+        % elif not is_shib_course and not can_enroll and audit_flag == 'Y':
+          <a class="audit register" id="audit_mode" style="float: right">${_("Audit Enrollment")}</a>
         %elif can_add_course_to_cart:
           <%
           if user.is_authenticated:

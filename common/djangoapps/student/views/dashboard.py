@@ -820,7 +820,6 @@ def student_dashboard(request):
                 print 'registration_flag_history error.'
                 print e
 
-
     enterprise_message = get_dashboard_consent_notification(request, user, course_enrollments)
 
     # Disable lookup of Enterprise consent_required_course due to ENT-727
@@ -1161,4 +1160,3 @@ def modi_teacher_name(request):
             return HttpResponse(data, 'application/json')
 
         return HttpResponse('success', 'application/json')
-
