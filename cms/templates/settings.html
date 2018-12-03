@@ -447,24 +447,31 @@ ${can_show_certificate_available_date_field(context_course) | n, dump_js_escaped
 
         % for dgree in difficult_degree_list:
                         <%
-                        for key, val in difficult_degree_list.items():
-                            print val, key
-                            print val[0]
-                            print val[1]
-                            print val[2]
+                        try:
+                            pstr = ''
+                            for key, val in difficult_degree_list.items():
+                                if key is None or val is None:
+                                    continue
 
-                            print val[0][0]
-                            print val[0][1]
+                                print val, key
+                                print val[0]
+                                print val[1]
+                                print val[2]
 
-                            print val[1][0]
-                            print val[1][1]
+                                print val[0][0]
+                                print val[0][1]
 
-                            print val[2][0]
-                            print val[2][1]
+                                print val[1][0]
+                                print val[1][1]
 
-                            pstr = """var degree = {'category':[{'code':'""" + val[0][0] + """', 'gettext': '""" + val[0][1] + """'}, """
-                            pstr += """{'code':'""" + val[1][0] + """', 'gettext': '""" + val[1][1] + """'}, """
-                            pstr += """{'code':'""" + val[2][0] + """', 'gettext': '""" + val[2][1] + """'},]};"""
+                                print val[2][0]
+                                print val[2][1]
+
+                                pstr = """var degree = {'category':[{'code':'""" + val[0][0] + """', 'gettext': '""" + val[0][1] + """'}, """
+                                pstr += """{'code':'""" + val[1][0] + """', 'gettext': '""" + val[1][1] + """'}, """
+                                pstr += """{'code':'""" + val[2][0] + """', 'gettext': '""" + val[2][1] + """'},]};"""
+                        except Exception as e:
+                            print e
                         %>
 
 
