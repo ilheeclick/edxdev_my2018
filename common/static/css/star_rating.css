@@ -213,9 +213,9 @@
 }
 
 .btn_del{
-  max-height: 50px;
-  min-width: 78px;
-  max-width: 78px;
+  max-height: 30px;
+  min-width: 34px;
+  max-width: 34px;
   border: 2px solid #f93f4a;
   border-radius: 5px;
   color: black;
@@ -228,9 +228,11 @@
   text-shadow:none;
   -webkit-transition-duration: 0.4s; /* Safari */
   transition-duration: 0.4s;
+  padding-left: 4px;
+  padding-top: 1px;
 }
 .btn_del:hover {
-  background-color: #f2dede; /* Green */
+  background-color: #ffffff; /* Green */
   color: white;
   background-image: none;
   box-shadow: none;
@@ -238,8 +240,8 @@
 }
 .btn_del:hover:not(:disabled), .btn_del:hover:not(:disabled) {
     cursor: pointer;
-  border: 3px black solid;
-   background-color: #ff3061;
+  /*border: 3px black solid;*/
+   background-color: #ffffff;
    background-image: none;
   box-shadow: white;
 }
@@ -248,7 +250,7 @@
   cursor: pointer;
   background-color: #ffffff;
   background-image: none;
-  box-shadow: white;
+
 }
 .btn:hover {
   background-color: #f2dede;
@@ -287,4 +289,18 @@
 .btn-chk{
   width:60px;
 
+}
+
+.del_img{
+  width: 25px;
+  height: 25px;
+
+}
+.img_like{
+  width: 20px;
+  height: 20px;
+}
+.img_dislike{
+  width: 20px;
+  height: 20px;
 }

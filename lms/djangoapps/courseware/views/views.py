@@ -978,7 +978,6 @@ def course_about(request, course_id):
             cur.execute(query)
             review_list = cur.fetchall()
 
-
             data_list = []
 
             for data in review_list:
@@ -989,7 +988,46 @@ def course_about(request, course_id):
                 data_dict['reg_time'] = data[3]
                 data_dict['seq'] = data[4]
                 data_dict['username'] = data[5]
+                # data_list.append(data_dict)
+                data_dict['like'] = 0
+                data_dict['bad'] = 0
+
+                with connections['default'].cursor() as cur:
+                    query = """
+                            select  count(good_bad),review_seq, good_bad
+                            from course_review_user
+                            where review_id = '{review_id}' and review_seq='{review_seq}'
+                            group by good_bad;
+                        """.format(review_id=data[2], review_seq=data[4])
+                    cur.execute(query)
+                    like_list = cur.fetchall()
+                    for like in like_list:
+                        if like[2] == 'g':
+                            data_dict['like'] = like[0]
+                        elif like[2] == 'b':
+                            data_dict['bad'] = like[0]
+
                 data_list.append(data_dict)
+                # with connections['default'].cursor() as cur:
+                #     query = """
+                #             select  count(good_bad),review_seq
+                #             from course_review_user
+                #             where review_id = '{review_id}' and good_bad ='b' and review_seq='{review_seq}';
+                #         """.format(review_id=review_list[2], review_seq=review_list[4])
+                #     cur.execute(query)
+                #     bad_list = cur.fetchall()
+                #     data_dict['bad'] = data[0]
+
+            # for data in like_list:
+            #     data_dict = dict()
+            #     data_dict['like'] = data[0]
+            #     data_list.append(data_dict)
+            #
+            # for data in bad_list:
+            #     data_dict = dict()
+            #     data_dict['bad'] = data[0]
+            #     data_list.append(data_dict)
+
 
         context = {
             'course': course,
@@ -1895,18 +1933,31 @@ def course_review_add(request):
 
         with connections['default'].cursor() as cur:
             query = """
-                insert into edxapp.course_review(content,
-                                                point,
-                                                user_id,
-                                                course_id)
-                values('{review}',
-                        '{point}',
-                        '{user_id}',
-                        '{course_id}')
-            """.format(user_id=user_id,course_id=course_id,point=point,review=review)
+                select id
+                from course_review
+                where course_id='{course_id}'and user_id='{user_id}'
+            """.format(user_id=user_id, course_id=course_id)
             cur.execute(query)
+            check = cur.fetchall()
 
-    return JsonResponse({"data":"success"})
+            if check !=():
+                return JsonResponse({"data":"false"})
+
+            else:
+                with connections['default'].cursor() as cur:
+                    query = """
+                        insert into edxapp.course_review(content,
+                                                        point,
+                                                        user_id,
+                                                        course_id)
+                        values('{review}',
+                                '{point}',
+                                '{user_id}',
+                                '{course_id}')
+                    """.format(user_id=user_id,course_id=course_id,point=point,review=review)
+                    cur.execute(query)
+
+                return JsonResponse({"data":"success"})
 
 def course_review_del(request):
     course_id = request.POST.get('course_id')
@@ -1920,6 +1971,65 @@ def course_review_del(request):
                 where id='{id}'
             """.format(id=id)
             cur.execute(query)
+        with connections['default'].cursor() as cur:
+            query = """
+                delete from course_review_user
+                where review_seq='{id}'
+            """.format(id=id)
+            cur.execute(query)
 
     return JsonResponse({"data":"success"})
+
+def course_review_gb(request):
+    review_id = request.POST.get('review_id')
+    user_id = request.POST.get('user_id')
+    gb = request.POST.get('gb')
+    review_seq = request.POST.get('review_seq')
+
+    if request.is_ajax():
+
+        with connections['default'].cursor() as cur:
+            query = """
+                select good_bad 
+                from course_review_user 
+                where review_id='{review_id}' and user_id = '{user_id}';
+            """.format(review_id=review_id,user_id=user_id)
+            cur.execute(query)
+            check=cur.fetchall()
+            
+            if check ==():
+                with connections['default'].cursor() as cur:
+                    query = """
+                        insert into edxapp.course_review_user(review_id,
+                                                        user_id,
+                                                        good_bad,
+                                                        review_seq)
+                        values('{review_id}',
+                                '{user_id}',
+                                '{gb}',
+                                '{review_seq}')
+                    """.format(review_id=review_id,gb=gb,user_id=user_id,review_seq=review_seq)
+                    cur.execute(query)
+
+                    print " insert ok"
+                return JsonResponse({"data":"success"})
+
+            elif check[0][0] == gb:
+                with connections['default'].cursor() as cur:
+                    query = """
+                        delete from edxapp.course_review_user 
+                        where review_id='{review_id}' and user_id = '{user_id}';
+                    """.format(review_id=review_id, user_id=user_id)
+                    cur.execute(query)
+                    print " delete ok"
+                return  JsonResponse({"data":"delete"})
+
+            elif check[0][0] != gb:
+                print " ok"
+                return JsonResponse({"data":"false"})
+
+
+
+
+
 
