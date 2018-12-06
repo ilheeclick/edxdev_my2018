@@ -54,6 +54,57 @@ define(['js/views/validation', 'codemirror', 'underscore', 'jquery', 'jquery.ui'
                 'click #edit_check': "course_editor_html",
             },
 
+            course_editor_html: function(e){
+                swal({
+                    html: 'HTML을 직접 수정하시면 이 후 <b>강좌소개페이지 에디터</b>를 통한 <br>수정이 불가합니다.<br>그래도 수정을 진행하시겠습니까?',
+                    title: '',
+                    //text: '',
+                    type: 'warning',
+                    //confirmButtonText: '확인',
+                    focusConfirm: false,
+                    showCancelButton: true,
+                    cancelButtonText: '취소',
+                    confirmButtonText: '확인',
+                    reverseButtons: true,
+                    //closeOnClickOutside: false,
+                    //closeOnEsc: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                }).then(function (check) {
+                    if(check.value == true){
+                        var addinfo_course_id = 'course-v1:' + $('#course-organization').val() + '+' + $('#course-number').val() + '+' + $('#course-name').val();
+                        var addinfo_user_id = $('#addinfo_user_id').text();
+                        $(".toggleOverviewLayerBtn").css({'display': 'none'});
+                        $(".CodeMirror-scroll").css({'pointer-events': 'all', 'opacity': 1});
+                        var json_data = {
+                            // csrfmiddlewaretoken: $.cookie('csrftoken'),
+                            user_edit: {
+                                "deprecated": "false",
+                                "display_name": "user_edit",
+                                "help": "Y또는 N을 입력합니다. Y를 입력할 경우 에디터를 이용한 수정이 불가합니다.",
+                                "value": "Y"
+                            }
+                        };
+
+                        $.ajax({
+                            url: "/settings/advanced/" + addinfo_course_id,
+                            type: "POST",
+                            dataType: "json",
+                            contentType: 'application/json; charset=utf-8',
+                            data: JSON.stringify(json_data)
+                        }).done(function(data){
+                            if(data.user_edit.value == 'Y'){
+                                $("#course_edit_check").val("Y");
+                                $("#course_edit_check").trigger('change');
+                                $(".CodeMirror").prop('id', '');
+                            }
+                        });
+                        console.log(check);
+                    } else {
+                        return;
+                    }
+                });
+            },
             initialize: function(options) {
                 options = options || {};
                 // fill in fields
