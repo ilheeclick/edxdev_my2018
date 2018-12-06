@@ -152,6 +152,25 @@ def course_start_datetime_text(start_date, advertised_start, format_string, time
         # does not yet have an announced start date.
         return _('TBD')
 
+def course_end_datetime_text(end_date, format_string, time_zone, strftime_localized):
+    """
+    Returns a formatted string for a course's end date or datetime.
+
+    If end_date is None, an empty string will be returned.
+
+    Arguments:
+        end_date (datetime): the end datetime of a course
+        format_string (str): the date format type, as passed to strftime
+        time_zone (pytz time zone): the time zone to convert to
+        strftime_localized ((datetime, str) -> str): a localized string
+            formatting function
+    """
+    return (
+        _datetime_to_string(end_date, format_string, time_zone, strftime_localized) if end_date is not None
+        else ''
+    )
+
+
 def may_certify_for_course(
         certificates_display_behavior,
         certificates_show_before_end,
