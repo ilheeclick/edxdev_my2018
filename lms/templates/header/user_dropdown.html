@@ -31,7 +31,7 @@ displayname = get_enterprise_learner_generic_name(request) or username
     <div class="toggle-user-dropdown" role="button" aria-label=${_("Options Menu")} aria-expanded="false" tabindex="0" aria-controls="user-menu">
         <span class="fa fa-caret-down" aria-hidden="true"></span>
     </div>
-    <div class="dropdown-user-menu hidden" aria-label=${_("More Options")} role="menu" id="user-menu" tabindex="-1">
+    <div class="dropdown-user-menu hidden" style="z-index: 999;" aria-label=${_("More Options")} role="menu" id="user-menu" tabindex="-1">
         % if resume_block:
             <div class="mobile-nav-item dropdown-item dropdown-nav-item"><a href="${resume_block}" role="menuitem">${_("Resume your last course")}</a></div>
         % endif

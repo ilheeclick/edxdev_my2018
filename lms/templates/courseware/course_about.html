@@ -732,7 +732,6 @@ div.about-side-title p {
                             <span>${_(study_time)}</span>
                             </br>(${get_course_about_section(request, course, "course_video")})
                     </span>
-
                 </div>
             </li>
                       ##% if get_course_about_section(request, course, "effort"):
@@ -743,20 +742,19 @@ div.about-side-title p {
 
           ##<li class="important-dates-item"><span class="icon fa fa-clock-o" aria-hidden="true"></span><p class="important-dates-item-title">${_('Course Length')}</p><span class="important-dates-item-text course-length">${_('{number} weeks').format(number=15)}</span></li>
 
-          %if course_price and (can_add_course_to_cart or is_cosmetic_price_enabled):
-            <li class="important-dates-item">
-                <div class="side-about">
-                    <div class="about-side-title">
-                        <span class="icon fa fa-money" aria-hidden="true"></span>
-                        <p class="important-dates-item-title">${_("Price")}</p>
-                    </div>
-                    <span class="important-dates-item-text prerequisites" style="display: inline-block; vertical-align: middle;">
-                            <span>${course_price}</span>
-                    </span>
+          ##%if course_price and (can_add_course_to_cart or is_cosmetic_price_enabled):
+            ##<li class="important-dates-item">
+              ##  <div class="side-about">
+                ##      <span class="icon fa fa-money" aria-hidden="true"></span>
+                  ##      <p class="important-dates-item-title">${_("Price")}</p>
+                    ##</div>
+                    ##<span class="important-dates-item-text prerequisites" style="display: inline-block; vertical-align: middle;">
+                      ##      <span>${course_price}</span>
+                    ##</span>
 
-                </div>
-            </li>
-          %endif
+                ##</div>
+            ##</li>
+          ##%endif
 
           % if pre_requisite_courses:
           <% prc_target = reverse('about_course', args=[unicode(pre_requisite_courses[0]['key'])]) %>
@@ -817,8 +815,8 @@ div.about-side-title p {
                     <span class="important-dates-item-text prerequisites" style="display: inline-block; vertical-align: middle;">
                             <span class="important-dates-item-text start-date" style="letter-spacing: -1px;">${course.start_datetime_text()} ~ ${course.end_datetime_text()}
                             % if day['day']:
-                            <br><p style="float: right; margin: 0;">(${day['day']})</p>
-                            % endif
+                <br><p style="float: right; margin: 0;">(${day['day']})</p>
+                % endif
                     </span>
 
                 </div>

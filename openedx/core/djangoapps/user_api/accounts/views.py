@@ -377,6 +377,7 @@ class AccountRetireMailingsView(APIView):
 
 
 class DeactivateLogoutView(APIView):
+
     """
     POST /api/user/v1/accounts/deactivate_logout/
     {
@@ -419,30 +420,41 @@ class DeactivateLogoutView(APIView):
         Marks the user as having no password set for deactivation purposes,
         and logs the user out.
         """
+        print "DeactivateLogoutView!!!_ post"
         user_model = get_user_model()
         try:
+            print "DeactivateLogoutView-------------1"
             # Get the username from the request and check that it exists
             verify_user_password_response = self._verify_user_password(request)
             if verify_user_password_response.status_code != status.HTTP_204_NO_CONTENT:
+                print "DeactivateLogoutView-------------2"
                 return verify_user_password_response
             with transaction.atomic():
+                print "DeactivateLogoutView-------------3"
                 UserRetirementStatus.create_retirement(request.user)
+                print "DeactivateLogoutView-------------4"
                 # Unlink LMS social auth accounts
                 UserSocialAuth.objects.filter(user_id=request.user.id).delete()
+                print "DeactivateLogoutView-------------5"
                 # Change LMS password & email
                 user_email = request.user.email
                 request.user.email = get_retired_email_by_email(request.user.email)
+                print "DeactivateLogoutView-------------6"
                 request.user.save()
+                print "DeactivateLogoutView-------------7"
                 _set_unusable_password(request.user)
+                print "DeactivateLogoutView-------------8"
                 # TODO: Unlink social accounts & change password on each IDA.
                 # Remove the activation keys sent by email to the user for account activation.
                 Registration.objects.filter(user=request.user).delete()
+                print "DeactivateLogoutView-------------9"
                 # Add user to retirement queue.
                 # Delete OAuth tokens associated with the user.
                 retire_dop_oauth2_models(request.user)
                 retire_dot_oauth2_models(request.user)
 
                 try:
+                    print "33333232322";
                     # Send notification email to user
                     site = Site.objects.get_current()
                     notification_context = get_base_template_context(site)
