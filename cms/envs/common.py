@@ -363,6 +363,15 @@ COURSE_DISCOVERY_MEANINGS = {
     'org': {
         'name': 'Organization',
     },
+    'org_kename': {
+        'name': 'Organization Korea Name',
+    },
+    'org_ename': {
+        'name': 'Organization English Name',
+    },
+    'teacher_name': {
+        'name': 'Teacher',
+    },
     'modes': {
         'name': 'Course Type',
         'terms': {
@@ -1429,7 +1438,8 @@ TRACKING_BACKENDS = {
     'logger': {
         'ENGINE': 'track.backends.logger.LoggerBackend',
         'OPTIONS': {
-            'name': 'tracking'
+            'name': 'tracking',
+            'max_event_size': TRACK_MAX_EVENT,
         }
     }
 }

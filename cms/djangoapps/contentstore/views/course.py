@@ -566,6 +566,9 @@ def course_listing(request):
             u'display_name': uca.display_name,
             u'course_key': unicode(uca.course_key),
             u'org': uca.course_key.org,
+            u'org_kname': None,
+            u'org_ename': None,
+            u'teacher_name': None,
             u'number': uca.course_key.course,
             u'run': uca.course_key.run,
             u'is_failed': True if uca.state == CourseRerunUIStateManager.State.FAILED else False,
@@ -589,6 +592,9 @@ def course_listing(request):
             u'library_key': unicode(library.location.library_key),
             u'url': reverse_library_url(u'library_handler', unicode(library.location.library_key)),
             u'org': library.display_org_with_default,
+            u'org_kname': None,
+            u'org_ename': None,
+            u'teacher_name': None,
             u'number': library.display_number_with_default,
             u'can_edit': has_studio_write_access(request.user, library.location.library_key),
         }
@@ -773,6 +779,9 @@ def _process_courses_list(courses_iter, in_process_course_actions, split_archive
             'lms_link': get_lms_link_for_item(course.location),
             'rerun_link': _get_rerun_link_for_item(course.id),
             'org': course.display_org_with_default,
+            'org_kname': None,
+            'org_ename': None,
+            'teacher_name': None,
             'number': course.display_number_with_default,
             'run': course.location.run
         }
@@ -878,6 +887,35 @@ def _create_or_rerun_course(request):
         fields['linguistics'] = linguistics
         course_period = request.json.get('course_period')
         fields['course_period'] = course_period
+
+        # 기관코드를 이용하여 기관 한글명, 기관 영문명을 가져온다.
+        org_kname = request.json.get('org_kname')
+        fields['org_kname'] = org_kname
+        org_ename = request.json.get('org_ename')
+        fields['org_ename'] = org_ename
+
+        try:
+            with connections['default'].cursor() as cur:
+                query = """
+                                SELECT ifnull(detail_name,'') org_kname, ifnull(detail_ename, '') org_ename 
+                                FROM   code_detail 
+                                WHERE  group_code = '003' 
+                                AND    detail_code = '{org}'
+                            """.format(org=org)
+                cur.execute(query)
+
+                row = cur.fetchone()
+                while row is not None:
+                    org_kname = row[0]
+                    org_ename = row[1]
+                    fields.update({'org_kname': org_kname})
+                    fields.update({'org_ename': org_ename})
+                    row = cur.fetchone()
+        except Exception as e:
+            print e
+
+        teacher_name = request.json.get('teacher_name')
+        fields['teacher_name'] = teacher_name
 
         # 한국학 null 방어 코드 ------- #
         if linguistics != 'Y':
@@ -1116,6 +1154,8 @@ def rerun_course(user, source_course_key, org, number, run, fields, async=True):
         fields['linguistics'] = source_course.linguistics
         fields['course_period'] = source_course.course_period
         fields['user_edit'] = source_course.user_edit
+        fields['org_kname'] = None
+        fields['org_ename'] = None
     except Exception as e:
         print e
 
@@ -1240,6 +1280,8 @@ def _rerun_course(request, org, number, run, fields):
         fields['linguistics'] = source_course.linguistics
         fields['course_period'] = source_course.course_period
         fields['user_edit'] = source_course.user_edit
+        fields['org_kname'] = None
+        fields['org_ename'] = None
     except Exception as e:
         print e
 
@@ -1494,6 +1536,9 @@ def settings_handler(request, course_key_string):
             else:
                 teacher_name = ""
 
+            course_module.teacher_name = teacher_name
+
+
             cur = con.cursor()
             query = """
                              SELECT count(*)
@@ -1555,11 +1600,11 @@ def settings_handler(request, course_key_string):
                     pass
                 else:
                     course_lang_tmp.append(lang)
-            print "------------------------------------>"
+
+            # request.json['teacher_name'] = teacher_name
 
             settings_context = {
                 'context_course': course_module,
-                'teacher_name': teacher_name,
                 'user_edit': edit_check,
                 'course_locator': course_key,
                 'lms_link_for_about_page': utils.get_lms_link_for_about_page(course_key),

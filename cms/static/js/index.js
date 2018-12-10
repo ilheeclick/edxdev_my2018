@@ -5,6 +5,8 @@ define(["domReady", "jquery", "underscore", "js/utils/cancel_on_escape", "js/vie
         var CreateCourseUtils = new CreateCourseUtilsFactory({
             name: '.new-course-name',
             org: '.new-course-org',
+            //org_kname: '.new-course-org-kname',
+            //org_ename: '.new-course-org-ename',
             number: '.new-course-number',
             run: '.new-course-run',
             save: '.new-course-save',
@@ -36,6 +38,8 @@ define(["domReady", "jquery", "underscore", "js/utils/cancel_on_escape", "js/vie
         var CreateLibraryUtils = new CreateLibraryUtilsFactory({
             name: '.new-library-name',
             org: '.new-library-org',
+            //org_kname: '.new-library-org-kname',
+            //org_ename: '.new-library-org-ename',
             number: '.new-library-number',
             save: '.new-library-save',
             errorWrapper: '.create-library .wrap-error',
@@ -61,6 +65,8 @@ define(["domReady", "jquery", "underscore", "js/utils/cancel_on_escape", "js/vie
             var $newCourseForm = $(this).closest('#create-course-form');
             var display_name = $newCourseForm.find('.new-course-name').val();
             var org = $newCourseForm.find('.new-course-org').val();
+            //var org_kname = $newCourseForm.find('.new-course-org-kname').val();
+            //var org_ename = $newCourseForm.find('.new-course-org-ename').val();
             var number = $newCourseForm.find('.new-course-number').val();
             var run = $newCourseForm.find('.new-course-run').val();
             // Il-Hee, Maeng update start --------------------------
@@ -98,6 +104,8 @@ define(["domReady", "jquery", "underscore", "js/utils/cancel_on_escape", "js/vie
 
             var course_info = {
                 org: org,
+                //org_kname: org_kname,
+                //org_ename: org_ename,
                 number: number,
                 display_name: display_name,
                 run: run,

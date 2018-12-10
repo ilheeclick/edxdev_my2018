@@ -180,12 +180,14 @@ COURSE_DISCOVERY_MEANINGS = {
     'org': {
         'name': 'Organization',
     },
-    'modes': {
-        'name': 'Course Type',
-        'terms': {
-            'honor': 'Honor',
-            'verified': 'Verified',
-        },
+    'org_kname': {
+        'name': 'Organization Korea Name',
+    },
+    'org_ename': {
+        'name': 'Organization English Name',
+    },
+    'teacher_name': {
+        'name': 'Teacher',
     },
     'language': LANGUAGE_MAP,
     'classfy': {

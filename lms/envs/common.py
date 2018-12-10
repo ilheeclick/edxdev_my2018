@@ -260,6 +260,15 @@ COURSE_DISCOVERY_MEANINGS = {
     'org': {
         'name': 'Organization',
     },
+    'org_kename': {
+        'name': 'Organization Korea Name',
+    },
+    'org_ename': {
+        'name': 'Organization English Name',
+    },
+    'teacher_name': {
+        'name': 'Teacher',
+    },
     'modes': {
         'name': 'Course Type',
         'terms': {
@@ -559,7 +568,7 @@ FEATURES = {
 
     # Setting for overriding default filtering facets for Course discovery
     # COURSE_DISCOVERY_FILTERS = ["org", "language", "modes"]
-    'COURSE_DISCOVERY_FILTERS': ["org", "language", "modes", 'classfy', 'middle_classfy', 'difficult_degree', 'linguistics', 'range', 'course_period'],
+    'COURSE_DISCOVERY_FILTERS': ["org", "org_kname", "org_ename", "teacher_name", "language", "modes", 'classfy', 'middle_classfy', 'difficult_degree', 'linguistics', 'range', 'course_period'],
 
     # Software secure fake page feature flag
     'ENABLE_SOFTWARE_SECURE_FAKE': False,
@@ -978,7 +987,8 @@ TRACKING_BACKENDS = {
     'logger': {
         'ENGINE': 'track.backends.logger.LoggerBackend',
         'OPTIONS': {
-            'name': 'tracking'
+            'name': 'tracking',
+            'max_event_size': TRACK_MAX_EVENT,
         }
     }
 }

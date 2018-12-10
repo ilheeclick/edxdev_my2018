@@ -10,7 +10,7 @@ from .result_processor import SearchResultProcessor
 from .utils import DateRange
 
 # Default filters that we support, override using COURSE_DISCOVERY_FILTERS setting if desired
-DEFAULT_FILTER_FIELDS = ["org", "language", "modes", "classfy", "middle_classfy", "classfysub", "middle_classfysub", "linguistics", "range", "course_period"]
+DEFAULT_FILTER_FIELDS = ["org", "language", "modes", "classfy", "middle_classfy", "classfysub", "middle_classfysub", "linguistics", "range", "course_period", "org_kname", "org_ename", "teacher_name"]
 
 
 def course_discovery_filter_fields():
@@ -20,7 +20,7 @@ def course_discovery_filter_fields():
 
 def course_discovery_facets():
     """ Discovery facets to include, by default we specify each filter field with unspecified size attribute """
-    facets = ['org', 'language', 'modes', 'classfy', 'middle_classfy', 'classfysub', 'middle_classfysub', 'linguistics', 'range', 'course_period']
+    facets = ['org', 'language', 'modes', 'classfy', 'middle_classfy', 'classfysub', 'middle_classfysub', 'linguistics', 'range', 'course_period', 'org_kname', 'org_ename', 'teacher_name']
     return getattr(settings, "COURSE_DISCOVERY_FACETS", {field: {'size':'300'} for field in facets})
 
 
@@ -119,7 +119,7 @@ def course_discovery_search(search_term=None, size=20, from_=0, field_dictionary
     # We'll ignore the course-enrollemnt informaiton in field and filter
     # dictionary, and use our own logic upon enrollment dates for these
     #use_search_fields = ["org"]
-    use_search_fields = ["org", "language", "modes", 'classfy', 'middle_classfy', 'classfysub', 'middle_classfysub', 'linguistics', 'range', 'course_period', 'start']
+    use_search_fields = ["org", "language", "modes", 'classfy', 'middle_classfy', 'classfysub', 'middle_classfysub', 'linguistics', 'range', 'course_period', 'start', 'org_kname', 'org_ename', 'teacher_name']
     (search_fields, _, exclude_dictionary) = SearchFilterGenerator.generate_field_filters()
     use_field_dictionary = {}
     use_field_dictionary.update({field: search_fields[field] for field in search_fields if field in use_search_fields})

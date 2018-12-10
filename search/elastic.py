@@ -615,11 +615,16 @@ class ElasticSearchEngine(SearchEngine):
         elastic_queries = []
         elastic_filters = []
 
+        if query_string:
+            query_text = query_string.encode('utf-8').translate(None, RESERVED_CHARACTERS)
+        else:
+            query_text = ''
+
         # We have a query string, search all fields for matching text within the "content" node
         if query_string:
             elastic_queries.append({
                 "query_string": {
-                    "fields": ["display_name^4", "short_description^2", "number", "start"],
+                    "fields": ["display_name^4", "short_description^2", "number", "start", "teacher_name", "org_kname", "org_ename"],
                     #"fields": ["content.*"],
                     "query": query_string.encode('utf-8').translate(None, RESERVED_CHARACTERS)
                 }
@@ -703,6 +708,7 @@ class ElasticSearchEngine(SearchEngine):
                         #        "must": elastic_filters
                         #    }
                         #}
+                        # "should": [{"term": {"display_name": query_text}}, {"term": {"short_description": query_text}}, {"term": {"teacher_name": query_text}}, {"term": {"org_kname": query_text}}, {"term": {"org_ename": query_text}}],
                         filter_segment = {
                             "bool": {
                                 "should": [{"term": {"middle_classfy": middle_classfysub}}, {"term": {"middle_classfysub": middle_classfysub}}],

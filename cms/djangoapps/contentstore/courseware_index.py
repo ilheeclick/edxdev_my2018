@@ -570,6 +570,9 @@ class CourseAboutSearchIndexer(object):
         AboutInfo("enrollment_start", AboutInfo.PROPERTY, AboutInfo.FROM_COURSE_PROPERTY),
         AboutInfo("enrollment_end", AboutInfo.PROPERTY, AboutInfo.FROM_COURSE_PROPERTY),
         AboutInfo("org", AboutInfo.PROPERTY, AboutInfo.FROM_COURSE_PROPERTY),
+        AboutInfo("org_kname", AboutInfo.PROPERTY, AboutInfo.FROM_COURSE_PROPERTY),
+        AboutInfo("org_ename", AboutInfo.PROPERTY, AboutInfo.FROM_COURSE_PROPERTY),
+        AboutInfo("teacher_name", AboutInfo.PROPERTY, AboutInfo.FROM_ABOUT_INFO),
         AboutInfo("modes", AboutInfo.PROPERTY, AboutInfo.FROM_COURSE_MODE),
         AboutInfo("language", AboutInfo.PROPERTY, AboutInfo.FROM_COURSE_PROPERTY),
         AboutInfo("classfy", AboutInfo.PROPERTY, AboutInfo.FROM_COURSE_PROPERTY),
@@ -610,6 +613,9 @@ class CourseAboutSearchIndexer(object):
             'middle_classfysub': course.middle_classfysub,
             'linguistics': course.linguistics,
             'course_period': course.course_period,
+            'org_kname': course.org_kname,
+            'org_ename': course.org_ename,
+            'teacher_name': course.teacher_name,
         }
 
         # load data for all of the 'about' modules for this course into a dictionary

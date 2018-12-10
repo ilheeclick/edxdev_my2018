@@ -281,6 +281,7 @@ def get_course_about_section(request, course, section_key):
 
     html_sections = {
         'short_description',
+        'teacher_name',
         'description',
         'key_dates',
         'video',
