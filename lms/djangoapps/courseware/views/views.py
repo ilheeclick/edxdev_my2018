@@ -227,7 +227,52 @@ def courses(request):
             courses_list = sort_by_start_date(courses_list)
         else:
             courses_list = sort_by_announcement(courses_list)
+    import time
+    try:
+        from urllib import urlencode
+    except ImportError:CourseDescriptorWithMixins
 
+
+    from elasticsearch.exceptions import ConnectionError
+    from elasticsearch.connection.http_urllib3 import Urllib3HttpConnection
+
+    def perform_request(self, method, url, params=None, body=None, timeout=None, ignore=()):
+        url = self.url_prefix + url
+        if 'size' in params:
+            params[
+                'sort'] = '_score:desc,enrollment_start:desc,start:desc,enrollment_end:desc,end:desc,display_name:asc'
+
+        if params:
+            url = '%s?%s' % (url, urlencode(params or {}))
+        full_url = self.host + url
+
+        start = time.time()
+
+        if body:
+            if '{"term": {"org": "SMUk"}}' in body:
+                body = body.replace('{"term": {"org": "SMUk"}}', '{"terms": {"org": ["SMUk", "SMUCk"]}}')
+
+        try:
+            kw = {}
+            if timeout:
+                kw['timeout'] = timeout
+            response = self.pool.urlopen(method, url, body, **kw)
+            duration = time.time() - start
+            raw_data = response.data.decode('utf-8')
+        except Exception as e:
+            self.log_request_fail(method, full_url, body, time.time() - start, exception=e)
+            raise ConnectionError('N/A', str(e), e)
+
+        if not (200 <= response.status < 300) and response.status not in ignore:
+            self.log_request_fail(method, url, body, duration, response.status)
+            self._raise_error(response.status, raw_data)
+
+        self.log_request_success(method, full_url, url, body, response.status,
+                                 raw_data, duration)
+
+        return response.status, response.getheaders(), raw_data
+
+    Urllib3HttpConnection.perform_request = perform_request
     # Add marketable programs to the context.
     programs_list = get_programs_with_type(request.site, include_hidden=False)
 
@@ -860,6 +905,18 @@ def course_about(request, course_id):
     """
     Display the course's about page.
     """
+    try:
+        review_email = str(request.user.email)
+        review_username = str(request.user.username)
+        login_status = 'o'
+    except BaseException:
+        review_email = 'x'
+        review_username = 'x'
+
+    #login check
+    if not request.user.is_authenticated():
+        login_status = 'x'
+
     course_key = CourseKey.from_string(course_id)
     course_id_str = str(course_id)
     index_org_start = course_id_str.find(':') + 1
@@ -966,7 +1023,242 @@ def course_about(request, course_id):
 
         # Embed the course reviews tool
         reviews_fragment_view = CourseReviewsModuleFragmentView().render_to_fragment(request, course=course)
+        #######E ADD.###########
+        # D-day
+        today = datetime.now()
+        course_start = course.start
+        today_val = today.strptime(str(today)[0:10], "%Y-%m-%d").date()
+        course_start_val = course_start.strptime(str(course_start)[0:10], "%Y-%m-%d").date()
+        d_day = (course_start_val - today_val)
 
+        if d_day.days > 0:
+            day = {'day': 'D-' + str(d_day.days)}
+        else:
+            day = {'day': ''}
+
+        # short description
+        short_description = {'short_description': course_details.short_description}
+
+        # classfy name
+        classfy_dict = {
+            # add classfy
+            "edu": "Education",
+            "hum": "Humanities",
+            "social": "Social Sciences",
+            "eng": "Engineering",
+            "nat": "Natural Sciences",
+            "med": "Medical Sciences",
+            "art": "Arts & Physical",
+            "intd": "Interdisciplinary",
+        }
+
+        middle_classfy_dict = {
+            "lang": "Linguistics & Literature",
+            "husc": "Human Sciences",
+            "busn": "Business Administration & Economics",
+            "law": "Law",
+            "scsc": "Social Sciences",
+            "enor": "General Education",
+            "ekid": "Early Childhood Education",
+            "espc": "Special Education",
+            "elmt": "Elementary Education",
+            "emdd": "Secondary Education",
+            "cons": "Architecture",
+            "civi": "Civil Construction & Urban Engineering",
+            "traf": "Transportation",
+            "mach": "Mechanical & Metallurgical Engineering",
+            "elec": "Electricity & Electronics",
+            "deta": "Precision & Energy",
+            "matr": "Materials",
+            "comp": "Computers & Communication",
+            "indu": "Industrial Engineering",
+            "cami": "Chemical Engineering",
+            "other": "Others",
+            "agri": "Agriculture & Fisheries",
+            "bio": "Biology, Chemistry & Environmental Science",
+            "life": "Living Science",
+            "math": "Mathematics, Physics, Astronomy & Geography",
+            "metr": "Medical Science",
+            "nurs": "Nursing",
+            "phar": "Pharmacy",
+            "heal": "Therapeutics & Public Health",
+            "dsgn": "Design",
+            "appl": "Applied Arts",
+            "danc": "Dancing & Physical Education",
+            "form": "FineArts & Formative Arts",
+            "play": "Drama & Cinema",
+            "musc": "Music",
+            "intd_m": "Interdisciplinary",
+        }
+
+        # if course_details.classfy != 'all':
+        #     classfy_name = ClassDict[course_details.classfy]
+        # else:
+        #     classfy_name = 'Etc'
+
+        global classfy_name
+        if course_details.classfy is None or course_details.classfy == '':
+            classfy_name = 'Etc'
+        else:
+            classfy_name = classfy_dict[
+                course_details.classfy] if course_details.classfy in classfy_dict else course_details.classfy
+
+        if course_details.middle_classfy is None or course_details.middle_classfy == '':
+            middle_classfy_name = 'Etc'
+        else:
+            middle_classfy_name = middle_classfy_dict[
+                course_details.middle_classfy] if course_details.middle_classfy in middle_classfy_dict else course_details.middle_classfy
+
+        # univ name
+        UnivDic = {
+            # add univ
+            "testUniv": "Test University",
+            "KYUNGNAMUNIVk": "KYUNGNAM UNIVERSITY",
+            "KHUk": "KYUNGHEE UNIVERSITY",
+            "KoreaUnivK": "KOREA UNIVERSITY",
+            "DGUk": "DAEGU UNIVERSITY",
+            "PNUk": "PUSAN NATIONAL UNIVERSITY",
+            "SMUCk": "SANGMYUNG UNIVERSITY",
+            "SNUk": "SEOUL NATIONAL UNIVERSITY",
+            "SKKUk": "SUNGKYUNKWAN UNIVERSITY",
+            "SSUk": "SUNGSHIN UNIVERSITY",
+            "SejonguniversityK": "SEJONG UNIVERSITY",
+            "SookmyungK": "SOOKMYUNG WOMEN'S UNIVERSITY",
+            "YSUk": "YONSEI UNIVERSITY",
+            "YeungnamUnivK": "YOUNGNAM UNIVERSITY",
+            "UOUk": "UNIVERSITY OF ULSAN",
+            "EwhaK": "EWHA WOMANS UNIVERSITY",
+            "INHAuniversityK": "INHA UNIVERSITY",
+            "CBNUk": "CHONBUK NATIONAL UNIVERSITY",
+            "POSTECHk": "POSTECH",
+            "KAISTk": "KAIST",
+            "HYUk": "HANYANG UNIVERSITY",
+            "KOCW": "KOCW",
+            "KONKUK UNIVERSITY": "KONKUK UNIVERSITY",
+            "KYUNGSUNG UNIVERSITY": "KYUNGSUNG UNIVERSITY",
+            "DANKOOK UNIVERSITY": "DANKOOK UNIVERSITY",
+            "SOGANG UNIVERSITY": "SOGANG UNIVERSITY",
+            "UNIVERSITY OF SEOUL": "UNIVERSITY OF SEOUL",
+            "SOONGSIL UNIVERSITY": "SOONGSIL UNIVERSITY",
+            "CHONNAM NATIONAL UNIVERSITY": "CHONNAM NATIONAL UNIVERSITY",
+            "JEJU NATIONAL UNIVERSITY": "JEJU NATIONAL UNIVERSITY",
+            "HGUk": "HANDONG GLOBAL UNIVERSITY",
+        }
+
+        univ_name = UnivDic[course_details.org] if hasattr(UnivDic, course_details.org) else course_details.org
+
+        if course_details.enrollment_start:
+            enroll_start = course_details.enrollment_start.strptime(str(course_details.enrollment_start)[0:10],
+                                                                    "%Y-%m-%d").date()
+            enroll_end = course_details.enrollment_end.strptime(str(course_details.enrollment_end)[0:10],
+                                                                "%Y-%m-%d").date()
+
+            if _("Agree") == "Agree":
+                enroll_sdate = {'enroll_sdate': enroll_start.strftime("%Y/%m/%d")}
+                enroll_edate = {'enroll_edate': enroll_end.strftime("%Y/%m/%d")}
+            else:
+                enroll_sdate = {'enroll_sdate': enroll_start.strftime("%Y.%m.%d")}
+                enroll_edate = {'enroll_edate': enroll_end.strftime("%Y.%m.%d")}
+        else:
+            enroll_sdate = {'enroll_sdate': ''}
+            enroll_edate = {'enroll_edate': ''}
+
+        # print "review_list = {}".format(review_list)
+        # print "review_email = {}".format(review_email)
+        print "course_id = {}".format(course_id)
+        # print "already_list = {}".format(already_list)
+        # print "enroll_list = {}".format(enroll_list)
+        print "course_org = {}".format(course_org)
+        print "course_number = {}".format(course_number)
+        # print "course_total = {}".format(course_total)
+        print "login_status = {}".format(login_status)
+
+        sys.setdefaultencoding('utf-8')
+        con = mdb.connect(settings.DATABASES.get('default').get('HOST'),
+                          settings.DATABASES.get('default').get('USER'),
+                          settings.DATABASES.get('default').get('PASSWORD'),
+                          settings.DATABASES.get('default').get('NAME'),
+                          charset='utf8')
+
+        flag = 0
+
+        # if (login_status != 'x'):
+        #     cur = con.cursor()
+        #     query = """
+        #                 SELECT count(user_id)
+        #                   FROM interest_course
+        #                  WHERE user_id = '{0}' AND org = '{1}' AND display_number_with_default = '{2}' AND use_yn = 'Y';
+        #             """.format(user_id[0][0], course_org, course_number)
+        #     cur.execute(query)
+        #     flag_index = cur.fetchall()
+        #     cur.close()
+        #     flag = flag_index[0][0]
+
+        cur = con.cursor()
+        query = """
+                    SELECT concat(Date_format(start, '%Y/%m/%d'),
+                            '~',
+                            Date_format(end, '%Y/%m/%d')),
+                             id
+                      FROM course_overviews_courseoverview
+                     WHERE org = '{0}' AND display_number_with_default = '{1}' AND id NOT IN ('{2}')
+                     ORDER BY start DESC;
+                """.format(course_org, course_number, overview)
+        cur.execute(query)
+        pre_course_index = cur.fetchall()
+        cur.close()
+        pre_course = pre_course_index
+
+        # 청강 - course.end < today
+        today_val = today.strptime(str(today)[0:10], "%Y-%m-%d").date()
+        course_end = course.end
+        time_compare = 'N'
+        if course_end is not None:
+            course_end_val = course_end.strptime(str(course_end)[0:10], "%Y-%m-%d").date()
+            if today_val > course_end_val:
+                time_compare = 'Y'
+
+        cur = con.cursor()
+        query = """
+                    SELECT audit_yn
+                      FROM course_overview_addinfo
+                     WHERE course_id = '{0}';
+                """.format(course_id)
+
+        cur.execute(query)
+        audit_index = cur.fetchall()
+        cur.close()
+        if len(audit_index) != 0 and time_compare == 'Y':
+            audit_flag = audit_index[0][0]
+        else:
+            audit_flag = 'N'
+
+        cur = con.cursor()
+        query = '''
+                    SELECT ifnull(b.detail_ename, '')
+                      FROM course_overview_addinfo a
+                           LEFT JOIN code_detail b
+                              ON a.course_level = b.detail_code AND b.group_code = '007'
+                     WHERE a.course_id = '{course_id}';
+                '''.format(course_id=course_id)
+        cur.execute(query)
+        course_level = cur.fetchall()[0][0]
+        cur.close()
+
+        cur = con.cursor()
+        query = """
+                    SELECT ifnull(effort, '00:00@0#00:00$00:00')
+                      FROM course_overviews_courseoverview
+                     WHERE id = '{course_id}'
+                """.format(course_id=course_id)
+        cur.execute(query)
+        effort = cur.fetchall()[0][0]
+        cur.close()
+        effort_week = effort.split('@')[1].split('#')[0] if effort and '@' in effort and '#' in effort else ''
+        study_time = effort.split('$')[1].split(':')[0] + "시간 " + effort.split('$')[1].split(':')[
+            1] + "분" if effort and '$' in effort else '-'
+
+        #######E ADD.###########
         # coure_review
         with connections['default'].cursor() as cur:
             query = """
@@ -978,7 +1270,6 @@ def course_about(request, course_id):
             cur.execute(query)
             review_list = cur.fetchall()
 
-
             data_list = []
 
             for data in review_list:
@@ -989,7 +1280,46 @@ def course_about(request, course_id):
                 data_dict['reg_time'] = data[3]
                 data_dict['seq'] = data[4]
                 data_dict['username'] = data[5]
+                # data_list.append(data_dict)
+                data_dict['like'] = 0
+                data_dict['bad'] = 0
+
+                with connections['default'].cursor() as cur:
+                    query = """
+                            select  count(good_bad),review_seq, good_bad
+                            from course_review_user
+                            where review_id = '{review_id}' and review_seq='{review_seq}'
+                            group by good_bad;
+                        """.format(review_id=data[2], review_seq=data[4])
+                    cur.execute(query)
+                    like_list = cur.fetchall()
+                    for like in like_list:
+                        if like[2] == 'g':
+                            data_dict['like'] = like[0]
+                        elif like[2] == 'b':
+                            data_dict['bad'] = like[0]
+
                 data_list.append(data_dict)
+                # with connections['default'].cursor() as cur:
+                #     query = """
+                #             select  count(good_bad),review_seq
+                #             from course_review_user
+                #             where review_id = '{review_id}' and good_bad ='b' and review_seq='{review_seq}';
+                #         """.format(review_id=review_list[2], review_seq=review_list[4])
+                #     cur.execute(query)
+                #     bad_list = cur.fetchall()
+                #     data_dict['bad'] = data[0]
+
+            # for data in like_list:
+            #     data_dict = dict()
+            #     data_dict['like'] = data[0]
+            #     data_list.append(data_dict)
+            #
+            # for data in bad_list:
+            #     data_dict = dict()
+            #     data_dict['bad'] = data[0]
+            #     data_list.append(data_dict)
+
 
         # today d-day와 청강에서 사용
         today = datetime.now()
@@ -1024,6 +1354,7 @@ def course_about(request, course_id):
             'studio_url': studio_url,
             'registered': registered,
             'course_target': course_target,
+            'day': day,
             'is_cosmetic_price_enabled': settings.FEATURES.get('ENABLE_COSMETIC_DISPLAY_PRICE'),
             'course_price': course_price,
             'in_cart': in_cart,
@@ -1048,7 +1379,29 @@ def course_about(request, course_id):
             'reviews_fragment_view': reviews_fragment_view,
             'sidebar_html_enabled': sidebar_html_enabled,
             'rev': data_list,
+            # 'classfy' : classfy,
+            'classfy_name': classfy_name,
+            'middle_classfy_name': middle_classfy_name,
+            'univ_name': univ_name,
+            'enroll_sdate': enroll_sdate,
+            'enroll_edate': enroll_edate,
+            # --- REVIEW CONTEXT --- #
+            # 'review_list': review_list,
+            # 'review_email': review_email,
+            'course_id': course_id,
+            # 'already_list': already_list,
+            # 'enroll_list': enroll_list,
+            'course_org': course_org,
+            'course_number': course_number,
+            # 'course_total': course_total,
+            'login_status': login_status,
+            'flag': flag,
+            'pre_course': pre_course,
             'audit_flag': audit_flag,
+            'effort_week': effort_week,
+            # 'course_link': course_link,
+            'course_level': course_level,
+            'study_time': study_time,
         }
 
         return render_to_response('courseware/course_about.html', context)
@@ -1922,18 +2275,31 @@ def course_review_add(request):
 
         with connections['default'].cursor() as cur:
             query = """
-                insert into edxapp.course_review(content,
-                                                point,
-                                                user_id,
-                                                course_id)
-                values('{review}',
-                        '{point}',
-                        '{user_id}',
-                        '{course_id}')
-            """.format(user_id=user_id,course_id=course_id,point=point,review=review)
+                select id
+                from course_review
+                where course_id='{course_id}'and user_id='{user_id}'
+            """.format(user_id=user_id, course_id=course_id)
             cur.execute(query)
+            check = cur.fetchall()
 
-    return JsonResponse({"data":"success"})
+            if check !=():
+                return JsonResponse({"data":"false"})
+
+            else:
+                with connections['default'].cursor() as cur:
+                    query = """
+                        insert into edxapp.course_review(content,
+                                                        point,
+                                                        user_id,
+                                                        course_id)
+                        values('{review}',
+                                '{point}',
+                                '{user_id}',
+                                '{course_id}')
+                    """.format(user_id=user_id,course_id=course_id,point=point,review=review)
+                    cur.execute(query)
+
+                return JsonResponse({"data":"success"})
 
 def course_review_del(request):
     course_id = request.POST.get('course_id')
@@ -1947,6 +2313,65 @@ def course_review_del(request):
                 where id='{id}'
             """.format(id=id)
             cur.execute(query)
+        with connections['default'].cursor() as cur:
+            query = """
+                delete from course_review_user
+                where review_seq='{id}'
+            """.format(id=id)
+            cur.execute(query)
 
     return JsonResponse({"data":"success"})
+
+def course_review_gb(request):
+    review_id = request.POST.get('review_id')
+    user_id = request.POST.get('user_id')
+    gb = request.POST.get('gb')
+    review_seq = request.POST.get('review_seq')
+
+    if request.is_ajax():
+
+        with connections['default'].cursor() as cur:
+            query = """
+                select good_bad 
+                from course_review_user 
+                where review_id='{review_id}' and user_id = '{user_id}';
+            """.format(review_id=review_id,user_id=user_id)
+            cur.execute(query)
+            check=cur.fetchall()
+
+            if check ==():
+                with connections['default'].cursor() as cur:
+                    query = """
+                        insert into edxapp.course_review_user(review_id,
+                                                        user_id,
+                                                        good_bad,
+                                                        review_seq)
+                        values('{review_id}',
+                                '{user_id}',
+                                '{gb}',
+                                '{review_seq}')
+                    """.format(review_id=review_id,gb=gb,user_id=user_id,review_seq=review_seq)
+                    cur.execute(query)
+
+                    print " insert ok"
+                return JsonResponse({"data":"success"})
+
+            elif check[0][0] == gb:
+                with connections['default'].cursor() as cur:
+                    query = """
+                        delete from edxapp.course_review_user 
+                        where review_id='{review_id}' and user_id = '{user_id}';
+                    """.format(review_id=review_id, user_id=user_id)
+                    cur.execute(query)
+                    print " delete ok"
+                return  JsonResponse({"data":"delete"})
+
+            elif check[0][0] != gb:
+                print " ok"
+                return JsonResponse({"data":"false"})
+
+
+
+
+
 

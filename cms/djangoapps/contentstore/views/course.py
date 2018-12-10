@@ -116,6 +116,9 @@ from django.db import connections
 from pymongo import MongoClient
 from bson import ObjectId
 
+from pymongo import MongoClient
+from bson import ObjectId
+
 log = logging.getLogger(__name__)
 
 __all__ = ['course_info_handler', 'course_handler', 'course_listing','level_Verifi',
@@ -1581,6 +1584,27 @@ def settings_handler(request, course_key_string):
                     if 'user_edit' in block['fields']:
                         edit_check = block['fields']['user_edit']
 
+            # 교수자명
+            with connections['default'].cursor() as cur:
+                query = '''
+                     SELECT IFNULL(teacher_name, '')
+                      FROM course_overview_addinfo
+                     WHERE course_id = '{0}';
+                '''.format(course_key)
+                cur.execute(query)
+                teacher_sel = cur.fetchall()
+
+            print "modi_course_about > pb = ", pb
+
+            structures_data = db.modulestore.structures.find_one({'_id': ObjectId(pb)})
+
+            blocks = structures_data.get('blocks')
+
+            for block in blocks:
+                if block['block_type'] == 'course':
+                    if 'user_edit' in block['fields']:
+                        edit_check = block['fields']['user_edit']
+
             print "------------------------------------>"
             course_lang = settings.ALL_LANGUAGES
 
@@ -1627,6 +1651,7 @@ def settings_handler(request, course_key_string):
                 'enable_extended_course_details': enable_extended_course_details,
                 'difficult_degree_list': difficult_degree_list,
                 'teacher_name': teacher_name,
+                'user_edit': edit_check,
             }
 
             if is_prerequisite_courses_enabled():
@@ -2001,20 +2026,21 @@ def advanced_settings_handler(request, course_key_string):
                         user=request.user,
                     )
 
-                    try:
-                        audit_yn = params['audit_yn']['value']
-                        audit_yn = 'N' if not audit_yn or audit_yn not in ['Y', 'y'] else 'Y'
-                        with connections['default'].cursor() as cur:
-                            query = """
-                                UPDATE course_overview_addinfo
-                                   SET audit_yn = '{audit_yn}'
-                                 WHERE course_id = '{course_id}';
-                            """.format(audit_yn=audit_yn, course_id=course_key_string)
-                            cur.execute(query)
-                    except Exception as e:
-                        is_valid = False
-                        errors.append({'message': 'audit_yn value is not collect', 'model': None})
-                        print e
+                    if 'audit_yn' in params:
+                        try:
+                            audit_yn = params['audit_yn']['value']
+                            audit_yn = 'N' if not audit_yn or audit_yn not in ['Y', 'y'] else 'Y'
+                            with connections['default'].cursor() as cur:
+                                query = """
+                                    UPDATE course_overview_addinfo
+                                       SET audit_yn = '{audit_yn}'
+                                     WHERE course_id = '{course_id}';
+                                """.format(audit_yn=audit_yn, course_id=course_key_string)
+                                cur.execute(query)
+                        except Exception as e:
+                            is_valid = False
+                            errors.append({'message': 'audit_yn value is not collect', 'model': None})
+                            print e
 
                     if is_valid:
                         try:

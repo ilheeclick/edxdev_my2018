@@ -21,7 +21,7 @@
     <label for="rate5" title="Amazing">5 stars</label>
 
   </fieldset>
-  <textarea id="review_text" style="min-width: 400px; width: 630px; max-width: 630px;"></textarea>
+  <textarea id="review_text" style="min-width: 400px; width: 300px; max-width: 630px;"></textarea>
 <button class="btn"onclick="chk()"><img class="btn-chk" src="/static/images/review_check.png"/></button>
 </form>
 %endif
@@ -31,16 +31,19 @@
     <thead></thead>
     <tr>
       <td>이름</td>
-      <td class="review_content">내용</td>
-      <td>별점</td>
+      <td style="width: 325px;" class="review_content">내용</td>
+      <td style="min-width: 100px;">별점</td>
+      <td></td>
       <td>생성날짜</td>
       <td></td>
     </tr>
     %for re_li in context['rev']:
+    <div id="review_user_id" hidden> ${re_li['user_id']} </div>
+    <div id="review_seq"hidden> ${re_li['seq']} </div>
     <tr>
       <td><h3>${re_li['username']}</h3></td>
       <td>${re_li['content']}</td>
-      <td style="min-width: 168px;">
+      <td style="min-width: 100px;">
         %if re_li['point'] ==1:
         <img class="star_img_1" src="/static/images/star.png"/>
         %elif re_li['point'] ==2:
@@ -63,10 +66,11 @@
         <img class="star_img_1" src="/static/images/star.png"/>
         %endif
       </td>
+      <td><img class="img_like" onclick="like('g',${re_li['user_id']},${re_li['seq']})" src="/static/images/like.png"/><span id="like">${re_li['like']}</span><img class="img_dislike" onclick="like('b',${re_li['user_id']},${re_li['seq']})"src="/static/images/dislike.png"/><span>${re_li['bad']}</span></td>
       <td>${re_li['reg_time']}</td>
 
       %if  re_li['user_id'] == user.id or user.is_staff ==True:
-      <td><button class="btn_del" onclick="re_del(${re_li['seq']})" value="${re_li['seq']}"> 삭제 </button></td>
+      <td><button class="btn_del" onclick="re_del(${re_li['seq']})" value="${re_li['seq']}" ><img class="del_img" src="/static/images/trashcan.png"/></button></td>
       %endif
     </tr>
     %endfor
@@ -83,7 +87,6 @@
     function chk() {
         star = $(".starability-basic input:radio[name='rating']:checked").val();
         review =$('#review_text').val();
-
         if (review.length > 100 || review.length==0){
             swal(
                 'CAUTION',
@@ -104,17 +107,7 @@
                     csrfmiddlewaretoken: '${ csrf_token }'
                 }
             }).done(function(data){
-                swal({
-                title: "success",
-                text: "완료",
-                icon: "success",
-                buttons: false,
-                dangerMode: false,
-              })
-                .then(function(willDelete) {
-
-                  location.reload()
-                });
+                console.log(data);
             })
         }}
     function re_del(del_seq) {
@@ -136,10 +129,37 @@
                 dangerMode: false,
               })
                 .then(function(willDelete) {
-
                   location.reload()
                 });
             })
+
+    }
+    function like(gb,review_id,review_seq) {
+
+        $.ajax({
+          url : '/course_review_gb',
+          type: "POST",
+          data : {
+              course_id:"${course.id}",
+              gb:gb,
+              review_id:review_id,
+              review_seq:review_seq,
+              user_id:$('#hidden_id').text(),
+              csrfmiddlewaretoken: '${ csrf_token }'
+          }
+      }).done(function(data){
+
+            console.log(data)
+
+            if(data.data == "success"){
+            }
+            else if (data.data =='delete'){
+                swal("취소되었습니다");
+            }
+            else if (data.data == "false"){
+                swal("한번만 가능합니다.");
+            }
+      })
 
     }
 </script>

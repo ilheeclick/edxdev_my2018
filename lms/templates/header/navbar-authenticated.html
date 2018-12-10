@@ -85,31 +85,7 @@ from openedx.core.djangoapps.lang_pref.api import header_language_selector_is_en
 <div class="nav-links">
   <div class="main">
 
-    <!-- 언어선택 -->
-    % if header_language_selector_is_enabled():
-        <% languages = released_languages() %>
-        % if len(languages) > 1:
-            <form action="/i18n/setlang/" method="post" class="settings-language-form" id="language-settings-form">
-                <input type="hidden" id="csrf_token" name="csrfmiddlewaretoken" value="${csrf_token}">
-                % if user.is_authenticated:
-                    <input title="preference api" type="hidden" class="url-endpoint" value="${reverse('preferences_api', kwargs={'username': user.username})}" data-user-is-authenticated="true">
-                % else:
-                    <input title="session update url" type="hidden" class="url-endpoint" value="${reverse('session_language')}" data-user-is-authenticated="false">
-                % endif
-                <label><span class="sr">${_("Choose Language")}</span>
-                <select class="input select language-selector" id="settings-language-value" name="language">
-                    % for language in languages:
-                        % if language[0] == LANGUAGE_CODE:
-                            <option value="${language[0]}" selected="selected">${language[1]}</option>
-                        % else:
-                            <option value="${language[0]}" >${language[1]}</option>
-                        % endif
-                    % endfor
-                </select>
-                </label>
-            </form>
-        % endif
-    % endif
+
 
 
     % if show_dashboard_tabs:
@@ -174,12 +150,37 @@ from openedx.core.djangoapps.lang_pref.api import header_language_selector_is_en
     <li class=" mobile-nav-item hidden-mobile nav-item nav-tab nav-item-dropdown item nav-global-04"><a href="#" class="comm_a" data-hover-label='${_("Community")}'><span class="effect_label">${_("Community")}</span></a>
         <ul class="dropdown-menu" style="width: 200px;">
             <li id="menu1"><a href="/comm_list/N" >공지사항</a></li>
-            <li id="menu2"><a href="/comm_list/K">K-MOOC 뉴스</a></li
+            <li id="menu2"><a href="/comm_list/K">K-MOOC 뉴스</a></li>
             <li id="menu3"><a href="/comm_list/R">자료실</a></li>
             <li id="menu4"><a href="/comm_tabs/kmooc_f/">FAQ</a></li>
         </ul>
     </li>
     %endif
+    <!-- 언어선택 -->
+    % if header_language_selector_is_enabled():
+        <% languages = released_languages() %>
+        % if len(languages) > 1:
+            <form action="/i18n/setlang/" method="post" class="settings-language-form" id="language-settings-form">
+                <input type="hidden" id="csrf_token" name="csrfmiddlewaretoken" value="${csrf_token}">
+                % if user.is_authenticated:
+                    <input title="preference api" type="hidden" class="url-endpoint" value="${reverse('preferences_api', kwargs={'username': user.username})}" data-user-is-authenticated="true">
+                % else:
+                    <input title="session update url" type="hidden" class="url-endpoint" value="${reverse('session_language')}" data-user-is-authenticated="false">
+                % endif
+                <label><span class="sr">${_("Choose Language")}</span>
+                <select class="input select language-selector" id="settings-language-value" name="language">
+                    % for language in languages:
+                        % if language[0] == LANGUAGE_CODE:
+                            <option value="${language[0]}" selected="selected">${language[1]}</option>
+                        % else:
+                            <option value="${language[0]}" >${language[1]}</option>
+                        % endif
+                    % endfor
+                </select>
+                </label>
+            </form>
+        % endif
+    % endif
         <!--
         <div class="mobile-nav-item hidden-mobile nav-item nav-tab">
         <a class="tab-nav-link" href="${marketing_link('COURSES')}">${_('Discover New')}</a>
@@ -197,31 +198,49 @@ from openedx.core.djangoapps.lang_pref.api import header_language_selector_is_en
         -->
 
     % endif
+
     % if show_sysadmin_dashboard:
       <div class="mobile-nav-item hidden-mobile nav-item nav-tab">
         ## Translators: This is short for "System administration".
         <a class="tab-nav-link" href="${reverse('sysadmin')}">${_("Sysadmin")}</a>
       </div>
     % endif
+
   </div>
   <div class="secondary">
+
     % if should_display_shopping_cart_func() and not (course and static.is_request_in_themed_site()): # see shoppingcart.context_processor.user_has_cart_context_processor
+
       <div class="mobile-nav-item hidden-mobile nav-item">
         <a class="shopping-cart" href="${reverse('shoppingcart.views.show_cart')}">
           <span class="icon fa fa-shopping-cart" aria-hidden="true"></span> ${_("Shopping Cart")}
         </a>
       </div>
     % endif
-    <div class="mobile-nav-item hidden-mobile nav-item">
+    <!--<div class="mobile-nav-item hidden-mobile nav-item">
       <a class="help-link" href="${help_link}" target="_blank">${_("Help")}</a>
+    </div>-->
+
+    <div class="mobile-nav-item hidden-mobile nav-item">
+
+      <li class="left item" style="margin-right: 10px;">
+          <a href="/memo" class="b1">
+              <img src="/static/images/bell.png" title="${_('K-MOOC Notification')}" style="background-color: darkgrey">
+              <i style="text-style: normal; margin-left: 5px;" id="cnt"></i>
+              <div class="b2" id="memo_row">
+              </div>
+          </a>
+      </li>
     </div>
     <%include file="user_dropdown.html"/>
   </div>
+
 </div>
 
 <script type="text/javascript">
     var window_W = 0;
     $(document).ready(function(){
+
         window_W = $(window).width();
 	    nav_resize();
         $(".language a").click(function(){
@@ -242,7 +261,43 @@ from openedx.core.djangoapps.lang_pref.api import header_language_selector_is_en
             }
 
         });
+      var user_id = "${user.id if user.is_authenticated() else ''}";
 
+      if (!user_id)
+          return;
+
+      $.ajax({
+          url : '/memo_sync',
+          type: "POST",
+          data : {
+              sync_memo : 'sync_memo',
+              user_id : user_id,
+              csrfmiddlewaretoken: '${ csrf_token }'
+          }
+      }).done(function(data) {
+          $('#cnt').html(data.cnt);
+          var memo_list = data.memo_list;
+          var memo_link = '#';
+
+          if(data.cnt > 0){
+              for(var i = 0 ; i < memo_list.length ; i++){
+                  if(memo_list[i].memo_gubun != '1'){
+                      memo_link = 'http://' + memo_list[i].contents;
+                  } else {
+                      memo_link = '/memo_view/'+memo_list[i].memo_id;
+                  }
+                  $("#memo_row").append('<a href="'+memo_link+'" id=link_'+i+'>');
+                  $("#link_"+i).append('<div class="b3" id="memo_data_'+i+'">');
+                  $("#memo_data_"+i).append('<div class="b4"><span>'+ memo_list[i].title + '</span></div>');
+                  $("#memo_data_"+i).append('<div class="b5"><span style="color:#999;">'+ memo_list[i].memo_date + '</span></div>');
+                  $("#link_"+i).append('</div>');
+                  $("#memo_row").append('</a>');
+              }
+          } else {
+              $("#memo_row").remove();
+          }
+
+      });
     });
     function nav_resize() {
         window_W = $(window).width();

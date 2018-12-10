@@ -459,6 +459,20 @@ class CourseOverview(TimeStampedModel):
         """
         return course_metadata_utils.course_starts_within(self.start, days)
 
+    def start_datetime_text(self, format_string="SHORT_DATE", time_zone=utc):
+        """
+        Returns the desired text corresponding to the course's start date and
+        time in the specified time zone, or utc if no time zone given.
+        Prefers .advertised_start, then falls back to .start.
+        """
+        return course_metadata_utils.course_start_datetime_text(
+            self.start,
+            self.advertised_start,
+            format_string,
+            time_zone,
+            ugettext,
+            strftime_localized
+        )
     @property
     def start_date_is_still_default(self):
         """

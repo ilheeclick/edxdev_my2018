@@ -153,9 +153,9 @@ def _allow_donation(course_modes, course_id, enrollment):
         DonationConfiguration.current().enabled
     )
     return (
-        donations_enabled and
-        enrollment.mode in course_modes[course_id] and
-        course_modes[course_id][enrollment.mode].min_price == 0
+            donations_enabled and
+            enrollment.mode in course_modes[course_id] and
+            course_modes[course_id][enrollment.mode].min_price == 0
     )
 
 
@@ -530,10 +530,10 @@ def _credit_statuses(user, course_enrollments):
     purchased_credit_providers = {
         attribute.enrollment.course_id: attribute.value
         for attribute in CourseEnrollmentAttribute.objects.filter(
-            namespace="credit",
-            name="provider_id",
-            enrollment__in=credit_enrollments.values()
-        ).select_related("enrollment")
+        namespace="credit",
+        name="provider_id",
+        enrollment__in=credit_enrollments.values()
+    ).select_related("enrollment")
     }
 
     provider_info_by_id = {
@@ -669,7 +669,7 @@ def student_dashboard(request):
     monitoring_utils.accumulate('num_courses', len(course_enrollments))
 
     # Sort the enrollment pairs by the enrollment date
-    #course_enrollments.sort(key=lambda x: x.created, reverse=True)
+    # course_enrollments.sort(key=lambda x: x.created, reverse=True)
 
     if 'status' in request.session:
         multisiteStatus = True
@@ -768,7 +768,6 @@ def student_dashboard(request):
         print c.course.id, c.course.display_name
     print 'check step 1 e'
     '''
-
 
     # Display activation message
     activate_account_message = ''
@@ -969,7 +968,7 @@ def student_dashboard(request):
     valid_verification_statuses = ['approved', 'must_reverify', 'pending', 'expired']
     display_sidebar_on_dashboard = (len(order_history_list) or
                                     (verification_status['status'] in valid_verification_statuses and
-                                    verification_status['should_display']))
+                                     verification_status['should_display']))
 
     # Filter out any course enrollment course cards that are associated with fulfilled entitlements
     for entitlement in [e for e in course_entitlements if e.enrollment_course_run is not None]:
@@ -1021,7 +1020,7 @@ def student_dashboard(request):
         'disable_courseware_js': True,
         'display_course_modes_on_dashboard': enable_verified_certificates and display_course_modes_on_dashboard,
         'display_sidebar_on_dashboard': display_sidebar_on_dashboard,
-        'display_sidebar_account_activation_message': not(user.is_active or hide_dashboard_courses_until_activated),
+        'display_sidebar_account_activation_message': not (user.is_active or hide_dashboard_courses_until_activated),
         'display_dashboard_courses': (user.is_active or not hide_dashboard_courses_until_activated),
         'empty_dashboard_message': empty_dashboard_message,
     }

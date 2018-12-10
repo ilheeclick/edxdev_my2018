@@ -90,6 +90,11 @@ urlpatterns = [
     # url(r'^multisite_delete_api$', branding_views.multisite_delete_api, name="multisite_delete_api"),
     # url(r'^multisite_error/$', branding_views.multisite_error, name="multisite_error"),
 
+    # memo
+    url(r'^memo$', community.memo, name='memo'),
+    url(r'^memo_view/(?P<memo_id>.*?)/$', community.memo_view, name='memo_view'),
+    url(r'^memo_sync$', community.memo_sync, name='memo'),
+
     #schools
     url(r'^schools/?$', courseware_views.schools, name="schools"),
     url(r'^school/(?P<org>.*?)$', courseware_views.haewoondaex, name="school"),
@@ -125,6 +130,7 @@ urlpatterns = [
     url(r'^course_review/$', courseware_views.course_review, name='course_review'),
     url(r'^course_review_add$', courseware_views.course_review_add, name='course_review_add'),
     url(r'^course_review_del$', courseware_views.course_review_del, name='course_review_del'),
+    url(r'^course_review_gb$', courseware_views.course_review_gb, name='course_review_gb'),
 
     # course_list
     url(r'^course_search_list$', courses.course_search_list, name='course_list'),

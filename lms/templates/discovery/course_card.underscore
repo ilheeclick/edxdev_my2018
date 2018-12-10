@@ -2,7 +2,17 @@
     <a href="/courses/<%- course %>/about">
         <header class="course-image">
             <div class="cover-image">
-                <img src="<%- image_url %>" alt="<%- content.display_name %> <%- content.number %>" />
+                <span class="univ-logo">
+                    <!--
+                    <img src="/static/images/univ/logo02_<%- org %>.png" alt=""  onerror="this.src='/static/images/no_images.png'">
+                    -->
+                </span>
+                <% if (end){ %>
+
+                <img src="<%- image_url %>" alt="<%- content.display_name %> <%- content.number %> 개강일 <%- start %> 종강일 <%- end %> 강좌상태 <%- gettext(status) %>"  onerror="this.src='/static/images/no_images_large.png'"/>
+                <% }else{ %>
+                <img src="<%- image_url %>" alt="<%- content.display_name %> <%- content.number %> 개강일 <%- start %> 강좌상태 <%- gettext(status) %>"  onerror="this.src='/static/images/no_images_large.png'"/>
+                <% } %>
                 <div class="learn-more" aria-hidden="true"><%- gettext("LEARN MORE") %></div>
             <% if (end){ %>
 
@@ -13,7 +23,7 @@
                 <div class="learn-more" aria-hidden="true"><%- gettext("LEARN MORE") %></div>
             </div>
         </header>
-        <section class="course-info" aria-hidden="true">
+        <div class="course-info" aria-hidden="true">
             <h2 class="course-name">
                 <span class="course-organization"><%- org %></span>
                 <span class="course-code"><%- content.number %></span>
@@ -25,16 +35,17 @@
                 <span class="course-title"><%- content.display_name %></span>
             </h2>
             <div class="course-date" aria-hidden="true">
-                <%- interpolate(
-                      gettext("Starts: %(start_date)s"),
-                      { start_date: start }, true
-                    ) %>
+                <time><%- start %></time></span>
+                <% if (end){ %>
+                ~ </strong><time><%- end %></time>
+                <% } %>
             </div>
             <div class="course-date" aria-hidden="true" style="position: absolute; bottom: 5px;">
                 <time><%- gettext(org) %></time>
             </div>
-        </section>
+        </div>
         <div class="sr">
+        <%- content.number %>
             <ul>
                 <li><%- org %></li>
                 <li><%- content.number %></li>
