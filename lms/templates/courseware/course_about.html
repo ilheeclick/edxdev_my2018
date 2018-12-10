@@ -23,6 +23,10 @@ from six import string_types
 <%block name="js_extra">
   <script type="text/javascript">
   (function() {
+      $(".youtubewrap").bind('contextmenu', function (e) {
+        return false;
+      });
+      
     $(".register").click(function(event) {
       $("#class_enroll_form").submit();
       event.preventDefault();
