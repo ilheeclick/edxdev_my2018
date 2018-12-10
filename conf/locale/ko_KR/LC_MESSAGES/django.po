@@ -26424,3 +26424,6 @@ msgstr "동의대학교"
 
 msgid "Please use your most frequently used e-mails to activate your account, log in, and change your password."
 msgstr "계정활성화, 로그인, 비밀번호 변경 등에 사용되오니 자주 사용하는 이메일로 적어주세요."
+
+msgid "user_edit"
+msgstr "강좌개요 에디터 사용여부"

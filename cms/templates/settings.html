@@ -17,6 +17,7 @@ from openedx.core.djangolib.markup import HTML, Text
 %>
 
 <%block name="header_extras">
+<script src='http://lovasoa.github.io/tidy-html5/tidy.js'></script>
 % for template_name in ["basic-modal", "modal-button", "upload-dialog", "license-selector", "course-settings-learning-fields", "course-instructor-details"]:
 <script type="text/template" id="${template_name}-tpl">
   <%static:include path="js/${template_name}.underscore" />
@@ -35,7 +36,7 @@ from openedx.core.djangolib.markup import HTML, Text
 </%block>
 
 <%block name="requirejs">
-require(["js/factories/settings"], function(SettingsFactory) {
+require(["js/factories/settings", "js/vendor/tinymce/js/tinymce/jquery.tinymce.min", "js/vendor/tinymce/js/tinymce/tinymce.full.min", "js/vendor/tinymce/js/tinymce/jquery.tinymce.min"], function(SettingsFactory) {
 SettingsFactory(
 "${details_url | n, js_escaped_string}",
 ${show_min_grade_warning | n, dump_js_escaped_json},
@@ -587,7 +588,7 @@ ${can_show_certificate_available_date_field(context_course) | n, dump_js_escaped
                   left: 10% !important;
                   width: 80% !important;
                   min-width: 400px !important;
-                  overflow-y: scroll;
+                  overflow-y: hidden;
                   max-height: 800px;
                 }
 
@@ -624,6 +625,8 @@ ${can_show_certificate_available_date_field(context_course) | n, dump_js_escaped
 
                 .overview-layer-popup .modal-content{
                   min-height: 270px;
+                  max-height: 450px;
+                  overflow: auto;
                 }
 
                 .overview-contents{
