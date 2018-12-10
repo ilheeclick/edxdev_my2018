@@ -68,8 +68,43 @@ define(['codemirror',
                         $(updateForm).hide();
                     }
                 });
+                this.$el.find(".new-update-form").hide();
+
+                this.tinymceInit();
                 return this;
             },
+
+            tinymceInit: function () {
+                tinymce.init({
+                    selector: "textarea",
+                    menubar: false,
+                    statusbar: false,
+                    plugins: "codemirror, table, link, image",
+                    codemirror: {
+                        path: "" + baseUrl + "/js/vendor"
+                    },
+                    toolbar_items_size: 'small',
+                    extended_valid_elements: "iframe[src|frameborder|style|scrolling|class|width|height|name|align|id]",
+                    toolbar: "fontselect | fontsizeselect | bold italic underline forecolor wrapAsCode | table link | bullist numlist outdent indent blockquote | link unlink image | code",
+                    resize: true,
+                    fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
+                    min_height: 300,
+                    setup: function (ed) {
+                        ed.on('click', function (e) {
+                            tinymce.execCommand('mceFocus', false, '.new-update-form:eq(0) textarea');
+                        });
+                    },
+                    block_formats: interpolate("%(paragraph)s=p;%(preformatted)s=pre;%(heading3)s=h3;%(heading4)s=h4;%(heading5)s=h5;%(heading6)s=h6", {
+                        paragraph: gettext("Paragraph"),
+                        preformatted: gettext("Preformatted"),
+                        heading3: gettext("Heading 3"),
+                        heading4: gettext("Heading 4"),
+                        heading5: gettext("Heading 5"),
+                        heading6: gettext("Heading 6")
+                    }, true),
+                });
+            },
+
 
             collectionSelector: function(uid) {
                 return 'course-update-list li[name=' + uid + ']';
@@ -123,70 +158,77 @@ define(['codemirror',
                 }
             },
 
-            onNew: function(event) {
+            onNew: function (event) {
+
+                event.preventDefault();
+                var self = this;
                 // create new obj, insert into collection, and render this one ele overriding the hidden attr
                 var newModel = new CourseUpdateModel();
-                event.preventDefault();
-
                 this.collection.add(newModel, {at: 0});
 
                 var $newForm = $(
-                this.template({
-                    updateModel: newModel,
-                    push_notification_enabled: this.options.push_notification_enabled
-                })
+                    this.template({
+                        updateModel: newModel,
+                        push_notification_enabled: this.options.push_notification_enabled
+                    })
                 );
 
-                var updateEle = this.$el.find('#course-update-list');
+                var updateEle = this.$el.find("#course-update-list");
                 $(updateEle).prepend($newForm);
 
-                var $textArea = $newForm.find('.new-update-content').first();
+                /*
+                var $textArea = $newForm.find(".new-update-content").first();
                 this.$codeMirror = CodeMirror.fromTextArea($textArea.get(0), {
-                    mode: 'text/html',
+                    mode: "text/html",
                     lineNumbers: true,
                     lineWrapping: true
                 });
+                */
 
                 $newForm.addClass('editing');
                 this.$currentPost = $newForm.closest('li');
 
                 // Variable stored for unit test.
-                this.$modalCover = ModalUtils.showModalCover(false, function() {
-                // Binding empty function to prevent default hideModal.
+                this.$modalCover = ModalUtils.showModalCover(false, function () {
+                    // Binding empty function to prevent default hideModal.
                 });
 
-                DateUtils.setupDatePicker('date', this, 0);
+                DateUtils.setupDatePicker("date", this, 0);
+                this.tinymceInit();
             },
 
-            onSave: function(event) {
+            onSave: function (event) {
                 event.preventDefault();
                 var targetModel = this.eventModel(event);
+
+                var content = tinymce.activeEditor.getContent({format: 'raw'});
+
                 targetModel.set({
-                // translate short-form date (for input) into long form date (for display)
-                    date: $.datepicker.formatDate('MM d, yy', new Date(this.dateEntry(event).val())),
-                    content: this.$codeMirror.getValue(),
+                    // translate short-form date (for input) into long form date (for display)
+                    date: $.datepicker.formatDate("MM d, yy", new Date(this.dateEntry(event).val())),
+                    content: content,
                     push_notification_selected: this.push_notification_selected(event)
                 });
-            // push change to display, hide the editor, submit the change
+                // push change to display, hide the editor, submit the change
                 var saving = new NotificationView.Mini({
                     title: gettext('Saving')
                 });
                 saving.show();
                 var ele = this.modelDom(event);
                 targetModel.save({}, {
-                    success: function() {
+                    success: function () {
                         saving.hide();
                     },
-                    error: function() {
+                    error: function () {
                         ele.remove();
                     }
                 });
                 this.closeEditor(false);
 
                 analytics.track('Saved Course Update', {
-                    course: course_location_analytics,
-                    date: this.dateEntry(event).val(),
-                    push_notification_selected: this.push_notification_selected(event)
+                    'course': course_location_analytics,
+                    'date': this.dateEntry(event).val(),
+                    'push_notification_selected': this.push_notification_selected(event)
                 });
             },
 
@@ -217,8 +259,8 @@ define(['codemirror',
                 } else {
                     $(this.dateEntry(event)).val('MM/DD/YY');
                 }
-                this.$codeMirror = CourseInfoHelper.editWithCodeMirror(
-                targetModel, 'content', self.options.base_asset_url, $textArea.get(0));
+                // this.$codeMirror = CourseInfoHelper.editWithCodeMirror(
+                // targetModel, 'content', self.options.base_asset_url, $textArea.get(0));
 
             // Variable stored for unit test.
                 this.$modalCover = ModalUtils.showModalCover(false,

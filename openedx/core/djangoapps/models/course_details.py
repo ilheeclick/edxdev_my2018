@@ -125,6 +125,10 @@ class CourseDetails(object):
         course_details.learning_info = course_descriptor.learning_info
         course_details.instructor_info = course_descriptor.instructor_info
 
+        course_details.classfy = course_descriptor.classfy
+
+        course_details.middle_classfy = course_descriptor.middle_classfy
+        
         # Default course license is "All Rights Reserved"
         course_details.license = getattr(course_descriptor, "license", "all-rights-reserved")
 
