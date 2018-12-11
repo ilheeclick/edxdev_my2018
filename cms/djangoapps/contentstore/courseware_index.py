@@ -613,9 +613,9 @@ class CourseAboutSearchIndexer(object):
             'middle_classfysub': course.middle_classfysub,
             'linguistics': course.linguistics,
             'course_period': course.course_period,
-            'org_kname': course.org_kname,
-            'org_ename': course.org_ename,
-            'teacher_name': course.teacher_name,
+            'org_kname': None,
+            'org_ename': None,
+            'teacher_name': None,
         }
 
         # load data for all of the 'about' modules for this course into a dictionary
