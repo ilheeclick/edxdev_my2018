@@ -74,6 +74,7 @@ class Thread(models.Model):
             paged_results=True
         )
         if query_params.get('text'):
+            print "query_params", query_params
             search_query = query_params['text']
             course_id = query_params['course_id']
             group_id = query_params['group_id'] if 'group_id' in query_params else None

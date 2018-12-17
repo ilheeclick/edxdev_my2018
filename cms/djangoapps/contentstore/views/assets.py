@@ -130,6 +130,9 @@ def _assets_json(request, course_key):
     if request_options['requested_text_search']:
         filter_parameters.update(_get_displayname_search_filter_for_mongo(request_options['requested_text_search']))
 
+    #debug
+    print "filter_parameters", filter_parameters
+
     sort_type_and_direction = _get_sort_type_and_direction(request_options)
 
     requested_page_size = request_options['requested_page_size']
@@ -166,6 +169,7 @@ def _assets_json(request, course_key):
         'assetTypes': _get_requested_file_types_from_requested_filter(request_options['requested_asset_type']),
         'textSearch': request_options['requested_text_search'],
     }
+
 
     return JsonResponse(response_payload)
 
@@ -261,9 +265,12 @@ def _get_displayname_search_filter_for_mongo(text_search):
     """
     Return a pymongo query dict for the given search string, using case insensitivity.
     """
+    print "_get_displayname_search_filter_for_mongo",text_search
     filters = []
 
     text_search_tokens = text_search.split()
+
+    print "text_search_tokens",text_search_tokens
 
     for token in text_search_tokens:
         escaped_token = re.escape(token)
@@ -274,7 +281,7 @@ def _get_displayname_search_filter_for_mongo(text_search):
                 '$options': 'i',
             },
         })
-
+    print "filters",filters
     return {
         '$and': filters,
     }

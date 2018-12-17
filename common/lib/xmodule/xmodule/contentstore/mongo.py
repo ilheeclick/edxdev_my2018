@@ -114,6 +114,7 @@ class MongoContentStore(ContentStore):
     @autoretry_read()
     def find(self, location, throw_on_not_found=True, as_stream=False):
         content_id, __ = self.asset_db_key(location)
+        print "find"
 
         try:
             if as_stream:
@@ -254,11 +255,16 @@ class MongoContentStore(ContentStore):
         # Mongo 3.4 does not require this hack. When upgraded, change this aggregation back to a find and specifiy
         # a collation based on user's language locale instead.
         # See: https://openedx.atlassian.net/browse/EDUCATOR-2221
+
         pipeline_stages = []
+        print "filter_params----------------------D",filter_params
         query = query_for_course(course_key, 'asset' if not get_thumbnails else 'thumbnail')
+
         if filter_params:
             query.update(filter_params)
+        print "query!", query
         pipeline_stages.append({'$match': query})
+        print "pipeline_stages",pipeline_stages
 
         if sort:
             sort = dict(sort)
@@ -282,6 +288,7 @@ class MongoContentStore(ContentStore):
                     }
                 })
                 sort = {'insensitive_displayname': sort['displayname']}
+                print "sort",sort
             pipeline_stages.append({'$sort': sort})
 
         # This is another hack to get the total query result count, but only the Nth page of actual documents

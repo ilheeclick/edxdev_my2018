@@ -1260,6 +1260,29 @@ def course_about(request, course_id):
 
         #######E ADD.###########
         # coure_review
+        try :
+            with connections['default'].cursor() as cur:
+                query = """
+                    select count(*)
+                    from course_review a
+                    left join auth_user b on a.user_id = b.id
+                    where course_id ="{course_id}" and b.username ="{user_name}";
+                    """.format(course_id=course_id,user_name=request.user)
+                cur.execute(query)
+                r_c = cur.fetchall()
+                review_val = r_c[0][0]
+                print "reivew_chk",review_val
+                print "query",query
+                if review_val > 0:
+                    review_chk ='o'
+                else:
+                    review_chk = 'x'
+        except:
+            review_chk = 'x'
+            pass
+
+
+
         with connections['default'].cursor() as cur:
             query = """
                     select a.content,a.point,a.user_id,DATE_FORMAT(a.reg_time, "%Y/%m/%d "),a.id,b.username
@@ -1379,6 +1402,7 @@ def course_about(request, course_id):
             'reviews_fragment_view': reviews_fragment_view,
             'sidebar_html_enabled': sidebar_html_enabled,
             'rev': data_list,
+            'review_chk': review_chk,
             # 'classfy' : classfy,
             'classfy_name': classfy_name,
             'middle_classfy_name': middle_classfy_name,

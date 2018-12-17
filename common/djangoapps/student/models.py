@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Models for User Information (students, staff, etc)
 

@@ -98,6 +98,8 @@ class UsernameCipher(object):
 
 
 def enable_notifications(user):
+    print "enable_notifications"
+    print "enable_notifications_user",user
     """
     Enable notifications for a user.
     Currently only used for daily forum digests.
@@ -115,6 +117,7 @@ def enable_notifications(user):
 
 @require_POST
 def ajax_enable(request):
+    print "ajax_enable"
     """
     A view that enables notifications for the authenticated user
 
@@ -133,6 +136,7 @@ def ajax_enable(request):
 
 @require_POST
 def ajax_disable(request):
+    print "ajax_disable"
     """
     A view that disables notifications for the authenticated user
 
