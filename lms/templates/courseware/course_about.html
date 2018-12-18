@@ -647,17 +647,17 @@ div.about-side-title p {
       % if get_course_about_section(request, course, "video"):
       <a href="#video-modal" class="media" rel="leanModal">
         <div class="hero">
-          <img src="${course_image_urls['large']}" alt="" />
+          <img src="${course_image_urls['large']}" alt="${course.display_name_with_default_escaped} 동영상" style="width: 356px; height: 220px;" />
           <div class="play-intro"></div>
         </div>
       </a>
-      %else:
+    %else:
       <div class="media">
         <div class="hero">
-          <img src="${course_image_urls['large']}" alt="" />
+          <img src="${course_image_urls['large']}" alt="${course.display_name_with_default_escaped} 이미지" style="width: 356px; height: 220px;" />
         </div>
       </div>
-      % endif
+    % endif
     </div>
       </div>
   </header>

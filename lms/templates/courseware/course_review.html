@@ -1,7 +1,10 @@
 <article class="response">
 <h3>평점 및 리뷰</h3>
 </article>
+
 %if user.id is not None:
+  %if user.is_authenticated and registered :
+    %if context['review_chk'] =='x':
 <form>
   <fieldset class="starability-basic">
     <legend> &nbsp</legend>
@@ -24,6 +27,8 @@
   <textarea id="review_text" style="min-width: 400px; width: 300px; max-width: 630px;"></textarea>
 <button class="btn"onclick="chk()"><img class="btn-chk" src="/static/images/review_check.png"/></button>
 </form>
+%endif
+%endif
 %endif
 
 <div class="rs">
@@ -64,6 +69,7 @@
         <img class="star_img_1" src="/static/images/star.png"/>
         <img class="star_img_1" src="/static/images/star.png"/>
         <img class="star_img_1" src="/static/images/star.png"/>
+<!--        <img class="star_img_1" src="/static/imareloadSliderges/star.png"/>-->
         %endif
       </td>
       <td><img class="img_like" onclick="like('g',${re_li['user_id']},${re_li['seq']})" src="/static/images/like.png"/><span id="like">${re_li['like']}</span><img class="img_dislike" onclick="like('b',${re_li['user_id']},${re_li['seq']})"src="/static/images/dislike.png"/><span>${re_li['bad']}</span></td>
@@ -149,15 +155,15 @@
           }
       }).done(function(data){
 
-            console.log(data)
+            console.log("ddaattaa",data)
 
             if(data.data == "success"){
             }
             else if (data.data =='delete'){
-                swal("취소되었습니다");
+                alert("취소되었습니다");
             }
             else if (data.data == "false"){
-                swal("한번만 가능합니다.");
+                alert("한번만 가능합니다.");
             }
       })
 

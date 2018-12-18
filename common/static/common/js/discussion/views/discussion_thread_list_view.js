@@ -474,6 +474,7 @@
             DiscussionThreadListView.prototype.searchFor = function(text, $searchInput) {
                 var url = DiscussionUtil.urlFor('search'),
                     self = this;
+
                 this.clearSearchAlerts();
                 this.clearFilters();
                 this.mode = 'search';
@@ -600,6 +601,7 @@
                 $checkbox = $('input.email-setting');
                 checked = $checkbox.prop('checked');
                 urlName = (checked) ? 'enable_notifications' : 'disable_notifications';
+                console.log("urlName",urlName)
                 DiscussionUtil.safeAjax({
                     url: DiscussionUtil.urlFor(urlName),
                     type: 'POST',
