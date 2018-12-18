@@ -63,6 +63,8 @@ from lms.djangoapps.community import views as community
 #lms/djangoapps/courseware/courses.py
 from courseware import courses as courses
 
+from openassessment.fileupload.urls import urlpatterns as oraurlpatterns
+
 if settings.DEBUG or settings.FEATURES.get('ENABLE_DJANGO_ADMIN_SITE'):
     django_autodiscover()
     admin.site.site_header = _('LMS Administration')
@@ -246,9 +248,15 @@ if settings.FEATURES.get('ENABLE_OPENBADGES'):
         url(r'^api/badges/v1/', include('badges.api.urls', app_name='badges', namespace='badges_api')),
     ]
 
+#urlpatterns += [
+#    url(r'^openassessment/fileupload/', include('openassessment.fileupload.urls')),
+#]
+
 urlpatterns += [
-    url(r'^openassessment/fileupload/', include('openassessment.fileupload.urls')),
+    url(r'^openassessment/storage/', include('openassessment.fileupload.urls')),
 ]
+
+#urlpatterns += oraurlpatterns
 
 # sysadmin dashboard, to see what courses are loaded, to delete & load courses
 if settings.FEATURES.get('ENABLE_SYSADMIN_DASHBOARD'):

@@ -583,7 +583,7 @@ FEATURES = {
     'SHOW_BUMPER_PERIODICITY': 7 * 24 * 3600,
 
     # Special Exams, aka Timed and Proctored Exams
-    'ENABLE_SPECIAL_EXAMS': False,
+    'ENABLE_SPECIAL_EXAMS': True,
 
     # Enable OpenBadge support. See the BADGR_* settings later in this file.
     'ENABLE_OPENBADGES': False,
@@ -2888,10 +2888,16 @@ ORA2_FILE_PREFIX = None
 FILE_UPLOAD_STORAGE_BUCKET_NAME = 'edxuploads'
 FILE_UPLOAD_STORAGE_PREFIX = 'submissions_attachments'
 
+
+ORA2_FILEUPLOAD_BACKEND = "filesystem"
+# your prefered cache system
+ORA2_FILEUPLOAD_CACHE_NAME = "default"
+#where you want to upload ora2 files
+ORA2_FILEUPLOAD_ROOT = os.path.join(MEDIA_ROOT, 'ora-upload/')
+
 ##### ACCOUNT LOCKOUT DEFAULT PARAMETERS #####
 MAX_FAILED_LOGIN_ATTEMPTS_ALLOWED = 5
 MAX_FAILED_LOGIN_ATTEMPTS_LOCKOUT_PERIOD_SECS = 15 * 60
-
 
 ##### LMS DEADLINE DISPLAY TIME_ZONE #######
 TIME_ZONE_DISPLAYED_FOR_DEADLINES = 'UTC'
