@@ -1157,8 +1157,8 @@ def rerun_course(user, source_course_key, org, number, run, fields, async=True):
         fields['linguistics'] = source_course.linguistics
         fields['course_period'] = source_course.course_period
         fields['user_edit'] = source_course.user_edit
-        fields['org_kname'] = None
-        fields['org_ename'] = None
+        # fields['org_kname'] = None
+        # fields['org_ename'] = None
     except Exception as e:
         print e
 
@@ -1283,8 +1283,8 @@ def _rerun_course(request, org, number, run, fields):
         fields['linguistics'] = source_course.linguistics
         fields['course_period'] = source_course.course_period
         fields['user_edit'] = source_course.user_edit
-        fields['org_kname'] = None
-        fields['org_ename'] = None
+        # fields['org_kname'] = None
+        # fields['org_ename'] = None
     except Exception as e:
         print e
 

@@ -180,15 +180,15 @@ COURSE_DISCOVERY_MEANINGS = {
     'org': {
         'name': 'Organization',
     },
-    'org_kname': {
-        'name': 'Organization Korea Name',
-    },
-    'org_ename': {
-        'name': 'Organization English Name',
-    },
-    'teacher_name': {
-        'name': 'Teacher',
-    },
+    # 'org_kname': {
+    #     'name': 'Organization Korea Name',
+    # },
+    # 'org_ename': {
+    #     'name': 'Organization English Name',
+    # },
+    # 'teacher_name': {
+    #     'name': 'Teacher',
+    # },
     'language': LANGUAGE_MAP,
     'classfy': {
         'name': 'Section',

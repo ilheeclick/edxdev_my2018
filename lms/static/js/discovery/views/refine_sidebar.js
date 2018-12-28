@@ -11,7 +11,9 @@
 
             el: '.search-facets',
             events: {
-                'click li button': 'selectOption',
+                // 'click li button': 'selectOption',
+                'change .facet-list': 'selectOption',
+                'click li button': 'selectOption2',
                 'click .show-less': 'collapse',
                 'click .show-more': 'expand'
             },
@@ -44,6 +46,7 @@
             // Il-Hee, Maeng addition end ------------------------
 
             termName: function(facetKey, termKey) {
+                //console.log('%s:%s', facetKey, termKey);
                 return this.meanings[facetKey] &&
                 this.meanings[facetKey].terms &&
                 this.meanings[facetKey].terms[termKey] || termKey;
@@ -87,13 +90,41 @@
                     else if(data.facet == 'middle_classfy' || data.facet == 'middle_classfysub'){
 
                         var middle_text = {
-                            "lang": "Linguistics & Literature","husc":"Human Sciences",
-                            "busn":"Business Administration & Economics", "law":"Law", "scsc": "Social Sciences",
-                            "enor":"General Education", "ekid":"Early Childhood Education", "espc":"Special Education", "elmt":"Elementary Education", "emdd":"Secondary Education",
-                            "cons":"Architecture", "civi":"Civil Construction & Urban Engineering", "traf":"Transportation", "mach":"Mechanical & Metallurgical Engineering", "elec":"Electricity & Electronics", "deta":"Precision & Energy", "matr":"Materials", "comp":"Computers & Communication", "indu":"Industrial Engineering", "cami":"Chemical Engineering", "other":"Others",
-                            "agri":"Agriculture & Fisheries", "bio":"Biology, Chemistry & Environmental Science", "life": "Living Science", "math": "Mathematics, Physics, Astronomy & Geography",
-                            "metr":"Medical Science", "nurs":"Nursing", "phar": "Pharmacy", "heal": "Therapeutics & Public Health",
-                            "dsgn":"Design", "appl":"Applied Arts", "danc": "Dancing & Physical Education", "form": "FineArts & Formative Arts", "play": "Drama & Cinema", "musc": "Music",
+                            "lang": "Linguistics & Literature",
+                            "husc":"Human Sciences",
+                            "busn":"Business Administration & Economics",
+                            "law":"Law",
+                            "scsc": "Social Sciences",
+                            "enor":"General Education",
+                            "ekid":"Early Childhood Education",
+                            "espc":"Special Education",
+                            "elmt":"Elementary Education",
+                            "emdd":"Secondary Education",
+                            "cons":"Architecture",
+                            "civi":"Civil Construction & Urban Engineering",
+                            "traf":"Transportation",
+                            "mach":"Mechanical & Metallurgical Engineering",
+                            "elec":"Electricity & Electronics",
+                            "deta":"Precision & Energy",
+                            "matr":"Materials",
+                            "comp":"Computers & Communication",
+                            "indu":"Industrial Engineering",
+                            "cami":"Chemical Engineering",
+                            "other":"Others",
+                            "agri":"Agriculture & Fisheries",
+                            "bio":"Biology, Chemistry & Environmental Science",
+                            "life": "Living Science",
+                            "math": "Mathematics, Physics, Astronomy & Geography",
+                            "metr":"Medical Science",
+                            "nurs":"Nursing",
+                            "phar": "Pharmacy",
+                            "heal": "Therapeutics & Public Health",
+                            "dsgn":"Design",
+                            "appl":"Applied Arts",
+                            "danc": "Dancing & Physical Education",
+                            "form": "FineArts & Formative Arts",
+                            "play": "Drama & Cinema",
+                            "musc": "Music",
                             "intd_m":"Interdisciplinary",
                         };
                         if(middle_text[data.term]){
@@ -110,6 +141,7 @@
                         }
                     }
                     else{
+                        //console.log('[%s]:%s:%s', data.name, data.facet, data.term);
                         data.name = this.termName(data.facet, data.term);
                     }
                     // Il-Hee, Maeng addition end ------------------------
@@ -224,7 +256,7 @@
                             return;
                         }
 
-                         if (options.length > 0) {
+                        if (options.length > 0) {
                             if(facetKey === 'org'){
                                 var options2 = [];
                                 _.map(options, function(option) {
@@ -238,15 +270,14 @@
                                 });
 
                                 return this.renderFacet(facetKey, options2);
-                            }else{
+                            } else {
                                 return this.renderFacet(facetKey, options);
-
                             }
-
                         }
                     }, this)
                 );
                 // Il-Hee, Maeng addition end ------------------------
+                //console.log('[%s]', htmlSnippet.toString());
                 HtmlUtils.setHtml(this.$container, htmlSnippet);
                 return this;
             },
@@ -254,8 +285,8 @@
             collapse: function(event) {
                 var $el = $(event.currentTarget),
                     $more = $el.siblings('.show-more'),
-                    $ul = $el.parent().siblings('ul');
-
+                    // $ul = $el.parent().siblings('ul');
+                    $ul = $('#'+($el).attr('id')).parent().prev();
                 $ul.addClass('collapse');
                 $el.addClass('hidden');
                 $more.removeClass('hidden');
@@ -263,23 +294,50 @@
 
             expand: function(event) {
                 var $el = $(event.currentTarget),
-                    $ul = $el.parent('div').siblings('ul');
-
+                    // $ul = $el.parent('div').siblings('ul');
+                    $ul = $('#'+($el).attr('id')).parent('div').prev();
                 $el.addClass('hidden');
                 $ul.removeClass('collapse');
                 $el.siblings('.show-less').removeClass('hidden');
             },
 
-            selectOption: function(event) {
-                var $target = $(event.currentTarget);
-                this.trigger(
-                'selectOption',
-                $target.data('facet'),
-                $target.data('value'),
-                $target.data('text')
-            );
-            }
+//            selectOption: function(event) {
+//                var $target = $(event.currentTarget);
+//                this.trigger(
+//                'selectOption',
+//                $target.data('facet'),
+//                $target.data('value'),
+//                $target.data('text')
+//            );
+//            }
 
+            selectOption: function (event) {
+                $(".course-facets-select").focus();
+                $(".search-facets-lists").focus();
+                var $target = $(event.currentTarget);
+                var select_val = $target.val();
+                var select_index = select_val.split('+');
+
+                this.trigger(
+                    'selectOption',
+                    $target.data('facet'),
+                    select_index[0],
+                    select_index[1]
+                );
+
+                $(".facet-list option[value=" + select_val+ "]").attr("selected","selected")
+            },
+            selectOption2: function (event) {
+                $(".course-facets-select").focus();
+                var $target = $(event.currentTarget);
+
+                this.trigger(
+                    'selectOption',
+                    $target.data('facet'),
+                    $target.data('value'),
+                    $target.data('text')
+                );
+            }
         });
     });
 }(define || RequireJS.define));

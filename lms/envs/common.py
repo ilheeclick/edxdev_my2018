@@ -260,15 +260,15 @@ COURSE_DISCOVERY_MEANINGS = {
     'org': {
         'name': 'Organization',
     },
-    'org_kename': {
-        'name': 'Organization Korea Name',
-    },
-    'org_ename': {
-        'name': 'Organization English Name',
-    },
-    'teacher_name': {
-        'name': 'Teacher',
-    },
+    # 'org_kname': {
+    #     'name': 'Organization Korea Name',
+    # },
+    # 'org_ename': {
+    #     'name': 'Organization English Name',
+    # },
+    # 'teacher_name': {
+    #     'name': 'Teacher',
+    # },
     'modes': {
         'name': 'Course Type',
         'terms': {
