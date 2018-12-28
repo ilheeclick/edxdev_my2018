@@ -316,7 +316,7 @@ def HangleConv(text):
             b1 = char_s + 0x1100
             b2 = char_m + 0x1161
             b3 = char_e + 0x11A8 - 1
-            print b1, b2, b3, unichr(b1), unichr(b2), unichr(b3), unichr(b1)+unichr(b2)+unichr(b3)
+            # print b1, b2, b3, unichr(b1), unichr(b2), unichr(b3), unichr(b1)+unichr(b2)+unichr(b3)
             if char_s != 0 and char_m != 0  and char_e != 0:
                 charToConv = ''.join(["\\u%04x" % (char_s + 0x1100)]) + ''.join(["\\u%04x" % (char_m + 0x1161)]) + ''.join(["\\u%04x" % (char_e + 0x11A8 - 1)])
                 result_chr = result_chr + unichr(b1)+unichr(b2)+unichr(b3)
@@ -327,7 +327,7 @@ def HangleConv(text):
                 charToConv = ''.join(["\\u%04x" % (char_s + 0x1100)])
                 result_chr = result_chr + unichr(b1)
             result = result + charToConv
-            print result_chr
+            # print result_chr
         else:
             result_chr = result_chr + ch
     return result_chr
