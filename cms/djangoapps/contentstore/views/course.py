@@ -909,8 +909,8 @@ def _create_or_rerun_course(request):
 
                 row = cur.fetchone()
                 while row is not None:
-                    org_kname = row[0]
-                    org_ename = row[1]
+                    org_kname = row[0].strip()
+                    org_ename = row[1].strip()
                     fields.update({'org_kname': org_kname})
                     fields.update({'org_ename': org_ename})
                     row = cur.fetchone()
