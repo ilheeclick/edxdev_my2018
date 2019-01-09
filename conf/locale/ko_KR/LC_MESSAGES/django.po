@@ -1781,6 +1781,60 @@ msgstr "체크박스"
 msgid "Multiple Choice"
 msgstr "선다형 문항"
 
+#: common/lib/capa/capa/responsetypes.py:3035
+msgid "Custom JavaScript Display and Grading"
+msgstr "사용자 자바스크립트 표시 및 등급"
+
+#: common/lib/capa/capa/responsetypes.py:3035
+msgid "Custom Python-Evaluated Input"
+msgstr "사용자 파이썬 평가 입력"
+
+#: common/lib/capa/capa/responsetypes.py:3035
+msgid "Drag and Drop"
+msgstr "드래그 앤 드롭"
+
+#: common/lib/capa/capa/responsetypes.py:3035
+msgid "Drag and Drop (Deprecated Version)"
+msgstr "드래그 앤 드롭 (사용되지 않는 버전)"
+
+#: common/lib/capa/capa/responsetypes.py:3035
+msgid "Open Response Assessment"
+msgstr "개방형 응답 평가"
+
+#: common/lib/capa/capa/responsetypes.py:3035
+msgid "Problem with Adaptive Hint"
+msgstr "반응형 힌트 포함 문제"
+
+#: cms/templates/widgets/problem-edit.html
+#: cms/templates/widgets/problem-edit.html
+msgid "Blank Common Problem"
+msgstr "공통 문제"
+
+#: cms/templates/widgets/problem-edit.html
+#: cms/templates/widgets/problem-edit.html
+msgid "Checkboxes with Hints and Feedback"
+msgstr "힌트와 피드백이 포함된 체크박스"
+
+#: cms/templates/widgets/problem-edit.html
+#: cms/templates/widgets/problem-edit.html
+msgid "Dropdown with Hints and Feedback"
+msgstr "힌트와 피드백이 포함된 드롭다운"
+
+#: cms/templates/widgets/problem-edit.html
+#: cms/templates/widgets/problem-edit.html
+msgid "Multiple Choice with Hints and Feedback"
+msgstr "힌트와 피드백이 포함된 선다형 문항"
+
+#: cms/templates/widgets/problem-edit.html
+#: cms/templates/widgets/problem-edit.html
+msgid "Numerical Input with Hints and Feedback"
+msgstr "힌트와 피드백이 포함된 수치 입력 문항"
+
+#: cms/templates/widgets/problem-edit.html
+#: cms/templates/widgets/problem-edit.html
+msgid "Text Input with Hints and Feedback"
+msgstr "힌트와 피드백이 포함된 텍스트 입력 문항"
+
 #. Translators: 'shuffle' and 'answer-pool' are attribute names and should not
 #. be translated.
 #: common/lib/capa/capa/responsetypes.py
@@ -3429,7 +3483,7 @@ msgstr "{short_label} 평균"
 
 #: common/lib/xmodule/xmodule/html_module.py
 msgid "Text"
-msgstr "Text"
+msgstr "텍스트"
 
 #: common/lib/xmodule/xmodule/html_module.py
 msgid "Html contents to display for this module"
@@ -11106,8 +11160,8 @@ msgid "Category"
 msgstr "범주 "
 
 #: openedx/core/lib/xblock_builtin/xblock_discussion/xblock_discussion/__init__.py
-msgid "Week 1"
-msgstr "1주"
+# msgid "Week 1"
+# msgstr "1주"
 
 #: openedx/core/lib/xblock_builtin/xblock_discussion/xblock_discussion/__init__.py
 msgid ""
@@ -11133,6 +11187,104 @@ msgid ""
 msgstr ""
 "로그인 하지 않으셨습니다. 게시판 내용을 보고싶으시면, {sign_in_link} 또는 {register_link}로 이동해 이 강좌를 "
 "등록하세요."
+
+
+
+#: openedx/core/lib/xblock_builtin/xblock_discussion/xblock_discussion.py
+msgid "Display name for this component"
+msgstr "이 구성요소에 대한 메뉴명"
+
+#: openedx/core/lib/xblock_builtin/xblock_discussion/xblock_discussion.py
+msgid "Week 1"
+msgstr "1주"
+
+msgid "Set up your certificate"
+msgstr "이수증 만들기"
+
+#:
+msgid "Grade Submissions"
+msgstr "평가하기"
+
+msgid "Upload your assignment"
+msgstr "파일 선택 후 버튼을 한번 더 클릭하여 업로드를 완료해주세요."
+
+msgid "Download All Submissions"
+msgstr "제출물을 모두 다운로드합니다."
+
+msgid "Filename"
+msgstr "파일명"
+
+msgid "Submitted"
+msgstr "제출"
+
+msgid "Instructor's comments"
+msgstr "교수자 첨삭"
+
+msgid "Annotated"
+msgstr "주석"
+
+#: studio > advanced option
+msgid "Staff Graded Assignment"
+msgstr "교수자 채점 과제"
+
+msgid "Poll"
+msgstr "투표"
+
+msgid "Survey"
+msgstr "설문"
+
+msgid "Randomized Content Block"
+msgstr "문제 은행"
+
+msgid "Google Calendar"
+msgstr "Google 캘린더"
+
+msgid "Google Document"
+msgstr "Google 문서"
+
+msgid "Word cloud"
+msgstr "워드 클라우드"
+
+# msgid ""
+# "The calendar view that students see by default. A student can change this "
+# "view."
+# msgstr "학습자들이 기본으로 보게되는 캘린더입니다. 학습자는 이 뷰를 바꿀 수 있습니다."
+
+msgid "Public Calendar ID"
+msgstr "공개 캘린더 아이디"
+
+msgid "Default View"
+msgstr "기본 보기"
+
+msgid ""
+"Google provides an ID for publicly available calendars. In the Google "
+"Calendar, open Settings and copy the ID from the Calendar Address section "
+"into this field. You can "
+msgstr ""
+"구글은 공개된 캘린더에 대한 ID를 제공합니다. 구글 캘린더에서 '설정'을 선택해고 필드의 캘린더 주소 영역으로부터 ID를 이곳으로 "
+"복사하십시오. 더 자세한 것은 것은"
+
+msgid "Google provides an ID for publicly available calendars. In the Google Calendar, open Settings and copy the ID from the Calendar Address section into this field. You can"
+msgstr "구글은 공개된 캘린더에 대한 ID를 제공합니다. 구글 캘린더에서 '설정'을 선택해고 필드의 캘린더 주소 영역으로부터 ID를 이곳으로 "
+"복사하십시오. 더 자세한 것은 것은"
+
+msgid "learn more here"
+msgstr "여기서 배울 수 있습니다"
+
+msgid "The calendar view that students see by default. A student can change this view."
+msgstr "학습자들이 기본으로 보게되는 캘린더입니다. 학습자는 이 뷰를 바꿀 수 있습니다."
+
+msgid ""
+"Google provides an embed code for Drive documents. In the Google Drive "
+"document, from the File menu, select Publish to the Web. Modify settings as "
+"needed, click Publish, and copy the embed code into this field."
+msgstr ""
+"구글은 구글 문서를 위한 embed code를 제공합니다. 구글 드라이브 문서에서 파일메뉴를 선택한 후 웹에 게시를 합니다. 수정이 "
+"필요할 때에는 '게시'를 클릭한 후에 embed code를 이곳에 복사합니다."
+
+#: src/xblock-google-drive/google_drive/templates/html/google_calendar_edit.html
+msgid "This name appears in the horizontal navigation at the top of the page."
+msgstr "상단에 가로로 나타나는 웹페이지의 명칭입니다."
 
 #: openedx/features/course_experience/plugins.py
 #: cms/templates/widgets/header.html
@@ -23261,6 +23413,99 @@ msgstr "동영상 업로드"
 msgid "Course Video Settings"
 msgstr "강좌 동영상 설정"
 
+#: cms/templates/videos_index.html
+msgid "Why upload video files?"
+msgstr "왜 동영상 파일을 업로드 하는가?"
+
+#: cms/templates/videos_index.html
+msgid ""
+"For a video to play on different devices, it needs to be available in "
+"multiple formats. After you upload an original video file in .mp4 or .mov "
+"format on this page, an automated process creates those additional formats "
+"and stores them for you."
+msgstr ""
+"동영상을 다른 장치에서 재생하려면, 파일이 다양한 파일 형식으로 재생될 수 있어야 합니다. 이 페이지에 원래의 동영상 파일을 .mp4 "
+"또는 .mov로 업로드하시면 됩니다. 그후 다른 형식의 파일들이 생성된 후 저장까지 자동으로 진행됩니다."
+
+#: cms/templates/videos_index.html
+msgid "Maximum Video File Size"
+msgstr "최대 동영상 파일 크기"
+
+#: cms/templates/videos_index.html
+msgid ""
+"The maximum size for each video file that you upload is 5 GB. The upload "
+"process fails for larger files."
+msgstr "각 동영상 파일의 최대 크기는 5GB입니다. 5GB 이상의 파일의 경우 업로드 과정에서 오류가 발생합니다."
+
+#: cms/templates/videos_index.html
+msgid "Monitoring files as they upload"
+msgstr "업로드된 파일 모니터링"
+
+#: cms/templates/videos_index.html
+msgid ""
+"Each video file that you upload needs to reach the video processing servers "
+"successfully before additional work can begin. You can monitor the progress "
+"of files as they upload, and try again if the upload fails."
+msgstr ""
+"추가 작업을 시작하기 전에, 각 동영상 파일의 업로드 작업이 마무리되어야 합니다. 파일의 업로드 상태를 모니터할 수 있으며, 업로드에 "
+"실패할 경우 다시 시도하세요."
+
+#: cms/templates/videos_index.html
+msgid "Managing uploaded files"
+msgstr "업로드 파일 관리"
+
+#: cms/templates/videos_index.html
+msgid ""
+"After a file uploads successfully, automated processing begins. The file is "
+"then listed under Previous Uploads as {em_start}In Progress{em_end}. You can"
+" add the video to your course as soon as it has a unique video ID and the "
+"status is {em_start}Ready{em_end}. Allow 24 hours for file processing at the"
+" external video hosting sites to complete."
+msgstr ""
+"파일 업로드가 완료되면 자동 프로세스가 시작됩니다. 기존 업로드에  {em_start}진행중{em_end} 형태로 파일이 추가됩니다. "
+"동영상 ID가 부여되고 상태가 {em_start}준비{em_end}가 되면 강좌에 동영상을 추가할 수 있습니다. 외부 동영상 호스트 "
+"사이트 파일 프로세스 과정에 24시간 정도 소요됩니다."
+
+#: cms/templates/videos_index.html
+msgid ""
+"If something goes wrong, the {em_start}Failed{em_end} status message "
+"appears. Check for problems in your original file and upload a replacement."
+msgstr ""
+"문제가 생긴 경우, {em_start} 실패{em_end}  상태 메시지가 나타납니다. 원본 파일의 문제를 확인한 후 다른 파일을 "
+"업로드해보세요."
+
+#: cms/templates/videos_index.html
+msgid "How do I get the videos into my course?"
+msgstr "내 강좌에서 동영상을 얻으려면 어떻게 해야하나요?"
+
+#: cms/templates/videos_index.html
+msgid ""
+"When status for a file is {em_start}Ready{em_end}, you can add that video to"
+" a component in your course. Copy the unique video ID. In another browser "
+"window, on the Course Outline page, create or locate a video component to "
+"play this video. Edit the video component to paste the ID into the Advanced "
+"{em_start}Video ID{em_end} field. The video can play in the LMS as soon as "
+"its status is {em_start}Ready{em_end}, although processing may not be "
+"complete for all encodings and all video hosting sites."
+msgstr ""
+"파일이  {em_start}준비{em_end} 상태가 되면 강좌의 구성요소에 해당 동영상을 추가할 수 있습니다. 동영상 ID를 복사한 뒤"
+" 다른 브라우저 창의 강좌 개요 페이지에서 동영상을 재생할 동영상 구성요소를 생성하거나 찾으세요. 동영상 구성요소를 편집해 고급 "
+"{em_start}동영상 ID{em_end} 필드에 ID를 붙여넣기 하면 됩니다. 모든 동영상 호스트 사이트에서 인코딩 과정이 끝나지 "
+"않았더라도 {em_start}준비{em_end} 상태가 되면 학습 관리 시스템에서 동영상을 재생할 수 있습니다."
+
+#: cms/templates/visibility_editor.html
+msgid "No content groups exist"
+msgstr "컨텐츠 그룹이 존재하지 않습니다."
+
+#: cms/templates/visibility_editor.html
+msgid ""
+"Use content groups to give groups of students access to a specific set of "
+"course content. Create one or more content groups, and make specific "
+"components visible to them."
+msgstr ""
+"학습 집단이 특정 콘텐츠에 접근할 수 있도록 콘텐츠 그룹을 사용합니다. 1개 이상의 콘텐츠 그룹을 만들고, 특정 구성요소를 해당 집단의 "
+"학습자들이 볼 수 있도록 하세요."
+
 #: cms/templates/visibility_editor.html
 msgid "Access is not restricted"
 msgstr "접근 허용"
@@ -26760,3 +27005,33 @@ msgstr "이전 강좌"
 
 msgid "Current Course"
 msgstr "현재 강좌"
+
+msgid "Announcement"
+msgstr "일림"
+
+msgid "Anonymous User ID"
+msgstr "익명 사용자 아이디"
+
+msgid "Full Screen Image Tool"
+msgstr "전체화면 이미지 도구"
+
+msgid "IFrame Tool"
+msgstr "IFrame 도구"
+
+msgid "Raw HTML"
+msgstr "HTML"
+
+msgid "Zooming Image Tool"
+msgstr "확대/축소 이미지 도구"
+
+msgid "Add Answer"
+msgstr "응답 추가"
+
+msgid "Enter the prompt for the user."
+msgstr "사용자 입력"
+
+msgid "RESULTS"
+msgstr "결과"
+
+msgid "Student data and results CSV available for download in the LMS."
+msgstr "LMS에서 CSV 파일 형식으로 다운로드할 수 있는 학생 데이터 및 결과."
