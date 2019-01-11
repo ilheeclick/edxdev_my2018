@@ -293,6 +293,9 @@ msgstr "전문 과정"
 msgid "Display Name"
 msgstr "표시될 이름"
 
+msgid "Display Name "
+msgstr "표시될 이름"
+
 #: common/djangoapps/course_modes/models.py
 #: lms/templates/courseware/course_about.html
 msgid "Price"
@@ -25765,8 +25768,15 @@ msgid "Account Activated"
 msgstr "계정이 활성화되었습니다."
 
 ###  ORA 관련 영문
+
+msgid "Your response (required)"
+msgstr "당신의 응답 (필수)"
+
 msgid "Your Response"
 msgstr "답변"
+
+msgid "Enter your response to the prompt."
+msgstr "프롬프트에 답변을 입력하세요."
 
 msgid "You can save your progress and return to complete your response at any time."
 msgstr "진행 상황을 저장하고 언제든지 돌아가서 응답을 완료 할 수 있습니다."
@@ -25774,11 +25784,27 @@ msgstr "진행 상황을 저장하고 언제든지 돌아가서 응답을 완료
 msgid "After you submit your response, you cannot edit it"
 msgstr "답을 제출 한 후에는 답을 편집 할 수 없습니다"
 
+msgid "The prompt for this section"
+msgstr "이 섹션의 프롬프트"
+
+msgid "This assignment has several steps. In the first step, you'll provide a response to the prompt. The other steps appear below the Your Response field."
+msgstr "본 과제에는 여러 단계가 있습니다. 첫 번째 단계에서는 프롬프트에 대한 답변을 제공합니다. 다른 단계는 귀하의 답변 아래에 나타납니다."
+
+# msgid "This assignment has several steps. In the first step, you'll provide a response to the prompt. The other steps appear below the%(start_tag)s Your Response%(end_tag)s field."
+# msgid "This assignment has several steps. In the first step, you'll provide a response to the prompt. The other steps appear below the %(start_tag)sYour Response %(end_tag)sfield."
+# msgid "This assignment has several steps. In the first step, you'll provide a response to the prompt. The other steps appear below the %(start_tag)sYour Response%(end_tag)s field."
+
+msgid "This assignment has several steps. In the first step, you'll provide a response to the prompt. The other steps appear below the %(start_tag)sYour Response%(end_tag)s field."
+msgstr "본 과제에는 여러 단계가 있습니다. 첫 번째 단계에서는 프롬프트에 대한 답변을 제공합니다. 다른 단계는%(start_tag)s 귀하의 답변%(end_tag)s 아래에 나타납니다."
+
 msgid "This assignment has several steps. In the first step, you'll provide a response to the question. The other steps appear below the Your Response field."
 msgstr "본 과제에는 여러 단계가 있습니다. 첫 번째 단계에서는 질문에 대한 답변을 제공합니다. 다른 단계는 귀하의 답변 아래에 나타납니다."
 
 msgid "This assignment has several steps. In the first step, you'll provide a response to the question. The other steps appear below the %(start_tag)sYour Response%(end_tag)s field."
 msgstr "본 과제에는 몇 가지 단계가 있습니다. 첫 번째 단계로, 질문에 대한 응답을 제출하세요. 그후 다른 단계들이 %(start_tag)s나의 응답%(end_tag)s 영역 아래에 나타날 것입니다. "
+
+msgid "This assignment has several steps. In the first step, you'll provide a response to the question. The other steps appear below the {start_tag} Your Response {end_tag} field."
+msgstr "본 과제에는 몇 가지 단계가 있습니다. 첫 번째 단계로, 질문에 대한 응답을 제출하세요. 그후 다른 단계들이 {start_tag} 나의 응답 {end_tag} 영역 아래에 나타날 것입니다. "
 
 msgid "Enter your response to the question above."
 msgstr "위 질문에 대한 귀하의 답변을 입력하십시오."
@@ -25797,6 +25823,9 @@ msgstr "답변을 제출하고 다음 단계로 이동합니다."
 
 msgid "Your Grade"
 msgstr "귀하의 점수는"
+
+msgid "Not Completed"
+msgstr "완료되지 않았습니다."
 
 msgid "Not Started"
 msgstr "시작되지 않았습니다."
@@ -26188,7 +26217,6 @@ msgstr "전체 답변"
 msgid "Active Learners in Step"
 msgstr "이 단계에서 활동중인 학습자들"
 
-
 msgid "Dates"
 msgstr "날짜"
 
@@ -26198,7 +26226,26 @@ msgstr "공개 날짜"
 msgid "You can save your progress and return to complete your response at any time before the due date"
 msgstr "현재 상태를 저장 후, 마감일 전까지 언제든 답변을 완성할 수 있습니다."
 
+msgid "This assignment is in progress. Complete the learner training step to move on."
+msgstr "이 과제는 진행 중입니다. 계속 진행하려면 학습자 교육 단계를 완료하십시오."
 
+msgid "Before you begin to assess your peers' responses, you'll learn how to complete peer assessments by reviewing responses that instructors have already assessed. If you select the same options for the response that the instructor selected, you'll move to the next step. If you don't select the same options, you'll review the response and try again."
+msgstr "동료의 반응을 평가하기 전에 강사가 이미 평가한 응답을 검토하여 동료 평가를 완료하는 방법을 배웁니다. 강사가 선택한 응답에 대해 동일한 옵션을 선택하면 다음 단계로 이동합니다. 동일한 옵션을 선택하지 않으면 응답을 검토하고 다시 시도합니다."
+
+msgid "Includes sufficient information and supporting details. (Details may not be fully developed; ideas may be listed.)  Explores some facets of the topic."
+msgstr "충분한 정보와 지원 세부 정보를 포함합니다. (세부 사항은 완전히 개발되지 않을 수 있으며 아이디어가 나열 될 수 있습니다.) 주제의 일부 측면을 탐색합니다."
+
+msgid "Excellent"
+msgstr "우수"
+
+msgid "Includes in-depth information and exceptional supporting details that are fully developed.  Explores all facets of the topic."
+msgstr "깊이 있는 정보와 완전히 개발된 예외적인 지원 세부사항을 포함합니다. 주제의 모든 측면을 탐색합니다."
+
+msgid "(Optional) What aspects of this response stood out to you? What did it do well? How could it be improved?"
+msgstr "(옵션) 이 반응의 어떤 측면이 당신에게 두드러졌는가? 그것이 무엇을 잘했는가? 어떻게 개선될 수 있을까?"
+
+msgid "I think that this response..."
+msgstr "이 응답은..."
 
 #-------------------------------------------------------------------------------------------------------
 
@@ -27035,3 +27082,217 @@ msgstr "결과"
 
 msgid "Student data and results CSV available for download in the LMS."
 msgstr "LMS에서 CSV 파일 형식으로 다운로드할 수 있는 학생 데이터 및 결과."
+
+msgid "PROMPT"
+msgstr "프롬프트"
+
+msgid "RUBRIC"
+msgstr "루브릭"
+
+msgid "Prompt"
+msgstr "프롬프트"
+
+msgid "Rubric"
+msgstr "루브릭"
+
+msgid "Optional"
+msgstr "선택"
+
+msgid "Text Response"
+msgstr "텍스트 응답"
+
+msgid "File Uploads Response"
+msgstr "파일 업로드 응답"
+
+msgid "The question for this section"
+msgstr "이 섹션에 대한 질문"
+
+msgid "Your response"
+msgstr "당신의 응답"
+
+msgid "The response to the prompt above:"
+msgstr "위 프롬프트에 대한 응답"
+
+msgid "Determine if there is a unifying theme or main idea."
+msgstr "통합된 주제 또는 주요 아이디어가 있는지 확인합니다."
+
+msgid "Assess the content of the submission"
+msgstr "제출 평가 내용"
+
+msgid "Compare your selections with the instructor's selections"
+msgstr "선택한 항목과 강사의 선택 항목을 비교합니다."
+
+msgid "You have not completed all the steps of this problem."
+msgstr "이 문제의 모든 단계를 완료하지 못했습니다."
+
+msgid "Basic Settings"
+msgstr "기본 설정"
+
+msgid "Show title"
+msgstr "제목 보이기"
+
+msgid "Standard"
+msgstr "표준"
+
+msgid "Assessment"
+msgstr "평가"
+
+msgid "Standard mode: the problem provides immediate feedback each time a learner drops an item on a target zone. Assessment mode: the problem provides feedback only after a learner drops all available items on target zones."
+msgstr "표준 모드 : 학습자가 대상 영역에 항목을 드롭하면 즉각적인 피드백을 제공합니다. 평가 모드: 학습자가 대상 영역에 있는 모든 사용 가능한 항목을 삭제한 후에만 피드백을 제공합니다."
+
+msgid "Problem text"
+msgstr "텍스트 문제"
+
+msgid "Show \"Problem\" heading"
+msgstr "\"문제\" 표제를 표시합니다"
+
+msgid "Display the heading \"Problem\" above the problem text?"
+msgstr "문제 텍스트 위에 \"문제\"라는 제목을 표시합니까?"
+
+msgid "Introductory feedback"
+msgstr "입문에 대한 피드백"
+
+msgid "Drag the items onto the image above."
+msgstr "위의 이미지로 항목을 끌어다 놓으십시오."
+
+msgid "Final feedback"
+msgstr "최종 피드백"
+
+msgid "Good work! You have completed this drag and drop problem."
+msgstr "잘 하셨습니다! 이 드래그 앤 드롭 문제를 완료하셨습니다."
+
+msgid "Zones"
+msgstr "영역"
+
+msgid "Background Image"
+msgstr "배경 이미지"
+
+msgid "Provide custom image"
+msgstr "커스텀 이미지를 제공합니다."
+
+msgid "Generate image automatically"
+msgstr "자동으로 이미지를 제공합니다."
+
+msgid "Zone Layout"
+msgstr "영역 레이아웃"
+
+msgid "Number of columns and rows."
+msgstr "행과 열 개수"
+
+msgid "Zone Size"
+msgstr "영역 크기"
+
+msgid "Size of a single zone in pixels."
+msgstr "픽셀 단위로 단일 영역의 크기 "
+
+msgid "Generate image and zones"
+msgstr "이미지와 영역 생성"
+
+msgid "Background description"
+msgstr "배경 설명"
+
+msgid "Please provide a description of the image for non-visual users. The description should provide sufficient information to allow anyone to solve the problem even without seeing the image."
+msgstr "비시각 사용자에 대한 이미지 설명을 제공하십시오. 설명은 이미지를 보지 않고도 누구나 문제를 해결할 수 있는 충분한 정보를 제공해야 합니다."
+
+msgid "Zone labels"
+msgstr "영역 라벨"
+
+msgid "Display label names on the image"
+msgstr "이미지에 라벨이름을 표시"
+
+msgid "Zone borders"
+msgstr "영역 경계선"
+
+msgid "Display zone borders on the image"
+msgstr "이미지에 영역 경계선을 표시"
+
+msgid "Zone definitions"
+msgstr "영역 정의"
+
+msgid "Describe this zone to non-visual users."
+msgstr "이 영역을 비시각 사용자에게 설명하십시오"
+
+msgid "Align dropped items to the left, center, or right."
+msgstr "왼쪽, 중앙, 또는 오른쪽에 아이템을 정렬하십시오."
+
+msgid "Add a zone"
+msgstr "영역 추가"
+
+msgid "The Top Zone"
+msgstr "위쪽 영역"
+
+msgid "The Middle Zone"
+msgstr "가운데쪽 영역"
+
+msgid "The Bottom Zone"
+msgstr "아래쪽 영역"
+
+msgid "center"
+msgstr "가운데"
+
+msgid "left"
+msgstr "왼쪽"
+
+msgid "right"
+msgstr "오른쪽"
+
+msgid "width"
+msgstr "폭"
+
+msgid "height"
+msgstr "높이"
+
+msgid "Items"
+msgstr "아이템"
+
+msgid "Item background color"
+msgstr "아이템 배경 색상"
+
+msgid "The background color of draggable items in the problem (example: 'blue' or '#0000ff')."
+msgstr "문제의 드래그 할 수 있는 아이템의 배경색 (예 : 'blue' 또는 '#0000ff')."
+
+msgid "Item text color"
+msgstr "아이템 텍스트 색상"
+
+msgid "Text color to use for draggable items (example: 'white' or '#ffffff')."
+msgstr "드래그 할 수 있는 아이템에 사용할 텍스트 색상 (예 : 'white' 또는 '#ffffff')."
+
+msgid "Maximum items per zone"
+msgstr "영역당 아이템 최대 개수"
+
+msgid "This setting limits the number of items that can be dropped into a single zone."
+msgstr "이 설정은 단일 영역에 드롭할 수 있는 아이템 수를 제한합니다."
+
+msgid "Item definitions"
+msgstr "아이템 정의"
+
+msgid "Use text that is clear and descriptive of the item to be placed."
+msgstr "배치할 아이템을 명확하게 설명하는 텍스트를 사용합니다."
+
+msgid "Image URL (alternative to the text)"
+msgstr "이미지 URL (텍스트 대체)"
+
+msgid "For example, 'http://example.com/image.png' or '/static/image.png'."
+msgstr "예를 들어, 'http://example.com/image.png' 또는 '/static/image.png'."
+
+msgid "Image description (should provide sufficient information to place the item even if the image did not load)"
+msgstr "이미지 설명 (이미지가 로드되지 않더라도 아이템을 배치하기에 충분한 정보를 제공해야 합니다.)"
+
+msgid "Success feedback"
+msgstr "성공 피드백"
+
+msgid "Error feedback"
+msgstr "오류 피드백"
+
+msgid "Show advanced settings"
+msgstr "고급 설정 보기"
+
+msgid "Add an item"
+msgstr "아이템 추가"
+
+msgid "Change background"
+msgstr "배경 이미지 변경"
+
+msgid "Background"
+msgstr "배경"
+
