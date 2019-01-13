@@ -1060,7 +1060,7 @@
     "Please select a PDF file to upload.": "\uc5c5\ub85c\ub4dc\ud560 PDF \ud30c\uc77c\uc744 \uc120\ud0dd\ud558\uc138\uc694.",
     "Please verify that you have uploaded a valid image (PNG and JPEG).": "\uc801\ud569\ud55c \uc774\ubbf8\uc9c0 \ud615\uc2dd(PNG \ubc0f JPEG)\uc778\uc9c0 \ud655\uc778\ud574 \uc8fc\uc2ed\uc2dc\uc624.",
     "Please verify that your webcam is connected and that you have allowed your browser to access it.": "\uc6f9\ucea0\uc774 \uc5f0\uacb0\ub418\uc5b4 \uc788\ub294\uc9c0, \ube0c\ub77c\uc6b0\uc800\uac00 \uc561\uc138\uc2a4\ub97c \ud5c8\uc6a9\ud558\ub294\uc9c0 \ud655\uc778\ud558\uc138\uc694.",
-    "PNUk": "\ubd80\uc0b0\ub300\ud559\uad50",ㅍ
+    "PNUk": "\ubd80\uc0b0\ub300\ud559\uad50",
     "Poll": "\ud22c\ud45c",
     "Post a response:": "\uc751\ub2f5 \uac8c\uc2dc:",
     "post anonymously to classmates": "\uc218\uac15\ub3d9\ub8cc\ub4e4\uc5d0\uac8c \uc775\uba85\uc73c\ub85c \uac8c\uc2dc",
@@ -1985,7 +1985,7 @@
     "Maximum items per zone": "\uc601\uc5ed\ub2f9 \uc544\uc774\ud15c \ucd5c\ub300 \uac1c\uc218",
     "This setting limits the number of items that can be dropped into a single zone.": "\uc774 \uc124\uc815\uc740 \ub2e8\uc77c \uc601\uc5ed\uc5d0 \ub4dc\ub86d\ud560 \uc218 \uc788\ub294 \uc544\uc774\ud15c \uc218\ub97c \uc81c\ud55c\ud569\ub2c8\ub2e4\u002e",
     "Item definitions": "\uc544\uc774\ud15c \uc815\uc758",
-    "Use text that is clear and descriptive of the item to be placed.": "\ubc30\uce58\ud560 \uc544\uc774\ud15c\uc744 \uba85\ud655\ud558\uac8c \uc124\uba85\ud558\ub294 \ud14d\uc2a4\ud2b8\ub97c \uc0ac\uc6a9\ud569\ub2c8\ub2e4\u002e"
+    "Use text that is clear and descriptive of the item to be placed.": "\ubc30\uce58\ud560 \uc544\uc774\ud15c\uc744 \uba85\ud655\ud558\uac8c \uc124\uba85\ud558\ub294 \ud14d\uc2a4\ud2b8\ub97c \uc0ac\uc6a9\ud569\ub2c8\ub2e4\u002e",
     "Image URL (alternative to the text)": "\uc774\ubbf8\uc9c0 \u0055\u0052\u004c \u0028\ud14d\uc2a4\ud2b8 \ub300\uccb4\u0029",
     "Zones": "\uc601\uc5ed",
     "Text": "\ud14d\uc2a4\ud2b8",
